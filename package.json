@@ -1,0 +1,51 @@
+{
+  "name": "customer-center-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3004",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "clear-all": "rimraf ./.cache ./.next ./node_modules",
+    "prettier": "npx prettier --write ."
+  },
+  "dependencies": {
+    "@emotion/cache": "11.13.1",
+    "@mui/material-nextjs": "6.1.2",
+    "autosuggest-highlight": "3.3.4",
+    "axios": "1.7.7",
+    "crypto-js": "4.2.0",
+    "date-fns": "4.1.0",
+    "lodash": "4.17.21",
+    "next": "14.2.15",
+    "notistack": "3.0.1",
+    "nprogress": "0.2.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-is": "18.3.1",
+    "react-number-format": "5.4.2",
+    "react-use": "17.5.1",
+    "swr": "2.2.5"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "8.1.0",
+    "@types/autosuggest-highlight": "^3.2.3",
+    "@types/crypto-js": "4.2.2",
+    "@types/lodash": "^4.17.10",
+    "@types/node": "^20",
+    "@types/nprogress": "^0.2.3",
+    "@types/react": "^18.3",
+    "@types/react-dom": "^18.3",
+    "@typescript-eslint/eslint-plugin": "8.8.1",
+    "@typescript-eslint/parser": "8.8.1",
+    "eslint": "8.57.1",
+    "eslint-config-next": "14.2.15",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-react": "7.37.1",
+    "husky": "9.1.6",
+    "lint-staged": "15.2.10",
+    "prettier": "^3.3.3",
+    "typescript": "5.5.4"
+  }
+}
