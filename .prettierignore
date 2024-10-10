@@ -3,5 +3,7 @@
 **/.hg
 **/node_modules
 **/.next
-/tsconfig.json
-/package.json
+*.yaml
+*.json
+*.md
+*.svg
