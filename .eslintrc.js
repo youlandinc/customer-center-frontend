@@ -76,6 +76,7 @@ module.exports = {
     'no-void': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
   },
   settings: {
     react: {

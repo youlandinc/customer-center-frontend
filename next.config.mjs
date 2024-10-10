@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    // USER_POOL_ID: process.env.USER_POOL_ID,
-    // CLIENT_ID: process.env.CLIENT_ID,
-    // STRIPE_PUBLISH_KEY: process.env.STRIPE_PUBLISH_KEY,
     PREFIX_URL: process.env.PREFIX_URL,
   },
   reactStrictMode: false,
