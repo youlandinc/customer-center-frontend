@@ -1,17 +1,17 @@
 'use client';
 import { useRouter } from 'next/navigation';
 
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+
+import { StyledLayout } from '@/components/atoms';
+import { CustomerSide } from '@/components/molecules';
 
 const Segments = () => {
   const router = useRouter();
   return (
-    <>
-      <Button onClick={() => router.back()}>back</Button>
-      <Typography>
-        <h1>Segments</h1>
-      </Typography>
-    </>
+    <StyledLayout isHomepage={false} sideMenu={<CustomerSide />}>
+      <Typography>Segments</Typography>
+    </StyledLayout>
   );
 };
 

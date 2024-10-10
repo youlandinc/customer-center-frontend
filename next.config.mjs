@@ -4,7 +4,7 @@ const nextConfig = {
     PREFIX_URL: process.env.PREFIX_URL,
   },
   reactStrictMode: false,
-  trailingSlash: true,
+  trailingSlash: false,
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
@@ -13,7 +13,9 @@ const nextConfig = {
     });
     return config;
   },
-  missingSuspenseWithCSRBailout: false,
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
   // async redirects() {
   //   return [
   //     {
