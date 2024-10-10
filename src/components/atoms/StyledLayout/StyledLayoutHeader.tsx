@@ -11,14 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import {
-  LAYOUT_HEADER_TAB,
-  URL_DOC,
-  URL_HOME,
-  URL_LOS,
-  URL_POS,
-  URL_PRICING,
-} from './index';
+import { URL_DOC, URL_HOME, URL_LOS, URL_POS, URL_PRICING } from './index';
 import { useSwitch } from '@/hooks';
 
 import { StyledButton, StyledDialog } from '@/components/atoms';
@@ -959,56 +952,56 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
             sx={{ height: '24px', width: 'auto' }}
           />
 
-          {!isHomepage && (
-            <Stack
-              alignItems={'center'}
-              component={'ul'}
-              flexDirection={'row'}
-              gap={6}
-              height={'100%'}
-            >
-              {LAYOUT_HEADER_TAB.map((item, index) => (
-                <Stack
-                  className={
-                    pathname === item.url || pathname.includes('loan')
-                      ? 'active'
-                      : ''
-                  }
-                  color={'text.primary'}
-                  component={'li'}
-                  fontSize={14}
-                  fontWeight={600}
-                  height={'100%'}
-                  justifyContent={'center'}
-                  key={`${item.label}_${index}`}
-                  mx={3}
-                  onClick={() => router.push(item.url)}
-                  position={'relative'}
-                  sx={{
-                    cursor: 'pointer',
-                    '&:hover': { color: 'primary.main' },
-                    '&.active': {
-                      color: 'primary.darker',
-                      '&::after': {
-                        content: '""',
-                        display: 'block',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '4px',
-                        bgcolor: 'primary.darker',
-                        borderRadius: 3,
-                      },
-                    },
-                  }}
-                >
-                  {item.label}
-                </Stack>
-              ))}
-              {actions}
-            </Stack>
-          )}
+          {/*{!isHomepage && (*/}
+          {/*  <Stack*/}
+          {/*    alignItems={'center'}*/}
+          {/*    component={'ul'}*/}
+          {/*    flexDirection={'row'}*/}
+          {/*    gap={6}*/}
+          {/*    height={'100%'}*/}
+          {/*  >*/}
+          {/*    {LAYOUT_HEADER_TAB.map((item, index) => (*/}
+          {/*      <Stack*/}
+          {/*        className={*/}
+          {/*          pathname === item.url || pathname.includes('loan')*/}
+          {/*            ? 'active'*/}
+          {/*            : ''*/}
+          {/*        }*/}
+          {/*        color={'text.primary'}*/}
+          {/*        component={'li'}*/}
+          {/*        fontSize={14}*/}
+          {/*        fontWeight={600}*/}
+          {/*        height={'100%'}*/}
+          {/*        justifyContent={'center'}*/}
+          {/*        key={`${item.label}_${index}`}*/}
+          {/*        mx={3}*/}
+          {/*        onClick={() => router.push(item.url)}*/}
+          {/*        position={'relative'}*/}
+          {/*        sx={{*/}
+          {/*          cursor: 'pointer',*/}
+          {/*          '&:hover': { color: 'primary.main' },*/}
+          {/*          '&.active': {*/}
+          {/*            color: 'primary.darker',*/}
+          {/*            '&::after': {*/}
+          {/*              content: '""',*/}
+          {/*              display: 'block',*/}
+          {/*              position: 'absolute',*/}
+          {/*              bottom: 0,*/}
+          {/*              left: 0,*/}
+          {/*              width: '100%',*/}
+          {/*              height: '4px',*/}
+          {/*              bgcolor: 'primary.darker',*/}
+          {/*              borderRadius: 3,*/}
+          {/*            },*/}
+          {/*          },*/}
+          {/*        }}*/}
+          {/*      >*/}
+          {/*        {item.label}*/}
+          {/*      </Stack>*/}
+          {/*    ))}*/}
+          {/*    {actions}*/}
+          {/*  </Stack>*/}
+          {/*)}*/}
         </Stack>
 
         <Stack

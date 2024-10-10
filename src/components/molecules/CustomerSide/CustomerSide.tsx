@@ -1,6 +1,6 @@
 'use client';
 import { FC } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Box, Icon, Stack, Typography } from '@mui/material';
 
 import { MENU_CONFIG } from './data';
@@ -8,7 +8,7 @@ import { MENU_CONFIG } from './data';
 export const CustomerSide: FC = () => {
   const router = useRouter();
   const pathname = usePathname();
-  //const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
 
   return (
     <Box

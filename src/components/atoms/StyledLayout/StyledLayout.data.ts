@@ -69,13 +69,13 @@ export const LAYOUT_SIDE_MENU: { [key in ServiceType]: LayoutSideMenuItem[] } =
 
 //export const LAYOUT_HEADER_PRODUCT = {};
 
-export const LAYOUT_HEADER_TAB = [
-  {
-    label: 'Portfolio',
-    key: 'Portfolio',
-    url: '/portfolio',
-  },
-];
+//export const LAYOUT_HEADER_TAB = [
+//  {
+//    label: 'Portfolio',
+//    key: 'Portfolio',
+//    url: '/portfolio',
+//  },
+//];
 
 //export const LAYOUT_HEADER_USER = {};
 
