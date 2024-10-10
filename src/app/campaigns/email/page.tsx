@@ -1,21 +1,19 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { Button, Typography } from '@mui/material';
-
 import { StyledLayout } from '@/components/atoms';
-import { CustomerSide } from '@/components/molecules';
 
 //import 'normalize.css';
 //import 'reset.css';
 
-const Directory = () => {
+const Email = () => {
   const router = useRouter();
   return (
-    <StyledLayout isHomepage={false} sideMenu={<CustomerSide />}>
+    <StyledLayout isHomepage={false}>
       <Button onClick={() => router.back()}>back</Button>
-      <Typography>Directory</Typography>
+      <Typography>Email</Typography>
     </StyledLayout>
   );
 };
 
-export default Directory;
+export default Email;

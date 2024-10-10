@@ -1,17 +1,15 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { Stack, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+import { StyledLayout } from '@/components/atoms';
+import { CustomerSide } from '@/components/molecules';
 
 export default function Home() {
   const router = useRouter();
   return (
-    <Stack>
-      <Typography onClick={() => router.push('/contacts/directory')}>
-        directory
-      </Typography>
-      <Typography onClick={() => router.push('/contacts/segments')}>
-        segments
-      </Typography>
-    </Stack>
+    <StyledLayout isHomepage={false} sideMenu={<CustomerSide />}>
+      <Button onClick={() => router.back()}>back</Button>
+      <Typography>Home</Typography>
+    </StyledLayout>
   );
 }

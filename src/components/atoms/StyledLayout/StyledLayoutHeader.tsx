@@ -30,12 +30,14 @@ import LOGO_PRODUCT_LOS from './assets/logo_product_los.svg';
 import LOGO_PRODUCT_DOC from './assets/logo_product_doc.svg';
 import LOGO_PRODUCT_PRICE from './assets/logo_product_price.svg';
 import LOGO_PRODUCT_SERVING from './assets/logo_product_serving.svg';
+import LOGO_PRODUCT_CUSTOMER from './assets/logo_product_customer.svg';
 
 //import LOGO_HEADER_POS from './assets/logo_header_pos.svg';
 //import LOGO_HEADER_LOS from './assets/logo_header_los.svg';
 //import LOGO_HEADER_DOC from './assets/logo_header_doc.svg';
 //import LOGO_HEADER_PRICE from './assets/logo_header_price.svg';
-import LOGO_HEADER_SERVING from './assets/logo_header_serving.svg';
+//import LOGO_HEADER_SERVING from './assets/logo_header_serving.svg';
+import LOGO_HEADER_CUSTOMER from './assets/logo_header_customer.svg';
 import LOGO_HEADER_SETTING from './assets/logo_header_setting.svg';
 
 import LOGO_SETTING from './assets/logo_auth_setting.svg';
@@ -822,7 +824,10 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
       },
       'Loan Servicing': {
         label: 'Loan Servicing',
-        url: '/portfolio',
+        url: `${URL_DOC}/?token=${
+          session?.accessToken?.jwtToken ||
+          localStorage?.getItem('USER_LOGIN_INFORMATION')
+        }`,
         icon: (
           <Icon
             component={LOGO_PRODUCT_SERVING}
@@ -830,28 +835,55 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
           />
         ),
       },
+      'Customer Center': {
+        label: 'Customer Center',
+        url: '/contacts/directory',
+        icon: (
+          <Icon
+            component={LOGO_PRODUCT_CUSTOMER}
+            sx={{ width: 32, height: 32 }}
+          />
+        ),
+      },
     };
 
     const productsKeys = Object.keys(productsData);
-    const result = licensedProduct.map(
+    const fromServer = licensedProduct.map(
       (item) => productsKeys.includes(item.name) && productsData[item.name],
     );
     //only youland and test user can see loan servicing
+    let result;
+
     if (
       ['1000052022092800000102', '1000052023032900000107'].includes(
         setting?.tenantId,
       )
     ) {
-      result.push({
-        label: 'Loan Servicing',
-        url: '/portfolio',
-        icon: (
-          <Icon
-            component={LOGO_PRODUCT_SERVING}
-            sx={{ width: 32, height: 32 }}
-          />
-        ),
-      });
+      result = fromServer.concat([
+        {
+          label: 'Loan Servicing',
+          url: `${URL_DOC}/?token=${
+            session?.accessToken?.jwtToken ||
+            localStorage?.getItem('USER_LOGIN_INFORMATION')
+          }`,
+          icon: (
+            <Icon
+              component={LOGO_PRODUCT_SERVING}
+              sx={{ width: 32, height: 32 }}
+            />
+          ),
+        },
+        {
+          label: 'Customer Center',
+          url: '/contacts/directory',
+          icon: (
+            <Icon
+              component={LOGO_PRODUCT_CUSTOMER}
+              sx={{ width: 32, height: 32 }}
+            />
+          ),
+        },
+      ]);
     }
     return result;
   }, [initialized, licensedProduct, session?.accessToken?.jwtToken, setting]);
@@ -923,7 +955,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
           />
           {/*according to different product replace counterpart icon*/}
           <Icon
-            component={isHomepage ? LOGO_HEADER_SETTING : LOGO_HEADER_SERVING}
+            component={isHomepage ? LOGO_HEADER_SETTING : LOGO_HEADER_CUSTOMER}
             sx={{ height: '24px', width: 'auto' }}
           />
 
@@ -1132,7 +1164,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
           />
         </Stack>
         <Stack gap={3}>
-          {productList.map((item, index) => (
+          {productList?.map((item, index) => (
             <Stack
               alignItems={'center'}
               alignSelf={'stretch'}
