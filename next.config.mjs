@@ -16,20 +16,20 @@ const nextConfig = {
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/',
-  //       destination: '/portfolio',
-  //       statusCode: 301,
-  //     },
-  //     {
-  //       source: '/loan',
-  //       destination: '/portfolio',
-  //       statusCode: 301,
-  //     },
-  //   ];
-  // },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/contacts/directory',
+        statusCode: 301,
+      },
+      {
+        source: '/contacts',
+        destination: '/contacts/directory',
+        statusCode: 301,
+      },
+    ];
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

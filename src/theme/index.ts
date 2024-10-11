@@ -2,6 +2,13 @@
 import { CSSProperties } from 'react';
 import { createTheme, ThemeOptions } from '@mui/material/styles';
 
+declare module 'notistack' {
+  interface OptionsObject {
+    isSimple?: boolean;
+    header?: string;
+  }
+}
+
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
     xs: true; // removes the `xs` breakpoint

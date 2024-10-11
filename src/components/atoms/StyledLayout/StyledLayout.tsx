@@ -4,6 +4,7 @@ import { FC, ReactNode, useEffect } from 'react';
 import { Stack } from '@mui/material';
 
 import { StyledLayoutHeader, StyledLayoutSide } from './index';
+import { useUserStore } from '@/providers';
 
 interface LayoutProps {
   isHomepage: boolean;
@@ -18,26 +19,21 @@ export const StyledLayout: FC<LayoutProps> = ({
   sideMenu,
   children,
 }) => {
-  //const store = useMst();
-  //const { userSetting, session } = store;
-  //const { fetchUserSetting, fetchUserLicensedProduct, initialized } =
-  //  userSetting;
+  const { isHydration, initialized, fetchUserInfo } = useUserStore(
+    (state) => state,
+  );
 
-  //useEffect(
-  //  () => {
-  //    const token =
-  //      session?.accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION');
-  //    if (!token) {
-  //      return store.logout();
-  //    }
-  //    if (!initialized) {
-  //      fetchUserSetting();
-  //      fetchUserLicensedProduct();
-  //    }
-  //  },
-  //  // eslint-disable-next-line react-hooks/exhaustive-deps
-  //  [],
-  //);
+  useEffect(
+    () => {
+      if (isHydration) {
+        if (!initialized) {
+          fetchUserInfo();
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isHydration, initialized],
+  );
 
   return (
     <Stack height={'100vh'} minHeight={'100vh'} minWidth={1367} width={'100%'}>

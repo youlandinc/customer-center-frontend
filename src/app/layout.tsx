@@ -12,6 +12,12 @@ import { lightTheme } from '@/theme';
 
 import '@/styles/global.css';
 
+import { SnackbarProvider } from 'notistack';
+import { UserStoreProvider } from '@/providers';
+
+import { useBreakpoints } from '@/hooks';
+import { StyledNotification } from '@/components/atoms';
+
 const YOULAND_FONTS = localFont({
   src: [
     {
@@ -35,24 +41,19 @@ const YOULAND_FONTS = localFont({
   display: 'swap',
 });
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: ReactNode;
-}>) {
+}>) => {
+  const breakpoints = useBreakpoints();
+
   useEffect(() => {
     const handleRouteStart = () => NProgress.start();
     const handleRouteDone = () => NProgress.done();
     Router.events.on('routeChangeStart', handleRouteStart);
     Router.events.on('routeChangeComplete', handleRouteDone);
     Router.events.on('routeChangeError', handleRouteDone);
-
-    if (localStorage && localStorage.getItem('USER_LOGIN_INFORMATION')) {
-      //rootStore.injectCognitoUserSession({
-      //  accessToken: localStorage.getItem('USER_LOGIN_INFORMATION') as string,
-      //  refreshToken: '',
-      //});
-    }
 
     return () => {
       Router.events.off('routeChangeStart', handleRouteStart);
@@ -67,10 +68,30 @@ export default function RootLayout({
         <AppRouterCacheProvider options={{ key: 'css', enableCssLayer: true }}>
           <ThemeProvider theme={lightTheme}>
             <CssBaseline />
-            {children}
+            <SnackbarProvider
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: ['sm', 'xs'].includes(breakpoints)
+                  ? 'center'
+                  : 'right',
+              }}
+              Components={{
+                success: StyledNotification,
+                error: StyledNotification,
+                default: StyledNotification,
+                info: StyledNotification,
+                warning: StyledNotification,
+              }}
+              maxSnack={3}
+            >
+              <UserStoreProvider>{children}</UserStoreProvider>
+            </SnackbarProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
+//export default dynamic(() => Promise.resolve(RootLayout), { ssr: false });
