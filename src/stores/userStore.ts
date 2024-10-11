@@ -1,14 +1,15 @@
 'use client';
 import { createStore } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
+import { enqueueSnackbar } from 'notistack';
+
+import { AUTO_HIDE_DURATION } from '@/constant';
+import { HttpError } from '@/types';
 import {
   _fetchUserDetailByAccountId,
   _fetchUserInfoWithToken,
   _fetchUserLicensedProduct,
 } from '@/request';
-import { enqueueSnackbar } from 'notistack';
-import { HttpError } from '@/types';
-import { AUTO_HIDE_DURATION } from '@/constant';
 
 export type UserState = {
   isAuth: boolean;
