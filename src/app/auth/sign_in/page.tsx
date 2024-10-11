@@ -10,12 +10,12 @@ import { URL_LOGOUT_REDIRECTION } from '@/components/atoms';
 const SignIn = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { accessToken, setAccessToken, initialized, loginSystem, isAuth } =
+  const { accessToken, setAccessToken, isHydration, loginSystem, isAuth } =
     useUserStore((state) => state);
 
   useEffect(
     () => {
-      if (!initialized) {
+      if (!isHydration) {
         return;
       }
 
@@ -39,7 +39,7 @@ const SignIn = () => {
       loginSystem(() => router.push('/'));
     },
     //eslint-disable-next-line react-hooks/exhaustive-deps
-    [initialized],
+    [isHydration],
   );
 
   return (
