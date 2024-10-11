@@ -1,14 +1,14 @@
 'use client';
-import { useRouter, useSearchParams } from 'next/navigation';
-import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+//import dynamic from 'next/dynamic';
 
 import { CircularProgress, Stack } from '@mui/material';
 import { useEffect } from 'react';
 import { useUserStore } from '@/providers';
 import { URL_LOGOUT_REDIRECTION } from '@/components/atoms';
+import { GetParamsFromUrl } from '@/utils';
 
 const SignIn = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
   const { accessToken, setAccessToken, isHydration, loginSystem, isAuth } =
     useUserStore((state) => state);
@@ -24,7 +24,7 @@ const SignIn = () => {
       }
 
       const token =
-        searchParams.get('token') ||
+        GetParamsFromUrl(location?.href)?.token ||
         accessToken ||
         localStorage.getItem('USER_LOGIN_INFORMATION');
 
@@ -63,4 +63,6 @@ const SignIn = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(SignIn), { ssr: false });
+export default SignIn;
+
+//export default dynamic(() => Promise.resolve(SignIn), { ssr: false });
