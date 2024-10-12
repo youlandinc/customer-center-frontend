@@ -1,12 +1,12 @@
 'use client';
+import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
-
 import { CircularProgress, Stack } from '@mui/material';
-import { useEffect } from 'react';
+
 import { useUserStore } from '@/providers';
+
 import { URL_LOGOUT_REDIRECTION } from '@/components/atoms';
-import { GetParamsFromUrl } from '@/utils';
 
 const SignIn = () => {
   const router = useRouter();
