@@ -31,7 +31,7 @@
     "react-number-format": "5.4.2",
     "react-use": "17.5.1",
     "swr": "2.2.5",
-    "xlsx": "file:vendor/xlsx-0.20.3.tgz",
+    "xlsx": "file:/vendor/xlsx-0.20.3.tgz",
     "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
