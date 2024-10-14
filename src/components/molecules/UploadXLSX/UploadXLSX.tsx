@@ -59,11 +59,9 @@ export const UploadXLSX = () => {
       /* Get first worksheet */
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
-      console.log(rABS, wb);
       /* Convert array of arrays */
       const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
       /* Update state */
-      console.log(data, 'xxx', ws);
       setData(data);
       setCols(make_cols(ws['!ref']));
     };
@@ -73,10 +71,6 @@ export const UploadXLSX = () => {
       reader.readAsArrayBuffer(file);
     }
   };
-
-  console.log(data, cols);
-
-  console.log(cols, 'cols');
 
   return (
     <>
@@ -155,32 +149,32 @@ export const UploadXLSX = () => {
 };
 
 /* list of supported file types */
-const SheetJSFT = [
-  'xlsx',
-  'xlsb',
-  'xlsm',
-  'xls',
-  'xml',
-  'csv',
-  'txt',
-  'ods',
-  'fods',
-  'uos',
-  'sylk',
-  'dif',
-  'dbf',
-  'prn',
-  'qpw',
-  '123',
-  'wb*',
-  'wq*',
-  'html',
-  'htm',
-]
-  .map(function (x) {
-    return '.' + x;
-  })
-  .join(',');
+//const SheetJSFT = [
+//  'xlsx',
+//  'xlsb',
+//  'xlsm',
+//  'xls',
+//  'xml',
+//  'csv',
+//  'txt',
+//  'ods',
+//  'fods',
+//  'uos',
+//  'sylk',
+//  'dif',
+//  'dbf',
+//  'prn',
+//  'qpw',
+//  '123',
+//  'wb*',
+//  'wq*',
+//  'html',
+//  'htm',
+//]
+//  .map(function (x) {
+//    return '.' + x;
+//  })
+//  .join(',');
 
 /* generate an array of column objects */
 const make_cols = (refstr: any) => {

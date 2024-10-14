@@ -43,6 +43,7 @@ import LOGO_HEADER_SETTING from './assets/logo_header_setting.svg';
 import LOGO_SETTING from './assets/logo_auth_setting.svg';
 import LOGO_SIGN_OUT from './assets/logo_auth_out.svg';
 import { useUserStore } from '@/providers';
+import { SystemLogout } from '@/utils';
 
 export interface LayoutHeaderProps {
   isHomepage: boolean;
@@ -563,8 +564,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
             <StyledButton
               onClick={() => {
                 close();
-                localStorage.clear();
-                window.location.href = URL_LOGOUT_REDIRECTION;
+                return SystemLogout();
               }}
               size={'small'}
             >

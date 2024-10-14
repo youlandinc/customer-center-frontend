@@ -1,7 +1,7 @@
 'use client';
 import { FC, ReactNode, useEffect } from 'react';
 
-import { Stack } from '@mui/material';
+import { CircularProgress, Stack } from '@mui/material';
 
 import { StyledLayoutHeader, StyledLayoutSide } from './index';
 import { useUserStore } from '@/providers';
@@ -35,7 +35,25 @@ export const StyledLayout: FC<LayoutProps> = ({
     [isHydration, initialized],
   );
 
-  return (
+  return !isHydration || !initialized ? (
+    <Stack
+      alignItems={'center'}
+      height={'100vh'}
+      justifyContent={'center'}
+      margin={'auto 0'}
+      minHeight={'calc(667px - 46px)'}
+      width={'100vw'}
+    >
+      <CircularProgress
+        sx={{
+          width: 24,
+          height: 24,
+          background: 'background.white',
+          color: 'action.loading',
+        }}
+      />
+    </Stack>
+  ) : (
     <Stack height={'100vh'} minHeight={'100vh'} minWidth={1367} width={'100%'}>
       <StyledLayoutHeader actions={actions} isHomepage={isHomepage} />
       <Stack

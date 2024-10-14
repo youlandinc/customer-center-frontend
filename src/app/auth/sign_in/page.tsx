@@ -7,6 +7,7 @@ import { CircularProgress, Stack } from '@mui/material';
 import { useUserStore } from '@/providers';
 
 import { URL_LOGOUT_REDIRECTION } from '@/components/atoms';
+import { SystemLogout } from '@/utils';
 
 const SignIn = () => {
   const router = useRouter();
@@ -30,9 +31,7 @@ const SignIn = () => {
         localStorage.getItem('USER_LOGIN_INFORMATION');
 
       if (!token) {
-        localStorage.clear();
-        window.location.href = URL_LOGOUT_REDIRECTION;
-        return;
+        return SystemLogout();
       }
 
       setAccessToken(token);

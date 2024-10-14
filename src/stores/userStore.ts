@@ -10,6 +10,8 @@ import {
   _fetchUserInfoWithToken,
   _fetchUserLicensedProduct,
 } from '@/request';
+import { URL_LOGOUT_REDIRECTION } from '@/components/atoms';
+import { SystemLogout } from '@/utils';
 
 export type UserState = {
   isAuth: boolean;
@@ -69,6 +71,7 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
                 isSimple: !header,
                 header,
               });
+              return SystemLogout();
             }
           },
           fetchUserInfo: async () => {
