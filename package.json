@@ -18,12 +18,12 @@
     "@mui/material": "6.1.2",
     "@mui/material-nextjs": "6.1.2",
     "@mui/x-date-pickers": "7.20.0",
-    "material-react-table": "3.0.1",
     "autosuggest-highlight": "3.3.4",
     "axios": "1.7.7",
     "crypto-js": "4.2.0",
     "date-fns": "4.1.0",
     "lodash": "4.17.21",
+    "material-react-table": "3.0.1",
     "next": "14.2.15",
     "notistack": "3.0.1",
     "nprogress": "0.2.0",
@@ -33,7 +33,6 @@
     "react-number-format": "5.4.2",
     "react-use": "17.5.1",
     "swr": "2.2.5",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
