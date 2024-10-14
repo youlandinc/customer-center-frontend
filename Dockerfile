@@ -8,7 +8,7 @@ COPY pnpm-lock.yaml pnpm-lock.yaml
 RUN npm cache clean --force
 RUN rm -rf node_modules
 
-RUN npm install --location=global pnpm@9.6.0
+RUN npm install --location=global pnpm
 
 RUN pnpm install
 
