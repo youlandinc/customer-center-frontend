@@ -3,6 +3,7 @@ import { createStore } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { enqueueSnackbar } from 'notistack';
 
+import { SystemLogout } from '@/utils';
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { HttpError } from '@/types';
 import {
@@ -10,8 +11,6 @@ import {
   _fetchUserInfoWithToken,
   _fetchUserLicensedProduct,
 } from '@/request';
-import { URL_LOGOUT_REDIRECTION } from '@/components/atoms';
-import { SystemLogout } from '@/utils';
 
 export type UserState = {
   isAuth: boolean;

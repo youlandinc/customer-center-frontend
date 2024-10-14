@@ -11,14 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import {
-  URL_DOC,
-  URL_HOME,
-  URL_LOGOUT_REDIRECTION,
-  URL_LOS,
-  URL_POS,
-  URL_PRICING,
-} from './index';
+import { URL_DOC, URL_HOME, URL_LOS, URL_POS, URL_PRICING } from './index';
 import { useSwitch } from '@/hooks';
 
 import { StyledButton, StyledDialog } from '@/components/atoms';

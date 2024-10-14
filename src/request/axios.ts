@@ -2,7 +2,6 @@ import axios from 'axios';
 
 import { REQUEST_TIMEOUT } from '@/constant';
 import { HttpError, HttpErrorType, HttpVariant } from '@/types';
-import { URL_LOGOUT_REDIRECTION } from '@/components/atoms';
 import { SystemLogout } from '@/utils';
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';

@@ -6,7 +6,6 @@ import { CircularProgress, Stack } from '@mui/material';
 
 import { useUserStore } from '@/providers';
 
-import { URL_LOGOUT_REDIRECTION } from '@/components/atoms';
 import { SystemLogout } from '@/utils';
 
 const SignIn = () => {
