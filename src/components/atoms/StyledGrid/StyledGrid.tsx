@@ -33,7 +33,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
     enableExpandAll: false, //hide expand all double arrow in column header
     enableExpanding: false,
     enableBottomToolbar: false, //pipelineType === PipelineDisplayMode.LIST_MODE,
-    paginateExpandedRows: true, //When rows are expanded, do not count sub-rows as number of rows on the page towards pagination
+    paginateExpandedRows: false, //When rows are expanded, do not count sub-rows as number of rows on the page towards pagination
     enableTopToolbar: false,
     enableColumnActions: false, //pipelineType === PipelineDisplayMode.LIST_MODE,
     enableColumnOrdering: false,
