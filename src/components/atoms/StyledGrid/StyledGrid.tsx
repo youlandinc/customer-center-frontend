@@ -6,7 +6,7 @@ import {
   MRT_TableOptions,
   useMaterialReactTable,
 } from 'material-react-table';
-import { router } from 'next/client';
+import { useRouter } from 'next/router';
 
 type StyledGridProps = MRT_TableOptions<any> & {
   loading?: boolean;
@@ -26,6 +26,8 @@ export const StyledGrid: FC<StyledGridProps> = ({
   rowCount,
   style,
 }) => {
+  const router = useRouter();
+
   const table = useMaterialReactTable({
     columns: columns,
     data: data,

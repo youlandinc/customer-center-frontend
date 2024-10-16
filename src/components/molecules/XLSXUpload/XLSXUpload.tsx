@@ -1,8 +1,7 @@
 'use client';
 import { ChangeEvent, useCallback, useRef, useState } from 'react';
-import { Icon, Stack, Tooltip, Typography } from '@mui/material';
+import { CircularProgress, Icon, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import XLSX from 'xlsx';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 
@@ -18,11 +17,15 @@ import {
 export const XLSXUpload = () => {
   const { enqueueSnackbar } = useSnackbar();
 
+  const [loading, setLoading] = useState(false);
   const [cols, setCols] = useState<Array<string | number>>([]);
   const [fixedCols, setFixedCols] = useState<Array<string | number>>([]);
   const [data, setData] = useState<
     Array<{ [key: string | number]: string | number }>
   >([]);
+  const [fileRows, setFileRows] = useState<number>(0);
+  const [fileColumns, setFileColumns] = useState<number>(0);
+  const [fileName, setFileName] = useState<string>('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -30,8 +33,8 @@ export const XLSXUpload = () => {
     (files: FileList) => {
       let flag = true;
       Array.from(files).some((item) => {
-        if (item.size / 1024 / 1024 > 100) {
-          enqueueSnackbar('File size cannot exceed 100MB.', {
+        if (item.size / 1024 / 1024 > 20) {
+          enqueueSnackbar('File size cannot exceed 20MB.', {
             header: 'Upload Failed',
             variant: 'error',
             autoHideDuration: AUTO_HIDE_DURATION,
@@ -46,91 +49,14 @@ export const XLSXUpload = () => {
     [enqueueSnackbar],
   );
 
-  const get_header_row = (ws: XLSX.WorkSheet): string[] => {
-    const headers: string[] = [];
-    const range = XLSX.utils.decode_range(ws['!ref']!);
-    const firstRow = range.s.r; // 只需要第一行的表头
-
-    for (let col = range.s.c; col <= range.e.c; col++) {
-      const cell = ws[XLSX.utils.encode_cell({ r: firstRow, c: col })];
-      const header = cell ? cell.v : `Column ${col + 1}`;
-      headers.push(header);
-    }
-
-    return headers;
-  };
-
-  const onExtractFile = useCallback(
-    (file: File) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const bstr = e.target?.result;
-          if (!bstr) {
-            throw new Error('Failed to read file data.');
-          }
-
-          const wb = XLSX.read(bstr, { type: 'array' });
-
-          const wsname = wb.SheetNames[0];
-          const ws = wb.Sheets[wsname];
-
-          if (!ws) {
-            throw new Error('No worksheet found in the file.');
-          }
-
-          const data = XLSX.utils.sheet_to_json(ws, { defval: '-' }) as any[];
-
-          if (data.length === 0) {
-            enqueueSnackbar('No data found in the file.', {
-              header: 'Upload Failed',
-              variant: 'error',
-              autoHideDuration: AUTO_HIDE_DURATION,
-              isSimple: false,
-            });
-            return;
-          }
-
-          const headers = Object.keys(data[0]);
-
-          const dataWithNumericKeys = data.map((row) => {
-            const newRow: { [key: number]: any } = {};
-            headers.forEach((key, index) => {
-              newRow[index] = row[key];
-            });
-            return newRow;
-          });
-
-          const numericCols = headers.map((_, index) => index.toString());
-          setCols(numericCols);
-          setFixedCols(get_header_row(ws));
-          setData(
-            dataWithNumericKeys.length > 10
-              ? dataWithNumericKeys.slice(0, 10)
-              : dataWithNumericKeys,
-          );
-        } catch (error) {
-          console.error('Error reading or parsing file:', error);
-          enqueueSnackbar('Error parsing the Excel file.', {
-            header: 'Upload Failed',
-            variant: 'error',
-            autoHideDuration: AUTO_HIDE_DURATION,
-            isSimple: false,
-          });
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    },
-    [enqueueSnackbar],
-  );
+  const onExtractFile = useCallback((file: File) => {}, []);
 
   const onChangeEvent = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       event.preventDefault();
       if (event.target.files && validatorFileSize(event.target.files)) {
         onExtractFile(event.target.files[0]);
-        event.target.value = '';
+        //event.target.value = '';
       }
     },
     [onExtractFile, validatorFileSize],
@@ -284,58 +210,99 @@ export const XLSXUpload = () => {
     },
   });
 
-  return (
-    <>
-      <Stack
-        alignItems={'center'}
-        border={'1px dashed #D2D6E1'}
-        borderRadius={1}
-        flex={1}
-        gap={1}
-        justifyContent={'center'}
-        p={6}
-      >
-        <input
-          accept={
-            '.csv,.xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,'
-          }
-          hidden
-          onChange={onChangeEvent}
-          ref={fileInputRef}
-          type="file"
-        />
-        <StyledButton
-          onClick={() => {
-            fileInputRef.current?.click();
-          }}
-          size={'small'}
-          sx={{
-            width: 144,
-          }}
-        >
-          <Icon
-            component={ICON_UPLOAD}
-            sx={{
-              height: 24,
-              width: 24,
-              mr: 1,
-            }}
+  return data.length === 0 ? (
+    <Stack
+      alignItems={'center'}
+      border={'1px dashed #D2D6E1'}
+      borderRadius={2}
+      flex={1}
+      gap={1}
+      justifyContent={'center'}
+      p={6}
+    >
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <input
+            accept={
+              '.csv,.xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,'
+            }
+            hidden
+            onChange={onChangeEvent}
+            ref={fileInputRef}
+            type="file"
           />
-          Select file
-        </StyledButton>
-        <Typography color={'text.secondary'} variant={'body2'}>
-          Drag & drop or click &#34;Select file&#34; above to browse your
-          computer
+          <StyledButton
+            onClick={() => {
+              fileInputRef.current?.click();
+            }}
+            size={'small'}
+            sx={{
+              width: 144,
+            }}
+          >
+            <Icon
+              component={ICON_UPLOAD}
+              sx={{
+                height: 24,
+                width: 24,
+                mr: 1,
+              }}
+            />
+            Select file
+          </StyledButton>
+          <Typography color={'text.secondary'} variant={'body2'}>
+            Drag & drop or click &#34;Select file&#34; above to browse your
+            computer
+          </Typography>
+          <Typography color={'text.secondary'} variant={'body2'}>
+            .xlsx and .csv files are supported
+          </Typography>
+        </>
+      )}
+    </Stack>
+  ) : (
+    <Stack flex={1}>
+      <Typography variant={'h7'}>Preview your file</Typography>
+      <Stack alignItems={'center'} flexDirection={'row'}>
+        <Typography color={'text.primary'} variant={'body3'}>
+          {fileName}: {fileRows} lines and {fileColumns} columns.
         </Typography>
-        <Typography color={'text.secondary'} variant={'body2'}>
-          .xlsx and .csv files are supported
+        <Typography
+          color={'primary.main'}
+          onClick={() => {
+            setData([]);
+            setCols([]);
+            setFixedCols([]);
+            setFileRows(0);
+            setFileColumns(0);
+          }}
+          sx={{
+            textDecoration: 'underline',
+            ml: 'auto',
+            cursor: 'pointer',
+          }}
+          variant={'body2'}
+        >
+          Delete file
         </Typography>
       </Stack>
       <MRT_TableContainer
-        sx={{ borderRadius: 2, border: '1px solid #D2D6E1' }}
+        sx={{ borderRadius: 2, border: '1px solid #D2D6E1', mt: 3 }}
         table={table}
       />
-    </>
+
+      <StyledButton
+        size={'small'}
+        sx={{
+          mt: 6,
+          width: 90,
+        }}
+      >
+        Continue
+      </StyledButton>
+    </Stack>
   );
 };
 
@@ -351,19 +318,30 @@ const genColumns = (
       muiTableHeadCellProps: { align: 'center' },
       Cell: ({ renderedCellValue }) => {
         return (
-          <Tooltip title={renderedCellValue ? renderedCellValue : '-'}>
-            <Typography
-              sx={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                width: '100%',
-              }}
-              variant={'body3'}
-            >
-              {renderedCellValue ? renderedCellValue : '-'}
-            </Typography>
-          </Tooltip>
+          <Typography
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              width: '100%',
+            }}
+            variant={'body3'}
+          >
+            {renderedCellValue ? renderedCellValue : '-'}
+          </Typography>
+          //<Tooltip title={renderedCellValue ? renderedCellValue : '-'}>
+          //  <Typography
+          //    sx={{
+          //      overflow: 'hidden',
+          //      textOverflow: 'ellipsis',
+          //      whiteSpace: 'nowrap',
+          //      width: '100%',
+          //    }}
+          //    variant={'body3'}
+          //  >
+          //    {renderedCellValue ? renderedCellValue : '-'}
+          //  </Typography>
+          //</Tooltip>
         );
       },
     } as MRT_ColumnDef<any>;
