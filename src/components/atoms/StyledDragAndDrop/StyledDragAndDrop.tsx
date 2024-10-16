@@ -1,6 +1,7 @@
-import { StyledButton } from '@/components/atoms';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import { Stack, Switch, Typography } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
-import { Box, Stack, Switch, Typography } from '@mui/material';
+
 import {
   DragDropContext,
   Draggable,
@@ -8,9 +9,9 @@ import {
   DropResult,
 } from '@hello-pangea/dnd';
 
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import { StyledButton } from '@/components/atoms';
 
-import { GridColumnItem } from '@/stores';
+import { GridColumnItem } from '@/types';
 
 export type StyledDragAndDropProps = {
   list: GridColumnItem[];

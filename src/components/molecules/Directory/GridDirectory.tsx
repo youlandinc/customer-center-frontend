@@ -11,20 +11,30 @@ import {
 } from '@/components/molecules';
 
 import { _getGridListById } from '@/request';
-import { useDirectoryColumnsStore } from '@/stores/directoryStores/directoryColumnsStore';
+import { useGridQueryConditionStore } from '@/stores/directoryStores/gridQueryConditionStore';
+import { useDirectoryGridColumnsStore } from '@/stores/directoryStores/gridColumnsStore';
 
 export const GridDirectory: FC = () => {
-  const { metadataColumns, getALlColumns, tableId } = useDirectoryColumnsStore(
-    (state) => state,
-  );
+  const { metadataColumns, getALlColumns, tableId, loading } =
+    useDirectoryGridColumnsStore((state) => state);
+  const { keyword } = useGridQueryConditionStore((state) => state);
 
-  const { data: list } = useSWR(
-    typeof tableId === 'number' ? [tableId] : null,
-    async ([tablId]) => {
-      return await _getGridListById(tablId, {
-        page: 0,
-        size: 50,
-      });
+  const { data: list, isLoading } = useSWR(
+    typeof tableId === 'number'
+      ? [
+          tableId,
+          {
+            page: 1,
+            size: 50,
+            searchFilter: {
+              keyword,
+            },
+          },
+          metadataColumns,
+        ]
+      : null,
+    async ([tableId, queryCondition]) => {
+      return await _getGridListById(tableId, queryCondition);
     },
   );
 
@@ -36,10 +46,10 @@ export const GridDirectory: FC = () => {
           size: 150,
           minSize: 100,
           muiTableBodyCellProps: {
-            align: 'center',
+            align: 'left',
           },
           muiTableHeadCellProps: {
-            align: 'center',
+            align: 'left',
           },
           Cell: ({ renderedCellValue }) => {
             return (
@@ -61,13 +71,14 @@ export const GridDirectory: FC = () => {
   const data =
     list?.data?.metadataValues?.records?.map((item) => {
       return item.reduce(
-        (pre, cur, index) => {
+        (pre, cur) => {
           pre[cur.columnName] = cur.columnValue;
           return pre;
         },
         {} as Record<string, any>,
       );
     }) || [];
+  const totalContacts = list?.data?.metadataValues?.total || 0;
 
   useEffect(() => {
     getALlColumns();
@@ -75,9 +86,16 @@ export const GridDirectory: FC = () => {
 
   return (
     <Stack gap={1.5}>
-      {typeof tableId === 'number' && <GridToolBar tableId={tableId} />}
+      {typeof tableId === 'number' && (
+        <GridToolBar totalContacts={totalContacts} />
+      )}
       <Stack bgcolor={'#fff'} border={'1px solid #ccc'} gap={3}>
-        <StyledGrid columns={columns} data={data || []} rowCount={0} />
+        <StyledGrid
+          columns={columns}
+          data={data || []}
+          loading={isLoading || loading}
+          rowCount={0}
+        />
         <GridPagination currentPage={0} rowCount={10} rowsPerPage={50} />
       </Stack>
     </Stack>

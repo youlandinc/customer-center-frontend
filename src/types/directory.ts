@@ -1,4 +1,5 @@
 import {
+  ColumnPiningDirectionEnum,
   ColumnTypeEnum,
   SearchOperationEnum,
   SortDirection,
@@ -37,11 +38,11 @@ type SearchAdditionalProp = {
 export type DirectoryGridQueryCondition = {
   page: number;
   size: number;
-  searchFilter: {
+  searchFilter: Partial<{
     segmentId: number;
     segmentFiler: Record<string, SearchAdditionalProp[]>;
     keyword: string;
-  };
+  }>;
   sort: [
     {
       field: string;
@@ -69,4 +70,15 @@ export type DirectoryGridResponse = {
     current: number;
     records: RecordsItem[][];
   };
+};
+
+export type GridColumnItem = {
+  columnWidth: number | null;
+  field: string;
+  headerName: string;
+  // id: maybe(number),
+  leftOrder: number | null;
+  pinType: ColumnPiningDirectionEnum | null;
+  sort: number;
+  visibility: boolean;
 };

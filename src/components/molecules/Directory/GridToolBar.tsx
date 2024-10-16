@@ -1,15 +1,21 @@
+import { useGridQueryConditionStore } from '@/stores/directoryStores/gridQueryConditionStore';
 import { FC, useRef } from 'react';
 import { Stack, Typography } from '@mui/material';
 
+import { useDebounceFn } from '@/hooks';
 import { StyledTextFieldSearch } from '@/components/atoms';
 import { GridMoreBtn } from '@/components/molecules';
 
 type GridToolBarProps = {
-  tableId: number;
+  totalContacts: number;
 };
 
-export const GridToolBar: FC<GridToolBarProps> = ({ tableId }) => {
+export const GridToolBar: FC<GridToolBarProps> = ({ totalContacts }) => {
+  const { setKeyword } = useGridQueryConditionStore((state) => state);
+
   const ref = useRef<HTMLInputElement | null>(null);
+
+  const [, , updateQueryDebounce] = useDebounceFn(setKeyword, 500);
 
   return (
     <>
@@ -20,17 +26,19 @@ export const GridToolBar: FC<GridToolBarProps> = ({ tableId }) => {
         mb={1.5}
         width={'100%'}
       >
-        <Typography variant={'subtitle1'}>74,0281 Contacts</Typography>
+        <Typography variant={'subtitle1'}>
+          {totalContacts.toLocaleString()} Contacts
+        </Typography>
         <Stack alignItems={'center'} direction={'row'} gap={3}>
           <StyledTextFieldSearch
-            // handleClear={() => {
-            //   propertyAddressRef.current!.value = '';
-            //   updateQueryDebounce('keyword', '');
-            // }}
+            handleClear={() => {
+              ref.current!.value = '';
+              updateQueryDebounce('');
+            }}
             inputRef={ref}
-            // onChange={(e) => {
-            //   updateQueryDebounce('keyword', e.target.value);
-            // }}
+            onChange={(e) => {
+              updateQueryDebounce(e.target.value);
+            }}
             variant={'outlined'}
           />
           <GridMoreBtn />

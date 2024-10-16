@@ -1,3 +1,8 @@
+import { Drawer, Icon, IconButton, Stack } from '@mui/material';
+import { enqueueSnackbar } from 'notistack';
+import { FC, useState } from 'react';
+import { useAsyncFn } from 'react-use';
+
 import {
   StyledAnchorMenus,
   StyledButton,
@@ -5,16 +10,23 @@ import {
   StyledDragAndDrop,
   StyledTextField,
 } from '@/components/atoms';
-
 import { useSwitch } from '@/hooks';
-import { Drawer, Icon, IconButton, Stack } from '@mui/material';
-import { FC, useState } from 'react';
+
+import { AUTO_HIDE_DURATION } from '@/constant';
+import { _addNewColumn } from '@/request';
+import { ColumnTypeEnum, HttpError } from '@/types';
+import { useDirectoryGridColumnsStore } from '@/stores/directoryStores/gridColumnsStore';
 
 import AddColumn from './assets/icon_add_column.svg';
 import EditColumn from './assets/icon_edit_column.svg';
 import MoreIcon from './assets/icon_more.svg';
 
 export const GridMoreBtn: FC = () => {
+  const { tableId, metadataColumns, getALlColumns } =
+    useDirectoryGridColumnsStore((state) => state);
+
+  const [columnName, setColumnName] = useState<string>('');
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { visible, open, close } = useSwitch();
@@ -43,9 +55,8 @@ export const GridMoreBtn: FC = () => {
       },
     },
   ];
-
-  const column = [
-    {
+  /*
+* {
       id: 4706,
       field: 'loanOfficer',
       headerName: 'Loan officer',
@@ -55,96 +66,42 @@ export const GridMoreBtn: FC = () => {
       pinType: 'CENTER',
       leftOrder: null,
       rightOrder: null,
+    },*/
+  const column = metadataColumns.map((item, index) => ({
+    id: item.columnId,
+    field: item.columnName,
+    headerName: item.columnLabel,
+    columnWidth: null,
+    sort: index,
+    visibility: true,
+    pinType: 'CENTER',
+    leftOrder: null,
+    rightOrder: null,
+  }));
+
+  const [state, addNewColumn] = useAsyncFn(
+    async (columnName: string) => {
+      try {
+        await _addNewColumn({
+          tableId: tableId as number,
+          columnLabel: columnName,
+          columnType: ColumnTypeEnum.text,
+        });
+        await getALlColumns();
+        dialogClose();
+        setColumnName('');
+      } catch (err) {
+        const { header, message, variant } = err as HttpError;
+        enqueueSnackbar(message, {
+          variant: variant || 'error',
+          autoHideDuration: AUTO_HIDE_DURATION,
+          isSimple: !header,
+          header,
+        });
+      }
     },
-    {
-      id: 4707,
-      field: 'stage',
-      headerName: 'Status',
-      columnWidth: null,
-      sort: 1,
-      visibility: true,
-      pinType: 'CENTER',
-      leftOrder: null,
-      rightOrder: null,
-    },
-    {
-      id: 4708,
-      field: 'appraisalStage',
-      headerName: 'Appraisal stage',
-      columnWidth: null,
-      sort: 2,
-      visibility: true,
-      pinType: 'CENTER',
-      leftOrder: null,
-      rightOrder: null,
-    },
-    {
-      id: 4731,
-      field: 'brokerOriginationFee',
-      headerName: 'Broker origination fee',
-      columnWidth: null,
-      sort: 25,
-      visibility: true,
-      pinType: 'CENTER',
-      leftOrder: null,
-      rightOrder: null,
-    },
-    {
-      id: 4732,
-      field: 'brokerProcessingFee',
-      headerName: 'Broker processing fee',
-      columnWidth: null,
-      sort: 26,
-      visibility: true,
-      pinType: 'CENTER',
-      leftOrder: null,
-      rightOrder: null,
-    },
-    {
-      id: 4733,
-      field: 'estClosingDate',
-      headerName: 'Est. closing date',
-      columnWidth: null,
-      sort: 27,
-      visibility: true,
-      pinType: 'CENTER',
-      leftOrder: null,
-      rightOrder: null,
-    },
-    {
-      id: 4734,
-      field: 'broker',
-      headerName: 'Referrer',
-      columnWidth: null,
-      sort: 28,
-      visibility: true,
-      pinType: 'CENTER',
-      leftOrder: null,
-      rightOrder: null,
-    },
-    {
-      id: 4735,
-      field: 'channel',
-      headerName: 'Source',
-      columnWidth: null,
-      sort: 29,
-      visibility: true,
-      pinType: 'CENTER',
-      leftOrder: null,
-      rightOrder: null,
-    },
-    {
-      id: 4736,
-      field: 'createdAt',
-      headerName: 'Submission date',
-      columnWidth: null,
-      sort: 30,
-      visibility: true,
-      pinType: 'CENTER',
-      leftOrder: null,
-      rightOrder: null,
-    },
-  ];
+    [tableId],
+  );
 
   return (
     <>
@@ -165,7 +122,16 @@ export const GridMoreBtn: FC = () => {
         open={Boolean(anchorEl)}
       />
       <StyledDialog
-        content={<StyledTextField label={'Column name'} size={'medium'} />}
+        content={
+          <StyledTextField
+            label={'Column name'}
+            onChange={(e) => {
+              setColumnName(e.target.value);
+            }}
+            size={'medium'}
+            value={columnName}
+          />
+        }
         footer={
           <Stack direction={'row'} gap={1.5} justifyContent={'center'}>
             <StyledButton
@@ -176,7 +142,15 @@ export const GridMoreBtn: FC = () => {
             >
               Cancel
             </StyledButton>
-            <StyledButton size={'small'}>Save</StyledButton>
+            <StyledButton
+              loading={state.loading}
+              onClick={async () => {
+                await addNewColumn(columnName);
+              }}
+              size={'small'}
+            >
+              Save
+            </StyledButton>
           </Stack>
         }
         header={'Add new column'}

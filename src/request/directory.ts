@@ -7,7 +7,9 @@ import {
 } from '@/types';
 
 export const _getAllColumns = () => {
-  return get<GetColumnsResponse>('/customer/metadata/columns');
+  return get<GetColumnsResponse>(
+    'http://192.168.1.102:8080/customer/metadata/columns',
+  );
 };
 
 export const _getGridListById = (
@@ -15,7 +17,7 @@ export const _getGridListById = (
   queryCondition: Partial<DirectoryGridQueryCondition>,
 ) => {
   return post<DirectoryGridResponse>(
-    `/customer/es/records/${tableId}`,
+    `http://192.168.1.102:8080/customer/es/records/${tableId}`,
     queryCondition,
   );
 };
@@ -25,7 +27,7 @@ export const _addNewColumn = (data: {
   columnLabel: string;
   columnType: ColumnTypeEnum;
 }) => {
-  return post('/customer/metadata/columns', data);
+  return post('http://192.168.1.102:8080/customer/metadata/columns', data);
 };
 
 export const _preUploadExcel = (params: FormData) => {

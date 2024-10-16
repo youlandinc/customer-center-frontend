@@ -10,7 +10,7 @@ export interface StyledTextFieldProps
 
 export const StyledTextField: FC<StyledTextFieldProps> = ({
   sx,
-  value = '',
+  // value = '',
   onChange,
   variant = 'outlined',
   disabledAutoFill = true,
@@ -80,7 +80,7 @@ export const StyledTextField: FC<StyledTextFieldProps> = ({
           },
           ...sx,
         }}
-        value={value}
+        // value={value}
         variant={variant}
         {...rest}
         // size={['xs', 'sm', 'md'].includes(breakpoints) ? 'small' : 'medium'}

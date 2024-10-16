@@ -1,12 +1,10 @@
-import { SxProps } from '@mui/material';
-import * as React from 'react';
-import { FC } from 'react';
 import {
   MRT_TableContainer,
   MRT_TableOptions,
   useMaterialReactTable,
 } from 'material-react-table';
-import { useRouter } from 'next/router';
+import * as React from 'react';
+import { FC } from 'react';
 
 type StyledGridProps = MRT_TableOptions<any> & {
   loading?: boolean;
@@ -26,7 +24,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
   rowCount,
   style,
 }) => {
-  const router = useRouter();
+  // const router = useRouter();
 
   const table = useMaterialReactTable({
     columns: columns,
@@ -96,10 +94,10 @@ export const StyledGrid: FC<StyledGridProps> = ({
       },
       onClick: async () => {
         const { loanId } = original;
-        await router.push({
-          pathname: '/loan/overview',
-          query: { loanId },
-        });
+        // await router.push({
+        //   pathname: '/loan/overview',
+        //   query: { loanId },
+        // });
       },
     }),
     muiTableHeadProps: {
