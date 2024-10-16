@@ -1,8 +1,7 @@
 'use client';
-import { Typography } from '@mui/material';
-
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide } from '@/components/molecules';
+import { DirectoryOverview } from '@/components/organisms';
 
 //import 'normalize.css';
 //import 'reset.css';
@@ -10,7 +9,7 @@ import { CustomerSide } from '@/components/molecules';
 const Email = () => {
   return (
     <StyledLayout isHomepage={false} sideMenu={<CustomerSide />}>
-      <Typography>Email</Typography>
+      <DirectoryOverview />
     </StyledLayout>
   );
 };
