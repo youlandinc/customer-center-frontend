@@ -1,70 +1,58 @@
 'use client';
-import { ChangeEvent, useCallback, useRef, useState } from 'react';
-import { CircularProgress, Icon, Stack, Typography } from '@mui/material';
+import { useCallback, useState } from 'react';
+import { Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-
-import { AUTO_HIDE_DURATION } from '@/constant';
-
-import { StyledButton } from '@/components/atoms';
-
-import ICON_UPLOAD from './assets/icon_upload.svg';
 import {
   MRT_ColumnDef,
   MRT_TableContainer,
   useMaterialReactTable,
 } from 'material-react-table';
 
+import { AUTO_HIDE_DURATION } from '@/constant';
+
+import { StyledButton, StyledUploadBox } from '@/components/atoms';
+
+import { _preUploadExcel } from '@/request/directory';
+import { HttpError } from '@/types';
+
 export const XLSXUpload = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [loading, setLoading] = useState(false);
-  const [cols, setCols] = useState<Array<string | number>>([]);
-  const [fixedCols, setFixedCols] = useState<Array<string | number>>([]);
-  const [data, setData] = useState<
+  const [tableHeader, setTableHeader] = useState([]);
+  const [tableData, setTableData] = useState<
     Array<{ [key: string | number]: string | number }>
   >([]);
-  const [fileRows, setFileRows] = useState<number>(0);
-  const [fileColumns, setFileColumns] = useState<number>(0);
   const [fileName, setFileName] = useState<string>('');
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const validatorFileSize = useCallback(
-    (files: FileList) => {
-      let flag = true;
-      Array.from(files).some((item) => {
-        if (item.size / 1024 / 1024 > 20) {
-          enqueueSnackbar('File size cannot exceed 20MB.', {
-            header: 'Upload Failed',
-            variant: 'error',
-            autoHideDuration: AUTO_HIDE_DURATION,
-            isSimple: false,
-          });
-          flag = false;
-          return true;
-        }
-      });
-      return flag;
+  const onExtractFile = useCallback(
+    async (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      setLoading(true);
+      try {
+        const { data } = await _preUploadExcel(formData);
+        setTableData(data.content);
+        setFileName(data.fileName);
+        setTableHeader(data.header);
+      } catch (err) {
+        const { header, message, variant } = err as HttpError;
+        enqueueSnackbar(message, {
+          variant: variant || 'error',
+          autoHideDuration: AUTO_HIDE_DURATION,
+          isSimple: !header,
+          header,
+        });
+      } finally {
+        setLoading(false);
+      }
     },
     [enqueueSnackbar],
   );
 
-  const onExtractFile = useCallback((file: File) => {}, []);
-
-  const onChangeEvent = useCallback(
-    async (event: ChangeEvent<HTMLInputElement>) => {
-      event.preventDefault();
-      if (event.target.files && validatorFileSize(event.target.files)) {
-        onExtractFile(event.target.files[0]);
-        //event.target.value = '';
-      }
-    },
-    [onExtractFile, validatorFileSize],
-  );
-
   const table = useMaterialReactTable({
-    columns: genColumns(cols, fixedCols),
-    data: data,
+    columns: genColumns(tableHeader),
+    data: tableData,
     enableExpandAll: false,
     enableExpanding: false,
     enableSorting: false,
@@ -210,73 +198,31 @@ export const XLSXUpload = () => {
     },
   });
 
-  return data.length === 0 ? (
-    <Stack
-      alignItems={'center'}
-      border={'1px dashed #D2D6E1'}
-      borderRadius={2}
-      flex={1}
-      gap={1}
-      justifyContent={'center'}
-      p={6}
-    >
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <input
-            accept={
-              '.csv,.xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,'
-            }
-            hidden
-            onChange={onChangeEvent}
-            ref={fileInputRef}
-            type="file"
-          />
-          <StyledButton
-            onClick={() => {
-              fileInputRef.current?.click();
-            }}
-            size={'small'}
-            sx={{
-              width: 144,
-            }}
-          >
-            <Icon
-              component={ICON_UPLOAD}
-              sx={{
-                height: 24,
-                width: 24,
-                mr: 1,
-              }}
-            />
-            Select file
-          </StyledButton>
-          <Typography color={'text.secondary'} variant={'body2'}>
-            Drag & drop or click &#34;Select file&#34; above to browse your
-            computer
-          </Typography>
-          <Typography color={'text.secondary'} variant={'body2'}>
-            .xlsx and .csv files are supported
-          </Typography>
-        </>
-      )}
-    </Stack>
+  return tableData.length === 0 ? (
+    <StyledUploadBox
+      loading={loading}
+      onUpload={onExtractFile}
+      sx={{
+        gap: 1,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 2,
+        p: 6,
+      }}
+    />
   ) : (
     <Stack flex={1}>
       <Typography variant={'h7'}>Preview your file</Typography>
       <Stack alignItems={'center'} flexDirection={'row'}>
         <Typography color={'text.primary'} variant={'body3'}>
-          {fileName}: {fileRows} lines and {fileColumns} columns.
+          {fileName}
         </Typography>
         <Typography
           color={'primary.main'}
           onClick={() => {
-            setData([]);
-            setCols([]);
-            setFixedCols([]);
-            setFileRows(0);
-            setFileColumns(0);
+            setTableData([]);
+            setTableHeader([]);
           }}
           sx={{
             textDecoration: 'underline',
@@ -307,13 +253,12 @@ export const XLSXUpload = () => {
 };
 
 const genColumns = (
-  arr: Array<string | number>,
-  fixedCols: Array<string | number>,
+  arr: Array<{ columnName: string; columnId: string }>,
 ): MRT_ColumnDef<any>[] => {
-  const result = arr.map((item, index) => {
+  const result = arr.map((item) => {
     return {
-      header: fixedCols[index],
-      accessorKey: `${item}`,
+      header: item.columnName,
+      accessorKey: item.columnId,
       muiTableBodyCellProps: { align: 'center' },
       muiTableHeadCellProps: { align: 'center' },
       Cell: ({ renderedCellValue }) => {
@@ -329,19 +274,6 @@ const genColumns = (
           >
             {renderedCellValue ? renderedCellValue : '-'}
           </Typography>
-          //<Tooltip title={renderedCellValue ? renderedCellValue : '-'}>
-          //  <Typography
-          //    sx={{
-          //      overflow: 'hidden',
-          //      textOverflow: 'ellipsis',
-          //      whiteSpace: 'nowrap',
-          //      width: '100%',
-          //    }}
-          //    variant={'body3'}
-          //  >
-          //    {renderedCellValue ? renderedCellValue : '-'}
-          //  </Typography>
-          //</Tooltip>
         );
       },
     } as MRT_ColumnDef<any>;

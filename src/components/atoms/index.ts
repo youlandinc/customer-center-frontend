@@ -10,5 +10,7 @@ export * from './StyledDragAndDrop';
 
 export * from './StyledGrid';
 
+export * from './StyledUploadBox';
+
 export * from './StyledTextField';
 export * from './StyledTextFieldSearch';
