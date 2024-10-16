@@ -1,3 +1,3 @@
 export * from './ImportContacts';
 
-export * from './DirectoryOverview'
+export * from './DirectoryOverview';
