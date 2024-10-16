@@ -1,3 +1,8 @@
+import { Stack, Typography } from '@mui/material';
+import { MRT_ColumnDef } from 'material-react-table';
+import { FC, useEffect, useMemo } from 'react';
+import useSWR from 'swr';
+
 import { StyledGrid } from '@/components/atoms';
 import {
   ellipsisStyle,
@@ -5,12 +10,8 @@ import {
   GridToolBar,
 } from '@/components/molecules';
 
-import { _getGridListById } from '@/request/directory';
-import { useDirectoryColumnsStore } from '@/stores';
-import { Stack, Typography } from '@mui/material';
-import { MRT_ColumnDef } from 'material-react-table';
-import { FC, useEffect, useMemo } from 'react';
-import useSWR from 'swr';
+import { _getGridListById } from '@/request';
+import { useDirectoryColumnsStore } from '@/stores/directoryStores/directoryColumnsStore';
 
 export const GridDirectory: FC = () => {
   const { metadataColumns, getALlColumns, tableId } = useDirectoryColumnsStore(
@@ -19,8 +20,8 @@ export const GridDirectory: FC = () => {
 
   const { data: list } = useSWR(
     typeof tableId === 'number' ? [tableId] : null,
-    async ([tablId]) => {
-      return await _getGridListById(tablId, {});
+    async ([tableId]) => {
+      return await _getGridListById(tableId, {} as any);
     },
   );
 
@@ -55,11 +56,15 @@ export const GridDirectory: FC = () => {
   }, [metadataColumns]);
 
   const data =
-    list?.data?.metadataValues?.records?.map((item) => ({
-      [item.columnName]: item.columnValue,
-    })) || [];
-
-  console.log(list?.data?.metadataValues?.records);
+    list?.data?.metadataValues?.records?.map((item) => {
+      return item.reduce(
+        (pre, cur, index) => {
+          pre[cur.columnName] = cur.columnValue;
+          return pre;
+        },
+        {} as Record<string, any>,
+      );
+    }) || [];
 
   useEffect(() => {
     getALlColumns();

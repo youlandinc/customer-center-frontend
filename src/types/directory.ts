@@ -67,6 +67,6 @@ export type DirectoryGridResponse = {
     total: number;
     size: number;
     current: number;
-    records: RecordsItem[];
+    records: RecordsItem[][];
   };
 };
