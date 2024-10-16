@@ -14,7 +14,7 @@ import AddColumn from './assets/icon_add_column.svg';
 import EditColumn from './assets/icon_edit_column.svg';
 import MoreIcon from './assets/icon_more.svg';
 
-export const StyledMoreBtn: FC = () => {
+export const GridMoreBtn: FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { visible, open, close } = useSwitch();
@@ -189,7 +189,7 @@ export const StyledMoreBtn: FC = () => {
         open={visible}
         PaperProps={{ sx: { px: 3, py: 6, minWidth: 465 } }}
       >
-        <StyledDragAndDrop list={column} />
+        <StyledDragAndDrop list={column as any} />
       </Drawer>
     </>
   );

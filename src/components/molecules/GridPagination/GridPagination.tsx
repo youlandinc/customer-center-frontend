@@ -26,7 +26,12 @@ export const GridPagination: FC<GridPaginationProps> = ({
   rowsPerPage,
 }) => {
   return (
-    <Stack alignItems={'center'} direction={'row'} spacing={6}>
+    <Stack
+      alignItems={'center'}
+      direction={'row'}
+      justifyContent={'flex-end'}
+      spacing={6}
+    >
       <TablePagination
         component={'div'}
         count={rowCount}
@@ -48,17 +53,20 @@ export const GridPagination: FC<GridPaginationProps> = ({
           },
         }}
         sx={{
-          // '& .MuiTablePagination-selectLabel,& .MuiTablePagination-displayedRows':
-          //   {
-          //     fontSize: {
-          //       xs: '14px !important',
-          //       lg: '16px !important',
-          //     },
-          //   },
           color: 'text.secondary',
-          '& .MuiTablePagination-input': {
+          '& .MuiTablePagination-selectLabel': {
             fontSize: 12,
+          },
+          '& .MuiSelect-select': {
+            fontSize: 12,
+            padding: 0,
+          },
+          '& .MuiTablePagination-displayedRows': {
+            fontSize: 12,
+          },
+          '& .MuiInputBase-root': {
             ml: 0,
+            mr: 3,
           },
         }}
       />
@@ -72,7 +80,7 @@ export const GridPagination: FC<GridPaginationProps> = ({
         shape="circular"
         siblingCount={0}
         sx={{
-          fontSize: 14,
+          fontSize: 16,
           '& .MuiPaginationItem-previousNext': {
             color: 'text.primary',
           },

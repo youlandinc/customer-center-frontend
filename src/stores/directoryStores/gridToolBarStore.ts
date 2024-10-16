@@ -17,6 +17,6 @@ export type GridToolBarState = {
   gridColumn: GridColumnItem[];
 };
 
-export const useGridToolBarStores = createStore<GridToolBarState>((set) => ({
+export const useGridToolBarStore = createStore<GridToolBarState>((set) => ({
   gridColumn: [],
 }));

@@ -1,3 +1,5 @@
+import { SxProps } from '@mui/material';
+import * as React from 'react';
 import { FC } from 'react';
 import {
   MRT_TableContainer,
@@ -13,6 +15,7 @@ type StyledGridProps = MRT_TableOptions<any> & {
   //   property: string; //.id as string,
   //   label: string;
   // }) => void;
+  style?: React.CSSProperties;
 };
 
 export const StyledGrid: FC<StyledGridProps> = ({
@@ -21,6 +24,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
   columns,
   data,
   rowCount,
+  style,
 }) => {
   const table = useMaterialReactTable({
     columns: columns,
@@ -173,6 +177,8 @@ export const StyledGrid: FC<StyledGridProps> = ({
     muiTableContainerProps: {
       style: {
         maxHeight: 'calc(100vh - 412px)',
+        borderBottom: '1px solid #ccc',
+        ...style,
       },
     },
   });
