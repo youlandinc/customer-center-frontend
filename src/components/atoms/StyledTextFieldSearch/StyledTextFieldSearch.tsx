@@ -2,7 +2,8 @@ import { FC, useState } from 'react';
 import {
   IconButton,
   InputAdornment,
-  OutlinedTextFieldProps,
+  StandardTextFieldProps,
+  SxProps,
 } from '@mui/material';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,11 +11,15 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { StyledTextField } from '../StyledTextField';
 
-type StyledTextFieldInputProps = OutlinedTextFieldProps & {
+interface StyledTextFieldInputProps
+  extends Omit<StandardTextFieldProps, 'variant'> {
+  sx?: SxProps;
+  disabledAutoFill?: boolean;
+  variant?: 'outlined' | 'standard' | 'filled';
   handleClear?: () => void;
-};
+}
 
-export const StyledSearchTextField: FC<StyledTextFieldInputProps> = ({
+export const StyledTextFieldSearch: FC<StyledTextFieldInputProps> = ({
   handleClear,
   ...rest
 }) => {

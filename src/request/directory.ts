@@ -12,7 +12,7 @@ export const _getAllColumns = () => {
 
 export const _getGridListById = (
   tableId: number,
-  queryCondition: DirectoryGridQueryCondition,
+  queryCondition: Partial<DirectoryGridQueryCondition>,
 ) => {
   return post<DirectoryGridResponse>(
     `/customer/es/records/${tableId}`,
@@ -26,4 +26,12 @@ export const _addNewColumn = (data: {
   columnType: ColumnTypeEnum;
 }) => {
   return post('/customer/metadata/columns', data);
+};
+
+export const _preUploadExcel = (params: FormData) => {
+  return post('/customer/task/data/preview', params, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 };

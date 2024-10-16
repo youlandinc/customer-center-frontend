@@ -1,7 +1,7 @@
 import { FC, useRef } from 'react';
 import { Stack, Typography } from '@mui/material';
 
-import { StyledSearchTextField } from '@/components/atoms';
+import { StyledTextFieldSearch } from '@/components/atoms';
 import { GridMoreBtn } from '@/components/molecules';
 
 type GridToolBarProps = {
@@ -22,7 +22,7 @@ export const GridToolBar: FC<GridToolBarProps> = ({ tableId }) => {
       >
         <Typography variant={'subtitle1'}>74,0281 Contacts</Typography>
         <Stack alignItems={'center'} direction={'row'} gap={3}>
-          <StyledSearchTextField
+          <StyledTextFieldSearch
             // handleClear={() => {
             //   propertyAddressRef.current!.value = '';
             //   updateQueryDebounce('keyword', '');

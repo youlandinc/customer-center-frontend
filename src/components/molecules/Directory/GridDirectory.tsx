@@ -20,7 +20,10 @@ export const GridDirectory: FC = () => {
   const { data: list } = useSWR(
     typeof tableId === 'number' ? [tableId] : null,
     async ([tablId]) => {
-      return await _getGridListById(tablId, {});
+      return await _getGridListById(tablId, {
+        page: 0,
+        size: 50,
+      });
     },
   );
 
