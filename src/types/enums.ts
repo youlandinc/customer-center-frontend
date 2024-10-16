@@ -5,32 +5,32 @@ export enum ColumnPiningDirectionEnum {
 }
 
 export enum ColumnTypeEnum {
-  text = 'Text',
-  number = 'Number',
-  address = 'Address',
-  uuid = 'Uuid',
+  text = 'TEXT',
+  number = 'NUMBER',
+  address = 'ADDRESS',
+  uuid = 'UUID',
 }
 
 export enum SortDirection {
-  ASC = 'Asc',
-  DESC = 'Desc',
+  asc = 'ASC',
+  desc = 'DESC',
 }
 
 export enum SearchOperationEnum {
-  EQUALS = 'EQUALS',
-  NOT = 'NOT',
-  CONTAINS = 'CONTAINS',
-  NOT_CONTAINS = 'NOT_CONTAINS',
-  STARTS_WITH = 'STARTS_WITH',
-  NOT_STARTS_WITH = 'NOT_STARTS_WITH',
-  ENDS_WITH = 'ENDS_WITH',
-  NOT_ENDS_WITH = 'NOT_ENDS_WITH',
-  GREATER_THAN = 'GREATER_THAN',
-  LESS_THAN = 'LESS_THAN',
-  GREATER_THAN_OR_EQUAL = 'GREATER_THAN_OR_EQUAL',
-  LESS_THAN_OR_EQUAL = 'LESS_THAN_OR_EQUAL',
-  IN = 'IN',
-  NOT_IN = 'NOT_IN',
-  BETWEEN = 'BETWEEN',
-  NOT_BETWEEN = 'NOT_BETWEEN',
+  equals = 'EQUALS',
+  not = 'NOT',
+  contains = 'CONTAINS',
+  not_contains = 'NOT_CONTAINS',
+  starts_with = 'STARTS_WITH',
+  not_starts_with = 'NOT_STARTS_WITH',
+  ends_with = 'ENDS_WITH',
+  not_ends_with = 'NOT_ENDS_WITH',
+  greater_than = 'GREATER_THAN',
+  less_than = 'LESS_THAN',
+  greater_than_or_equal = 'GREATER_THAN_OR_EQUAL',
+  less_than_or_equal = 'LESS_THAN_OR_EQUAL',
+  in = 'IN',
+  not_in = 'NOT_IN',
+  between = 'BETWEEN',
+  not_between = 'NOT_BETWEEN',
 }
