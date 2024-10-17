@@ -1,6 +1,13 @@
 'use client';
 import { useMemo, useState } from 'react';
-import { Stack, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import {
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 import { StyledButton } from '@/components/atoms';
 import { XLSXMatchColumn, XLSXPreUpload } from '@/components/molecules';
@@ -14,14 +21,19 @@ interface ImportContactsProps {
 export const ImportContacts = ({
   back = () => console.log('cancel import'),
 }) => {
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
 
   const renderNode = useMemo(() => {
     switch (activeStep) {
       case 0:
         return <XLSXPreUpload nextStep={() => setActiveStep(1)} />;
       case 1:
-        return <XLSXMatchColumn />;
+        return (
+          <XLSXMatchColumn
+            backStep={() => setActiveStep(0)}
+            nextStep={() => setActiveStep(2)}
+          />
+        );
       case 2:
         return <div>Step {activeStep}</div>;
     }

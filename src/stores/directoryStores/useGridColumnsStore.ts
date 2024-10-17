@@ -4,7 +4,7 @@ import { enqueueSnackbar } from 'notistack';
 import { AUTO_HIDE_DURATION } from '@/constant';
 
 import { _getAllColumns } from '@/request/directory';
-import { ColumnItem, HttpError } from '@/types';
+import { ColumnItem, ColumnTypeEnum, HttpError } from '@/types';
 
 export type ColumnsStoreStates = {
   tableId?: number;
@@ -16,18 +16,33 @@ export type ColumnsStoreStates = {
 
 type ColumnsStoreStoresActions = {
   fetchAllColumns: () => Promise<void>;
-  updateColumn: (data: ColumnItem[]) => void;
+  setColumn: (data: ColumnItem[]) => void;
+  getPureColumn: () => {
+    columnId: number | string;
+    columnName: string;
+    columnLabel: string;
+    columnType: ColumnTypeEnum;
+  }[];
 };
 
 export const useGridColumnsStore = create<
   ColumnsStoreStates & ColumnsStoreStoresActions
->((set) => ({
+>((set, get) => ({
   tableId: undefined,
   tableLabel: '',
   tableName: '',
   metadataColumns: [],
   loading: false,
-  updateColumn: (data) => {
+  getPureColumn: () => {
+    const columns = get().metadataColumns;
+    return columns.map((column) => ({
+      columnId: column.columnId,
+      columnName: column.columnName,
+      columnLabel: column.columnLabel,
+      columnType: column.columnType,
+    }));
+  },
+  setColumn: (data) => {
     set({ metadataColumns: data });
   },
   fetchAllColumns: async () => {

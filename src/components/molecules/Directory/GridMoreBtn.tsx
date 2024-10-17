@@ -22,7 +22,7 @@ import EditColumn from './assets/icon_edit_column.svg';
 import MoreIcon from './assets/icon_more.svg';
 
 export const GridMoreBtn: FC = () => {
-  const { tableId, metadataColumns, updateColumn } = useGridColumnsStore(
+  const { tableId, metadataColumns, setColumn } = useGridColumnsStore(
     (state) => state,
   );
 
@@ -57,17 +57,17 @@ export const GridMoreBtn: FC = () => {
     },
   ];
   /*
-* {
-      id: 4706,
-      field: 'loanOfficer',
-      headerName: 'Loan officer',
-      columnWidth: null,
-      sort: 0,
-      visibility: true,
-      pinType: 'CENTER',
-      leftOrder: null,
-      rightOrder: null,
-    },*/
+   * {
+   id: 4706,
+   field: 'loanOfficer',
+   headerName: 'Loan officer',
+   columnWidth: null,
+   sort: 0,
+   visibility: true,
+   pinType: 'CENTER',
+   leftOrder: null,
+   rightOrder: null,
+   },*/
   const column = metadataColumns.map((item, index) => ({
     id: item.columnId,
     field: item.columnName,
@@ -88,7 +88,7 @@ export const GridMoreBtn: FC = () => {
           columnLabel: columnName,
           columnType: ColumnTypeEnum.text,
         });
-        updateColumn(res.data.metadataColumns);
+        setColumn(res.data.metadataColumns);
         dialogClose();
         setColumnName('');
       } catch (err) {

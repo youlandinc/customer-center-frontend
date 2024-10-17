@@ -18,8 +18,15 @@ import { _preUploadExcel } from '@/request/directory';
 
 export const XLSXPreUpload: FC<{ nextStep: () => void }> = ({ nextStep }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { setFileColumns, setTaskId, setFileName, reset, fileName } =
-    useTableImportStore();
+  const {
+    setFileColumns,
+    setTaskId,
+    setFileName,
+    reset,
+    setFileContent,
+    setColumnMappingList,
+    fileName,
+  } = useTableImportStore();
 
   const [loading, setLoading] = useState(false);
   const [tableHeader, setTableHeader] = useState<ExcelHeaderProps[]>([]);
@@ -39,10 +46,21 @@ export const XLSXPreUpload: FC<{ nextStep: () => void }> = ({ nextStep }) => {
           _id: uniqueId(),
         }));
         setTableData(result);
+
+        setFileContent(
+          data.content.length > 2 ? data.content.slice(0, 2) : data.content,
+        );
         setFileName(data.fileName);
         setTableHeader(data.header);
         setFileColumns(data.header);
         setTaskId(data.taskId);
+
+        const mappingList = data.header.map((column) => ({
+          columnName: column.columnName,
+          executeColumnId: '',
+        }));
+
+        setColumnMappingList(mappingList);
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {
@@ -55,7 +73,8 @@ export const XLSXPreUpload: FC<{ nextStep: () => void }> = ({ nextStep }) => {
         setLoading(false);
       }
     },
-    [enqueueSnackbar, setFileColumns, setFileName, setTaskId],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [enqueueSnackbar],
   );
 
   const table = useMaterialReactTable({

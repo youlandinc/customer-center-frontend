@@ -1,25 +1,135 @@
-import { StyledSelectPopup } from '@/components/atoms';
-import { Stack } from '@mui/material';
-import { useState } from 'react';
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
+import { FC, useMemo } from 'react';
+import { Stack, Typography } from '@mui/material';
 
-export const XLSXMatchColumn = () => {
-  const { metadataColumns } = useGridColumnsStore();
-  const [x, setX] = useState('');
+import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
+import { useTableImportStore } from '@/stores/directoryStores/useTableImportStore';
+
+import { StyledButton, StyledSelectPopup } from '@/components/atoms';
+
+export const XLSXMatchColumn: FC<{
+  backStep: () => void;
+  nextStep: () => void;
+}> = ({ backStep, nextStep }) => {
+  const { getPureColumn } = useGridColumnsStore();
+  const {
+    fileColumns,
+    fileContent,
+    columnMappingList,
+    setColumnMappingList,
+    reset,
+  } = useTableImportStore();
+
+  const matchOption = useMemo(() => {
+    return getPureColumn().map((column) => {
+      return {
+        key: column.columnName,
+        value: column.columnId,
+        label: column.columnLabel,
+      };
+    });
+  }, [getPureColumn]);
 
   return (
     <>
-      <Stack width={320}>
-        <StyledSelectPopup
-          id={'match-select'}
-          label={''}
-          labelId={'match-select-label'}
-          onChange={(e: any) => {
-            setX(e.target.value as any);
+      <Typography variant={'h7'}>
+        Here is a preview of columns that will be imported
+      </Typography>
+      <Stack
+        border={'1px solid #D2D6E1'}
+        borderRadius={2}
+        maxWidth={1200}
+        overflow={'hidden'}
+      >
+        <Stack
+          alignItems={'center'}
+          bgcolor={'#F8F9FC'}
+          borderBottom={'1px solid #D2D6E1'}
+          flexDirection={'row'}
+          height={40}
+          pl={4}
+          width={'100%'}
+        >
+          <Typography sx={{ flex: 1 }} variant={'subtitle2'}>
+            File column
+          </Typography>
+          <Typography sx={{ flex: 1 }} variant={'subtitle2'}>
+            Data field
+          </Typography>
+        </Stack>
+        <Stack bgcolor={'#ffffff'} width={'100%'}>
+          {fileColumns.map((column, index) => (
+            <Stack
+              alignItems={'center'}
+              borderBottom={'1px solid #D2D6E1'}
+              flexDirection={'row'}
+              key={`table-hash-${column.columnLabel}-${index}`}
+              pl={4}
+              py={1.5}
+              sx={{
+                '&:last-of-type': {
+                  borderBottom: 'none',
+                },
+              }}
+              width={'100%'}
+            >
+              <Stack flex={1} gap={1}>
+                <Typography
+                  color={
+                    columnMappingList[index].executeColumnId === '-1'
+                      ? '#BABCBE'
+                      : 'text.primary'
+                  }
+                  variant={'subtitle2'}
+                >
+                  {column.columnLabel}
+                </Typography>
+                {fileContent.map((row, rowIndex) => (
+                  <Typography
+                    color={'text.secondary'}
+                    key={`table-hash-${column.columnLabel}-${index}-${row[column.columnName]}-${rowIndex}`}
+                    variant={'body2'}
+                  >
+                    {row[column.columnName] ? row[column.columnName] : '-'}
+                  </Typography>
+                ))}
+              </Stack>
+              <Stack flex={1}>
+                <StyledSelectPopup
+                  id={`match-select-column-${index}`}
+                  onChange={(e: any) => {
+                    const list = JSON.parse(JSON.stringify(columnMappingList));
+                    list[index].executeColumnId = e.target.value;
+                    setColumnMappingList(list);
+                  }}
+                  options={matchOption}
+                  sx={{ flex: 1, maxWidth: 300 }}
+                  value={columnMappingList[index].executeColumnId}
+                />
+              </Stack>
+            </Stack>
+          ))}
+        </Stack>
+      </Stack>
+
+      <Stack flexDirection={'row'} gap={3}>
+        <StyledButton
+          color={'info'}
+          onClick={backStep}
+          size={'small'}
+          variant={'text'}
+        >
+          Back
+        </StyledButton>
+        <StyledButton
+          disabled={columnMappingList.some((item) => !item.executeColumnId)}
+          onClick={() => {
+            nextStep();
+            reset();
           }}
-          options={[{ value: '1', label: 'First Name' }]}
-          value={x}
-        />
+          size={'small'}
+        >
+          Continue
+        </StyledButton>
       </Stack>
     </>
   );
