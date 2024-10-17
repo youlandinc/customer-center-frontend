@@ -15,15 +15,16 @@ import { useSwitch } from '@/hooks';
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { _addNewColumn } from '@/request';
 import { ColumnTypeEnum, HttpError } from '@/types';
-import { useDirectoryGridColumnsStore } from '@/stores/directoryStores/gridColumnsStore';
+import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
 import AddColumn from './assets/icon_add_column.svg';
 import EditColumn from './assets/icon_edit_column.svg';
 import MoreIcon from './assets/icon_more.svg';
 
 export const GridMoreBtn: FC = () => {
-  const { tableId, metadataColumns, getALlColumns } =
-    useDirectoryGridColumnsStore((state) => state);
+  const { tableId, metadataColumns, updateColumn } = useGridColumnsStore(
+    (state) => state,
+  );
 
   const [columnName, setColumnName] = useState<string>('');
 
@@ -82,12 +83,12 @@ export const GridMoreBtn: FC = () => {
   const [state, addNewColumn] = useAsyncFn(
     async (columnName: string) => {
       try {
-        await _addNewColumn({
+        const res = await _addNewColumn({
           tableId: tableId as number,
           columnLabel: columnName,
           columnType: ColumnTypeEnum.text,
         });
-        await getALlColumns();
+        updateColumn(res.data.metadataColumns);
         dialogClose();
         setColumnName('');
       } catch (err) {

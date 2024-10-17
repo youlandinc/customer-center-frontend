@@ -27,7 +27,10 @@ export const _addNewColumn = (data: {
   columnLabel: string;
   columnType: ColumnTypeEnum;
 }) => {
-  return post('http://192.168.1.102:8080/customer/metadata/columns', data);
+  return post<GetColumnsResponse>(
+    'http://192.168.1.102:8080/customer/metadata/columns',
+    data,
+  );
 };
 
 export const _preUploadExcel = (params: FormData) => {

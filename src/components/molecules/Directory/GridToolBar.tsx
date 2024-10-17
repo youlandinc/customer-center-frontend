@@ -1,9 +1,13 @@
-import { useGridQueryConditionStore } from '@/stores/directoryStores/gridQueryConditionStore';
-import { FC, useRef } from 'react';
+import { FC, useRef, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 
+import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
+
 import { useDebounceFn } from '@/hooks';
-import { StyledTextFieldSearch } from '@/components/atoms';
+import {
+  StyledGoogleAutoComplete,
+  StyledTextFieldSearch,
+} from '@/components/atoms';
 import { GridMoreBtn } from '@/components/molecules';
 
 type GridToolBarProps = {
@@ -41,6 +45,7 @@ export const GridToolBar: FC<GridToolBarProps> = ({ totalContacts }) => {
             }}
             variant={'outlined'}
           />
+
           <GridMoreBtn />
         </Stack>
       </Stack>

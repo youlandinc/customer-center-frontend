@@ -4,18 +4,22 @@ import { create } from 'zustand';
 import { enqueueSnackbar } from 'notistack';
 
 import { _getAllColumns } from '@/request/directory';
-import { GetColumnsResponse, HttpError } from '@/types';
+import { ColumnItem, GetColumnsResponse, HttpError } from '@/types';
 
-type ColumnsStoreStates = Omit<GetColumnsResponse, 'tableId'> & {
+export type ColumnsStoreStates = {
   tableId?: number;
   loading?: boolean;
+  tableLabel: string;
+  tableName: string;
+  metadataColumns: ColumnItem[];
 };
 
 type ColumnsStoreStoresActions = {
-  getALlColumns: () => Promise<void>;
+  fetchAllColumns: () => Promise<void>;
+  updateColumn: (data: ColumnItem[]) => void;
 };
 
-export const useDirectoryGridColumnsStore = create<
+export const useGridColumnsStore = create<
   ColumnsStoreStates & ColumnsStoreStoresActions
 >((set) => ({
   tableId: undefined,
@@ -23,7 +27,10 @@ export const useDirectoryGridColumnsStore = create<
   tableName: '',
   metadataColumns: [],
   loading: false,
-  getALlColumns: async () => {
+  updateColumn: (data) => {
+    set({ metadataColumns: data });
+  },
+  fetchAllColumns: async () => {
     try {
       set({ loading: true });
       const response = await _getAllColumns();

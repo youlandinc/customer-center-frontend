@@ -11,12 +11,12 @@ import {
 } from '@/components/molecules';
 
 import { _getGridListById } from '@/request';
-import { useGridQueryConditionStore } from '@/stores/directoryStores/gridQueryConditionStore';
-import { useDirectoryGridColumnsStore } from '@/stores/directoryStores/gridColumnsStore';
+import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
+import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
 export const GridDirectory: FC = () => {
-  const { metadataColumns, getALlColumns, tableId, loading } =
-    useDirectoryGridColumnsStore((state) => state);
+  const { metadataColumns, fetchAllColumns, tableId, loading } =
+    useGridColumnsStore((state) => state);
   const { keyword } = useGridQueryConditionStore((state) => state);
 
   const { data: list, isLoading } = useSWR(
@@ -81,7 +81,7 @@ export const GridDirectory: FC = () => {
   const totalContacts = list?.data?.metadataValues?.total || 0;
 
   useEffect(() => {
-    getALlColumns();
+    fetchAllColumns();
   }, []);
 
   return (

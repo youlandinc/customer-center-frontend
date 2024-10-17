@@ -1,4 +1,5 @@
 'use client';
+import Script from 'next/script';
 import { ReactNode, useEffect } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import NProgress from 'nprogress';
@@ -89,6 +90,10 @@ const RootLayout = ({
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
+      <Script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbKnoaYuPycOQD4uQdPrc1nESFEVRH5-g&libraries=places,streetView,maps"
+        type="text/javascript"
+      />
     </html>
   );
 };
