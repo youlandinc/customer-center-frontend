@@ -15,6 +15,8 @@ export * from './StyledUploadBox';
 export * from './StyledTextField';
 export * from './StyledTextFieldSearch';
 
+export * from './StyledSelectPopup';
+
 export * from './StyledSelect';
 
 export * from './StyledGoogleAutoComplete';
