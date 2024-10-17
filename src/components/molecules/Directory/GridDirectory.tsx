@@ -1,3 +1,4 @@
+import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
 import { Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { FC, useEffect, useMemo } from 'react';
@@ -18,6 +19,7 @@ export const GridDirectory: FC = () => {
   const { metadataColumns, fetchAllColumns, tableId, loading } =
     useGridColumnsStore((state) => state);
   const { keyword } = useGridQueryConditionStore((state) => state);
+  const newContact = useGridNewContactStore((state) => state.data);
 
   const { data: list, isLoading } = useSWR(
     typeof tableId === 'number'
@@ -31,6 +33,7 @@ export const GridDirectory: FC = () => {
             },
           },
           metadataColumns,
+          { ...newContact },
         ]
       : null,
     async ([tableId, queryCondition]) => {
@@ -86,9 +89,7 @@ export const GridDirectory: FC = () => {
 
   return (
     <Stack gap={1.5}>
-      {typeof tableId === 'number' && (
-        <GridToolBar totalContacts={totalContacts} />
-      )}
+      <GridToolBar totalContacts={totalContacts} />
       <Stack bgcolor={'#fff'} border={'1px solid #ccc'} gap={3}>
         <StyledGrid
           columns={columns}

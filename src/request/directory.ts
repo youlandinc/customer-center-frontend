@@ -1,5 +1,6 @@
 import { get, post } from '@/request/axios';
 import {
+  AddContactRequestParam,
   ColumnTypeEnum,
   DirectoryGridQueryCondition,
   DirectoryGridResponse,
@@ -32,6 +33,10 @@ export const _addNewColumn = (data: {
     'http://192.168.1.102:8080/customer/metadata/columns',
     data,
   );
+};
+
+export const _addNewContact = (param: AddContactRequestParam) => {
+  return post('http://192.168.1.102:8080/customer/es/record', param);
 };
 
 export const _preUploadExcel = (params: FormData) => {

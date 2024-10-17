@@ -82,3 +82,12 @@ export type GridColumnItem = {
   sort: number;
   visibility: boolean;
 };
+
+export type AddContactRequestParam = {
+  tableId: number;
+  record: {
+    columnId: number;
+    columnName: string;
+    columnValue: unknown;
+  }[];
+};

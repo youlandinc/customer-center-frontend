@@ -107,6 +107,7 @@ export const GridMoreBtn: FC = () => {
   return (
     <>
       <IconButton
+        disabled={!metadataColumns.length}
         onClick={(e) => {
           setAnchorEl(e.currentTarget);
         }}

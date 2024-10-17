@@ -1,14 +1,12 @@
-import { FC, useRef, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
+import { FC, useRef } from 'react';
 
-import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
+import { StyledTextFieldSearch } from '@/components/atoms';
+import { GridMoreBtn } from '@/components/molecules';
 
 import { useDebounceFn } from '@/hooks';
-import {
-  StyledGoogleAutoComplete,
-  StyledTextFieldSearch,
-} from '@/components/atoms';
-import { GridMoreBtn } from '@/components/molecules';
+
+import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
 
 type GridToolBarProps = {
   totalContacts: number;

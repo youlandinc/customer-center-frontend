@@ -5,8 +5,10 @@ import { CreateNewContact, GridDirectory } from '@/components/molecules';
 
 export const DirectoryOverview: FC = () => {
   return (
-    <Stack gap={3}>
-      <CreateNewContact />
+    <Stack gap={4}>
+      <Stack direction={'row'}>
+        <CreateNewContact />
+      </Stack>
       <GridDirectory />
     </Stack>
   );

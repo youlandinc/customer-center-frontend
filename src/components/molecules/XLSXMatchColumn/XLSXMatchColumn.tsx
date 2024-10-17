@@ -1,10 +1,10 @@
 import { StyledSelectPopup } from '@/components/atoms';
 import { Stack } from '@mui/material';
 import { useState } from 'react';
-import { useDirectoryGridColumnsStore } from '@/stores/directoryStores/gridColumnsStore';
+import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
 export const XLSXMatchColumn = () => {
-  const { metadataColumns } = useDirectoryGridColumnsStore();
+  const { metadataColumns } = useGridColumnsStore();
   const [x, setX] = useState('');
 
   return (
