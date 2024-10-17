@@ -2,7 +2,6 @@ import { FC } from 'react';
 import {
   FormControl,
   Icon,
-  InputLabel,
   MenuItem,
   Select,
   SxProps,
@@ -13,8 +12,6 @@ import { SelectInputProps } from '@mui/material/Select/SelectInput';
 import LOGO_PROHIBIT from './asset/logo-prohibit.svg';
 
 interface StyledSelectPopupProps {
-  label: string;
-  labelId: string;
   id: string;
   value: string | undefined | number;
   onChange: SelectInputProps['onChange'];
@@ -24,8 +21,6 @@ interface StyledSelectPopupProps {
 }
 
 export const StyledSelectPopup: FC<StyledSelectPopupProps> = ({
-  label,
-  labelId,
   id,
   value,
   onChange,
@@ -41,14 +36,8 @@ export const StyledSelectPopup: FC<StyledSelectPopupProps> = ({
         '& .MuiOutlinedInput-root': {
           padding: 0,
           border: 'none',
-          '& .MuiInputLabel-outlined': {
-            transform: 'translate(14px, 18px) scale(1)',
-          },
-          '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-            transform: 'translate(14px, -6px) scale(0.75)',
-          },
           '& .MuiOutlinedInput-input': {
-            padding: '16.5px 32px 16.5px 14px',
+            padding: '10.5px 32px 10.5px 14px',
           },
           '& fieldset': {
             border: '1px solid',
@@ -73,11 +62,9 @@ export const StyledSelectPopup: FC<StyledSelectPopupProps> = ({
         ...sx,
       }}
     >
-      <InputLabel id={labelId}>{label}</InputLabel>
       <Select
+        displayEmpty
         id={id}
-        label={label}
-        labelId={labelId}
         MenuProps={{
           disableScrollLock: true,
           MenuListProps: {
@@ -89,6 +76,11 @@ export const StyledSelectPopup: FC<StyledSelectPopupProps> = ({
         }}
         onChange={onChange}
         renderValue={(selected) => {
+          if ((selected as string).length === 0) {
+            return (
+              <Typography color={'text.secondary'}>Select a field</Typography>
+            );
+          }
           if (selected == -1) {
             return <Typography>Do not import</Typography>;
           }
@@ -98,7 +90,11 @@ export const StyledSelectPopup: FC<StyledSelectPopupProps> = ({
         value={value}
         variant={'outlined'}
       >
-        <MenuItem disabled sx={{ px: 1.5, pt: 1.5, pb: 0, fontSize: 12 }}>
+        <MenuItem
+          disabled
+          sx={{ px: 1.5, pt: 1.5, pb: 0, fontSize: 12 }}
+          value={''}
+        >
           Match to existing column
         </MenuItem>
         {options.map((item) => (
