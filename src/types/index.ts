@@ -1,5 +1,6 @@
 export * from './enums';
-export * from './directory';
+export * from './contacts';
+
 export enum HttpErrorType {
   tokenExpired = '40001',
 }

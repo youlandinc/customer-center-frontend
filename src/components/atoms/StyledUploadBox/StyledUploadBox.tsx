@@ -24,7 +24,7 @@ import {
 
 import { StyledButton } from '@/components/atoms';
 
-import ICON_UPLOAD from '@/components/molecules/XLSXUpload/assets/icon_upload.svg';
+import ICON_UPLOAD from '@/components/molecules/XLSXPreUpload/assets/icon_upload.svg';
 
 interface StyledUploadBoxProps {
   loading?: boolean;

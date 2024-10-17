@@ -1,5 +1,4 @@
-'use client';
-import { useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import {
@@ -7,23 +6,26 @@ import {
   MRT_TableContainer,
   useMaterialReactTable,
 } from 'material-react-table';
+import { uniqueId } from 'lodash';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 
 import { StyledButton, StyledUploadBox } from '@/components/atoms';
 
+import { useTableImportStore } from '@/stores/directoryStores/useTableImportStore';
+import { ExcelContentProps, ExcelHeaderProps, HttpError } from '@/types';
 import { _preUploadExcel } from '@/request/directory';
-import { HttpError } from '@/types';
 
-export const XLSXUpload = () => {
+export const XLSXPreUpload: FC<{ nextStep: () => void }> = ({ nextStep }) => {
   const { enqueueSnackbar } = useSnackbar();
+  const { setFileColumns, setTaskId, setFileName, reset, fileName } =
+    useTableImportStore();
 
   const [loading, setLoading] = useState(false);
-  const [tableHeader, setTableHeader] = useState([]);
+  const [tableHeader, setTableHeader] = useState<ExcelHeaderProps[]>([]);
   const [tableData, setTableData] = useState<
-    Array<{ [key: string | number]: string | number }>
+    Array<ExcelContentProps & { _id: string }>
   >([]);
-  const [fileName, setFileName] = useState<string>('');
 
   const onExtractFile = useCallback(
     async (file: File) => {
@@ -32,9 +34,15 @@ export const XLSXUpload = () => {
       setLoading(true);
       try {
         const { data } = await _preUploadExcel(formData);
-        setTableData(data.content);
+        const result = data.content.map((item) => ({
+          ...item,
+          _id: uniqueId(),
+        }));
+        setTableData(result);
         setFileName(data.fileName);
         setTableHeader(data.header);
+        setFileColumns(data.header);
+        setTaskId(data.taskId);
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {
@@ -47,7 +55,7 @@ export const XLSXUpload = () => {
         setLoading(false);
       }
     },
-    [enqueueSnackbar],
+    [enqueueSnackbar, setFileColumns, setFileName, setTaskId],
   );
 
   const table = useMaterialReactTable({
@@ -83,7 +91,7 @@ export const XLSXUpload = () => {
     initialState: {
       showProgressBars: false,
     },
-    getRowId: (row) => row.title, //default
+    getRowId: (row) => row._id, //default
     rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
     columnVirtualizerOptions: { overscan: 5 }, //optionally customize the column virtualizer
 
@@ -223,6 +231,7 @@ export const XLSXUpload = () => {
           onClick={() => {
             setTableData([]);
             setTableHeader([]);
+            reset();
           }}
           sx={{
             textDecoration: 'underline',
@@ -240,6 +249,7 @@ export const XLSXUpload = () => {
       />
 
       <StyledButton
+        onClick={nextStep}
         size={'small'}
         sx={{
           mt: 6,
@@ -253,12 +263,12 @@ export const XLSXUpload = () => {
 };
 
 const genColumns = (
-  arr: Array<{ columnName: string; columnId: string }>,
+  arr: Array<{ columnName: string; columnLabel: string }>,
 ): MRT_ColumnDef<any>[] => {
   const result = arr.map((item) => {
     return {
-      header: item.columnName,
-      accessorKey: item.columnId,
+      header: item.columnLabel,
+      accessorKey: item.columnName,
       muiTableBodyCellProps: { align: 'center' },
       muiTableHeadCellProps: { align: 'center' },
       Cell: ({ renderedCellValue }) => {

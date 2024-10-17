@@ -14,3 +14,5 @@ export * from './StyledUploadBox';
 
 export * from './StyledTextField';
 export * from './StyledTextFieldSearch';
+
+export * from './StyledSelectPopup';

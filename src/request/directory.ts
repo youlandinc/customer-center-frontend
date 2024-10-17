@@ -5,6 +5,7 @@ import {
   DirectoryGridResponse,
   GetColumnsResponse,
 } from '@/types';
+import { PreUploadExcelResponse } from '@/types/contacts';
 
 export const _getAllColumns = () => {
   return get<GetColumnsResponse>(
@@ -31,7 +32,7 @@ export const _addNewColumn = (data: {
 };
 
 export const _preUploadExcel = (params: FormData) => {
-  return post('/customer/task/data/preview', params, {
+  return post<PreUploadExcelResponse>('/customer/task/data/preview', params, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
