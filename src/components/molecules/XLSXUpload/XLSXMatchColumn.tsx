@@ -114,7 +114,10 @@ export const XLSXMatchColumn: FC<{
       <Stack flexDirection={'row'} gap={3}>
         <StyledButton
           color={'info'}
-          onClick={backStep}
+          onClick={() => {
+            backStep();
+            reset();
+          }}
           size={'small'}
           variant={'text'}
         >
@@ -124,7 +127,6 @@ export const XLSXMatchColumn: FC<{
           disabled={columnMappingList.some((item) => !item.executeColumnId)}
           onClick={() => {
             nextStep();
-            reset();
           }}
           size={'small'}
         >

@@ -63,6 +63,31 @@ const RootLayout = ({
     };
   }, []);
 
+  useEffect(() => {
+    const storage = localStorage?.getItem('PERSIST_DATA');
+    const accessToken = storage ? JSON.parse(storage)?.state?.accessToken : '';
+    const token =
+      accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION');
+    if (!token) {
+      return;
+    }
+    const eventSource = new EventSource(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/customer/task/notification?token=${token}`,
+    );
+
+    eventSource.onmessage = (e) => {
+      if (e.data === 'heartbeat') {
+        return;
+      }
+      const data = JSON.parse(e.data);
+      console.log(data);
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
   return (
     <html lang="en">
       <body className={YOULAND_FONTS.variable}>

@@ -65,7 +65,7 @@ export const StyledLayout: FC<LayoutProps> = ({
       >
         {isHomepage ? <StyledLayoutSide /> : sideMenu}
         <Stack
-          bgcolor={'primary.lighter'}
+          bgcolor={'#FBFCFD'}
           height={'100%'}
           overflow={'hidden'}
           width={'100%'}

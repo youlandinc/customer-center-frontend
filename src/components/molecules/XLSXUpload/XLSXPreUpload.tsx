@@ -281,7 +281,7 @@ export const XLSXPreUpload: FC<{ nextStep: () => void }> = ({ nextStep }) => {
   );
 };
 
-const genColumns = (
+export const genColumns = (
   arr: Array<{ columnName: string; columnLabel: string }>,
 ): MRT_ColumnDef<any>[] => {
   const result = arr.map((item) => {
