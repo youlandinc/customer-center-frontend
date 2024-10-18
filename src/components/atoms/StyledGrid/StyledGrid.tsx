@@ -89,87 +89,62 @@ export const StyledGrid: FC<StyledGridProps> = ({
           '& .MuiTableCell-root[data-pinned="true"]::after': {
             zIndex: -2,
           },
+          //muiTableBodyCellProps
+          '& .MuiTableCell-root': {
+            px: 1,
+            py: 0,
+            height: 32,
+            borderRight: '1px solid',
+            borderBottom: '1px solid',
+            borderColor: '#EDF1FF',
+            '&:last-of-type': {
+              borderRight: 'none',
+            },
+          },
         },
         onClick: () => {
           onRowClick?.(props);
         },
       };
     },
-    defaultColumn: {},
-    muiTableBodyCellProps: ({ row: { original } }) => ({
-      sx: {
-        px: 1,
-        py: 0,
-        height: 32,
-        borderRight: '1px solid',
-        borderBottom: '1px solid',
-        borderColor: '#EDF1FF',
-        '&:last-of-type': {
-          borderRight: 'none',
+    defaultColumn: {
+      muiTableHeadCellProps: (props) => ({
+        sx: {
+          opacity: 1,
+          minHeight: 36,
+          px: 1,
+          py: 1.25,
+          justifyContent: 'center',
+          '& .Mui-TableHeadCell-Content-Labels ': {
+            pl: 0,
+          },
+          '& .Mui-TableHeadCell-Content-Wrapper': {
+            fontWeight: 600,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            webkitBoxOrient: 'vertical',
+            webkitLineClamp: 2,
+            display: '-webkit-box',
+            whiteSpace: 'normal',
+            color: '#636A7C',
+          },
+          '& .Mui-TableHeadCell-ResizeHandle-Wrapper': {
+            mr: '-8px',
+          },
+          '&[data-pinned="true"]:before': {
+            bgcolor: 'transparent',
+          },
+          cursor: 'pointer',
+          '&:hover': {
+            bgcolor: '#ececec',
+          },
+          '& .MuiDivider-root': {
+            borderWidth: '1px',
+            height: 16,
+          },
         },
-      },
-      onClick: async () => {
-        const { loanId } = original;
-        // await router.push({
-        //   pathname: '/loan/overview',
-        //   query: { loanId },
-        // });
-      },
-    }),
-    muiTableHeadCellProps: (props) => ({
-      sx: {
-        bgcolor: '#F4F6FA',
-        opacity: 1,
-        border: 'none',
-        minHeight: 36,
-        px: 1,
-        py: 1.25,
-        justifyContent: 'center',
-        '& .Mui-TableHeadCell-Content-Labels ': {
-          pl: 0,
-        },
-        '& .Mui-TableHeadCell-Content-Wrapper': {
-          fontWeight: 600,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          webkitBoxOrient: 'vertical',
-          webkitLineClamp: 2,
-          display: '-webkit-box',
-          whiteSpace: 'normal',
-          color: '#636A7C',
-        },
-        '& .Mui-TableHeadCell-ResizeHandle-Wrapper': {
-          mr: '-8px',
-        },
-        '&[data-pinned="true"]:before': {
-          bgcolor: 'transparent',
-        },
-        cursor: 'pointer',
-        '&:hover': {
-          bgcolor: '#ececec',
-        },
-        '& .MuiDivider-root': {
-          borderWidth: '1px',
-          height: 16,
-        },
-      },
-      // onClick: (e) => {
-      //     if (
-      //         (e.target as HTMLElement).className?.includes(
-      //             'Mui-TableHeadCell-ResizeHandle-Wrapper',
-      //         ) ||
-      //         (e.target as HTMLElement).className?.includes(
-      //             'Mui-TableHeadCell-ResizeHandle-Divider',
-      //         )
-      //     ) {
-      //         return;
-      //     }
-      //     setAnchorEl(e.currentTarget);
-      //     setTableHeaderIndex(props.column.getIndex());
-      //     setHeaderColumnId(props.column.id);
-      //     setHeaderTitle(props.column.columnDef.header);
-      // },
-    }),
+      }),
+    },
     muiTableHeadProps: {
       sx: {
         opacity: 1,
@@ -177,16 +152,22 @@ export const StyledGrid: FC<StyledGridProps> = ({
           boxShadow: 'none',
         },
         '& .Mui-TableHeadCell-Content-Wrapper': {
-          fontWeight: 600,
-          fontSize: 12,
+          fontWeight: 400,
+          fontSize: 14,
           lineHeight: '20px',
           whiteSpace: 'nowrap',
         },
         '& .MuiTableCell-root': {
           border: 'none',
+          bgcolor: '#F8F9FC',
         },
         '& .MuiTableCell-root:last-child': {
-          bgcolor: '#F4F6FA',
+          bgcolor: '#F8F9FC',
+        },
+        '& .MuiDivider-root': {
+          borderWidth: '1px',
+          height: 16,
+          borderColor: '#D2D6E1',
         },
       },
     },

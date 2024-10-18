@@ -126,7 +126,7 @@ export const GridDirectory: FC = () => {
             Cell: ({ renderedCellValue }) => {
               return (
                 <Typography
-                  fontSize={12}
+                  fontSize={14}
                   sx={{
                     ...ellipsisStyle,
                     width: '100%',
