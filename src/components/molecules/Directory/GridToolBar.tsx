@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import { FC, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 
 import { StyledTextFieldSearch } from '@/components/atoms';
 import { GridMoreBtn } from '@/components/molecules';
@@ -13,11 +13,17 @@ type GridToolBarProps = {
 };
 
 export const GridToolBar: FC<GridToolBarProps> = ({ totalContacts }) => {
-  const { setKeyword } = useGridQueryConditionStore((state) => state);
+  const { setKeyword, keyword } = useGridQueryConditionStore((state) => state);
 
   const ref = useRef<HTMLInputElement | null>(null);
 
   const [, , updateQueryDebounce] = useDebounceFn(setKeyword, 500);
+
+  useEffect(() => {
+    if (ref.current && typeof keyword === 'string') {
+      ref.current!.value = keyword;
+    }
+  }, []);
 
   return (
     <>

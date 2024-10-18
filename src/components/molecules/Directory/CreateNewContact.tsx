@@ -7,10 +7,10 @@ import { useAsyncFn } from 'react-use';
 
 import { StyledButton } from '@/components/atoms';
 import { StyledInputByType } from '@/components/molecules/Directory/StyledInputByType';
-import { useSwitch } from '@/hooks';
+import { useDebounceFn, useSwitch } from '@/hooks';
 
-import { AddContactRequestParam, HttpError } from '@/types';
-import { _addNewContact } from '@/request/directory';
+import { AddContactRequestParam, HttpError, ValidateColumnData } from '@/types';
+import { _addNewContact, _validateColumnData } from '@/request/directory';
 import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
 import UserIcon from './assets/icon_user.svg';
@@ -45,6 +45,39 @@ export const CreateNewContact: FC = () => {
     },
     [formData],
   );
+
+  const [validateState, validateColumnData] = useAsyncFn(
+    async (param: Omit<ValidateColumnData, 'tableId'>) => {
+      try {
+        const res = await _validateColumnData({
+          tableId: tableId as number,
+          ...param,
+        });
+        if (res.data?.variant === 'error') {
+          const key = `${param.columnName}|${param.columnId}`;
+          setFormData((prev) => ({
+            ...prev,
+            [key]: {
+              value: param.columnValue,
+              errorMessage: res.data?.errorMessage,
+            },
+          }));
+        }
+        return res;
+      } catch (err) {
+        const { header, message, variant } = err as HttpError;
+        enqueueSnackbar(message, {
+          variant: variant || 'error',
+          autoHideDuration: AUTO_HIDE_DURATION,
+          isSimple: !header,
+          header,
+        });
+      }
+    },
+    [tableId],
+  );
+
+  const [, , validateDebounce] = useDebounceFn(validateColumnData, 400);
 
   const handleAddContact = async () => {
     if (!formRef.current?.reportValidity()) {
@@ -93,19 +126,36 @@ export const CreateNewContact: FC = () => {
             overflow={'auto'}
             ref={formRef}
           >
-            {metadataColumns.map((item) => (
-              <StyledInputByType
-                handleChange={(key, value) => {
-                  setFormData((prev) => ({ ...prev, [key]: value }));
-                }}
-                key={`${item.columnName}|${item.columnId}`}
-                label={item.columnLabel}
-                name={`${item.columnName}|${item.columnId}`}
-                required={item.notNull}
-                type={item.columnType}
-                value={formData[`${item.columnName}|${item.columnId}`] ?? ''}
-              />
-            ))}
+            {metadataColumns.map((item) => {
+              const key = `${item.columnName}|${item.columnId}`;
+              return (
+                <StyledInputByType
+                  errorMessage={formData[key]?.errorMessage}
+                  handleChange={(key, value) => {
+                    if (item.unique) {
+                      validateDebounce({
+                        columnId: item.columnId,
+                        columnName: item.columnName,
+                        columnValue: value,
+                      });
+                    }
+                    setFormData((prev) => ({
+                      ...prev,
+                      [key]: {
+                        value,
+                      },
+                    }));
+                  }}
+                  isValidate={item.unique}
+                  key={key}
+                  label={item.columnLabel}
+                  name={key}
+                  required={item.notNull}
+                  type={item.columnType}
+                  value={formData[key]?.value ?? ''}
+                />
+              );
+            })}
           </Stack>
           <Stack direction={'row'} gap={6} justifyContent={'center'}>
             <StyledButton

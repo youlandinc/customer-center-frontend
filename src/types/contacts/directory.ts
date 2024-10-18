@@ -68,17 +68,15 @@ export type DirectoryGridResponse = {
     total: number;
     size: number;
     current: number;
+    pages: number;
     records: RecordsItem[][];
   };
 };
 
 export type GridColumnItem = {
-  columnWidth: number | null;
+  id: number;
   field: string;
-  headerName: string;
-  // id: maybe(number),
-  leftOrder: number | null;
-  pinType: ColumnPiningDirectionEnum | null;
+  label: string;
   sort: number;
   visibility: boolean;
 };
@@ -90,4 +88,22 @@ export type AddContactRequestParam = {
     columnName: string;
     columnValue: unknown;
   }[];
+};
+
+export type SortColumnItem = {
+  columnId: number;
+  columnName: string;
+  active: boolean;
+};
+
+export type SortColumnParam = {
+  tableId: number;
+  columns: SortColumnItem[];
+};
+
+export type ValidateColumnData = {
+  columnId: number;
+  columnName: string;
+  columnValue: unknown;
+  tableId: number;
 };

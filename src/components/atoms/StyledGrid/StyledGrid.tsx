@@ -9,11 +9,8 @@ import { FC } from 'react';
 type StyledGridProps = MRT_TableOptions<any> & {
   loading?: boolean;
   columnOrder?: string[];
-  // handleSort?: (param: {
-  //   property: string; //.id as string,
-  //   label: string;
-  // }) => void;
   style?: React.CSSProperties;
+  rowSelection: Record<string, boolean>;
 };
 
 export const StyledGrid: FC<StyledGridProps> = ({
@@ -23,6 +20,9 @@ export const StyledGrid: FC<StyledGridProps> = ({
   data,
   rowCount,
   style,
+  getRowId,
+  rowSelection,
+  ...rest
 }) => {
   // const router = useRouter();
 
@@ -52,11 +52,12 @@ export const StyledGrid: FC<StyledGridProps> = ({
     state: {
       columnOrder: columnOrder || [],
       showSkeletons: loading,
+      rowSelection,
     },
     initialState: {
       showProgressBars: false,
     },
-    getRowId: (row) => row.loanId, //default
+    getRowId: getRowId || ((row) => row.id), //default
     rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
     columnVirtualizerOptions: { overscan: 5 }, //optionally customize the column virtualizer
     muiTableBodyRowProps: {
@@ -80,6 +81,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
         },
       },
     },
+    defaultColumn: {},
     muiTableBodyCellProps: ({ row: { original } }) => ({
       sx: {
         px: 1,
@@ -100,26 +102,6 @@ export const StyledGrid: FC<StyledGridProps> = ({
         // });
       },
     }),
-    muiTableHeadProps: {
-      sx: {
-        opacity: 1,
-        '& .MuiTableRow-head': {
-          boxShadow: 'none',
-        },
-        '& .Mui-TableHeadCell-Content-Wrapper': {
-          fontWeight: 600,
-          fontSize: 12,
-          lineHeight: '20px',
-          whiteSpace: 'nowrap',
-        },
-        '& .MuiTableCell-root': {
-          border: 'none',
-        },
-        '& .MuiTableCell-root:last-child': {
-          bgcolor: '#F4F6FA',
-        },
-      },
-    },
     muiTableHeadCellProps: (props) => ({
       sx: {
         bgcolor: '#F4F6FA',
@@ -174,6 +156,27 @@ export const StyledGrid: FC<StyledGridProps> = ({
       //     setHeaderTitle(props.column.columnDef.header);
       // },
     }),
+    muiTableHeadProps: {
+      sx: {
+        opacity: 1,
+        '& .MuiTableRow-head': {
+          boxShadow: 'none',
+        },
+        '& .Mui-TableHeadCell-Content-Wrapper': {
+          fontWeight: 600,
+          fontSize: 12,
+          lineHeight: '20px',
+          whiteSpace: 'nowrap',
+        },
+        '& .MuiTableCell-root': {
+          border: 'none',
+        },
+        '& .MuiTableCell-root:last-child': {
+          bgcolor: '#F4F6FA',
+        },
+      },
+    },
+
     muiTableContainerProps: {
       style: {
         maxHeight: 'calc(100vh - 412px)',
@@ -181,6 +184,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
         ...style,
       },
     },
+    ...rest,
   });
   return <MRT_TableContainer table={table} />;
 };
