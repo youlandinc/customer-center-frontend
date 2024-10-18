@@ -1,6 +1,8 @@
-import { StyledButton } from '@/components/atoms';
 import { Box, Fade, Icon, Stack, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import React, { FC, Fragment } from 'react';
+
+import { StyledButton } from '@/components/atoms';
+
 import DeleteIcon from './assets/icon_grid_delete.svg';
 import ExportIcon from './assets/icon_grid_export.svg';
 
@@ -55,7 +57,7 @@ export const GridActionsCard: FC<ExportLoanTypeProps> = ({
         zIndex={20}
       >
         {btns.map((item, index) => (
-          <Box key={index}>
+          <Fragment key={index}>
             <StyledButton
               loading={item.loading}
               onClick={item.onClick}
@@ -64,6 +66,7 @@ export const GridActionsCard: FC<ExportLoanTypeProps> = ({
                 p: '0 !important',
                 height: 'fit-content !important',
                 minWidth: 'fit-content !important',
+                width: 51,
               }}
               variant={'text'}
             >
@@ -77,7 +80,7 @@ export const GridActionsCard: FC<ExportLoanTypeProps> = ({
             {index !== btns.length - 1 && (
               <Box bgcolor={'background.white'} height={25} width={'1px'}></Box>
             )}
-          </Box>
+          </Fragment>
         ))}
       </Stack>
     </Fade>
