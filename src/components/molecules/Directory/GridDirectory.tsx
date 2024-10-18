@@ -1,8 +1,3 @@
-import { GridNoData } from '@/components/molecules/Directory/GridNoData';
-import { AUTO_HIDE_DURATION } from '@/constant';
-import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
-import { useGridStore } from '@/stores/directoryStores/useGridStore';
-import { HttpError } from '@/types';
 import { Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { enqueueSnackbar } from 'notistack';
@@ -14,15 +9,20 @@ import { StyledGrid } from '@/components/atoms';
 import {
   ellipsisStyle,
   GridActionsCard,
+  GridNoData,
   GridPagination,
   GridToolBar,
 } from '@/components/molecules';
 
+import { AUTO_HIDE_DURATION } from '@/constant';
+import { HttpError } from '@/types';
 import {
   _deleteGridRecords,
   _exportGridRecords,
   _getGridListById,
 } from '@/request';
+import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
 import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
@@ -170,6 +170,10 @@ export const GridDirectory: FC = () => {
             data={data || []}
             getRowId={(row) => row.id}
             loading={isLoading || loading}
+            //TODO
+            onRowClick={() => {
+              return;
+            }}
             onRowSelectionChange={setRowSelection}
             rowCount={0}
             rowSelection={rowSelection}
