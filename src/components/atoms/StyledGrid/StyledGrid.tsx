@@ -1,5 +1,7 @@
 import {
+  MRT_Row,
   MRT_TableContainer,
+  MRT_TableInstance,
   MRT_TableOptions,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -11,6 +13,12 @@ type StyledGridProps = MRT_TableOptions<any> & {
   columnOrder?: string[];
   style?: React.CSSProperties;
   rowSelection: Record<string, boolean>;
+  onRowClick?: (props: {
+    isDetailPanel?: boolean;
+    row: MRT_Row<any>;
+    staticRowIndex: number;
+    table: MRT_TableInstance<any>;
+  }) => void;
 };
 
 export const StyledGrid: FC<StyledGridProps> = ({
@@ -22,6 +30,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
   style,
   getRowId,
   rowSelection,
+  onRowClick,
   ...rest
 }) => {
   // const router = useRouter();
@@ -60,26 +69,31 @@ export const StyledGrid: FC<StyledGridProps> = ({
     getRowId: getRowId || ((row) => row.id), //default
     rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
     columnVirtualizerOptions: { overscan: 5 }, //optionally customize the column virtualizer
-    muiTableBodyRowProps: {
-      sx: {
-        '& .MuiTableCell-root:last-child': {
-          // borderBottom: 'none',
-          borderColor: '#EDF1FF',
-        },
-        boxShadow: 'none',
-        '& td': {},
-        '&:hover': {
-          '& td:after': {
-            background: '#F6F6F6',
+    muiTableBodyRowProps: (props) => {
+      return {
+        sx: {
+          '& .MuiTableCell-root:last-child': {
+            // borderBottom: 'none',
+            borderColor: '#EDF1FF',
+          },
+          boxShadow: 'none',
+          '& td': {},
+          '&:hover': {
+            '& td:after': {
+              background: '#F6F6F6',
+            },
+          },
+          '&:hover .MuiTableCell-root[data-pinned="true"]::before': {
+            bgcolor: '#F6F6F6',
+          },
+          '& .MuiTableCell-root[data-pinned="true"]::after': {
+            zIndex: -2,
           },
         },
-        '&:hover .MuiTableCell-root[data-pinned="true"]::before': {
-          bgcolor: '#F6F6F6',
+        onClick: () => {
+          onRowClick?.(props);
         },
-        '& .MuiTableCell-root[data-pinned="true"]::after': {
-          zIndex: -2,
-        },
-      },
+      };
     },
     defaultColumn: {},
     muiTableBodyCellProps: ({ row: { original } }) => ({

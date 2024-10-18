@@ -64,6 +64,10 @@ export const _validateColumnData = (param: ValidateColumnData) => {
   );
 };
 
+export const _fetchAllContacts = () => {
+  return get<number>('http://192.168.1.102:8080/customer/es/record/total');
+};
+
 export const _preUploadExcel = (params: FormData) => {
   return post<PreUploadExcelResponse>('/customer/task/data/preview', params, {
     headers: {

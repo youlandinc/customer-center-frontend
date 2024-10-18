@@ -1,3 +1,4 @@
+import { DrawerNewContact } from '@/components/molecules/Directory/DrawerNewContact';
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
 import { enqueueSnackbar } from 'notistack';
@@ -21,10 +22,16 @@ export const CreateNewContact: FC = () => {
   const { visible, open, close } = useSwitch();
   const [formData, setFormData] = useState({} as Record<string, any>);
   const formRef = useRef<HTMLFormElement>(null);
+  const {
+    visible: continueShow,
+    open: continueOpen,
+    close: continueClose,
+  } = useSwitch();
 
   const handleClose = () => {
     close();
     setFormData({});
+    continueClose();
   };
 
   const [state, addNewContact] = useAsyncFn(
@@ -110,74 +117,7 @@ export const CreateNewContact: FC = () => {
           </Typography>
         </Stack>
       </StyledButton>
-      <Drawer
-        anchor={'right'}
-        onClose={handleClose}
-        open={visible}
-        PaperProps={{ sx: { px: 3, py: 6, minWidth: 465 } }}
-      >
-        <Stack gap={3} height={'100%'} padding={3}>
-          <Typography variant={'subtitle1'}>Create a contact</Typography>
-          <Stack
-            autoComplete={'off'}
-            component={'form'}
-            flex={1}
-            gap={3}
-            overflow={'auto'}
-            ref={formRef}
-          >
-            {metadataColumns.map((item) => {
-              const key = `${item.columnName}|${item.columnId}`;
-              return (
-                <StyledInputByType
-                  errorMessage={formData[key]?.errorMessage}
-                  handleChange={(key, value) => {
-                    if (item.unique) {
-                      validateDebounce({
-                        columnId: item.columnId,
-                        columnName: item.columnName,
-                        columnValue: value,
-                      });
-                    }
-                    setFormData((prev) => ({
-                      ...prev,
-                      [key]: {
-                        value,
-                      },
-                    }));
-                  }}
-                  isValidate={item.unique}
-                  key={key}
-                  label={item.columnLabel}
-                  name={key}
-                  required={item.notNull}
-                  type={item.columnType}
-                  value={formData[key]?.value ?? ''}
-                />
-              );
-            })}
-          </Stack>
-          <Stack direction={'row'} gap={6} justifyContent={'center'}>
-            <StyledButton
-              color={'info'}
-              onClick={handleClose}
-              size={'small'}
-              sx={{ width: 208 }}
-              variant={'text'}
-            >
-              Cancel
-            </StyledButton>
-            <StyledButton
-              loading={state.loading}
-              onClick={handleAddContact}
-              size={'small'}
-              sx={{ width: 208 }}
-            >
-              Add contact
-            </StyledButton>
-          </Stack>
-        </Stack>
-      </Drawer>
+      <DrawerNewContact onClose={close} open={visible} />
     </>
   );
 };

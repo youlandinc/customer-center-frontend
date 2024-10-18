@@ -71,6 +71,7 @@ export type DirectoryGridResponse = {
     pages: number;
     records: RecordsItem[][];
   };
+  totalRecords: number;
 };
 
 export type GridColumnItem = {

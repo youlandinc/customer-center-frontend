@@ -1,5 +1,7 @@
+import { GridNoData } from '@/components/molecules/Directory/GridNoData';
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 import { HttpError } from '@/types';
 import { Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
@@ -29,7 +31,13 @@ export const GridDirectory: FC = () => {
     useGridColumnsStore((state) => state);
   const { keyword } = useGridQueryConditionStore((state) => state);
   const newContact = useGridNewContactStore((state) => state.data);
+  const { totalRecords, setTotalRecords } = useGridStore((state) => state);
+
   const [rowSelection, setRowSelection] = useState({});
+  const [pagination, setPagination] = useState({
+    page: 0,
+    size: 50,
+  });
 
   const {
     data: list,
@@ -40,8 +48,8 @@ export const GridDirectory: FC = () => {
       ? [
           tableId,
           {
-            page: 1,
-            size: 50,
+            page: pagination.page + 1,
+            size: pagination.size,
             searchFilter: {
               keyword,
             },
@@ -51,8 +59,12 @@ export const GridDirectory: FC = () => {
         ]
       : null,
     async ([tableId, queryCondition]) => {
-      return await _getGridListById(tableId, queryCondition);
+      return await _getGridListById(tableId, queryCondition).then((res) => {
+        setTotalRecords(res.data.totalRecords);
+        return res;
+      });
     },
+    {},
   );
 
   const [deleteState, deleteGridRecords] = useAsyncFn(
@@ -135,7 +147,6 @@ export const GridDirectory: FC = () => {
       );
     }) || [];
   const totalContacts = list?.data?.metadataValues?.total || 0;
-  const page = list?.data?.metadataValues?.current || 1;
   const pageCount = list?.data?.metadataValues?.pages;
 
   const actionsCardShow = Object.keys(rowSelection).length > 0;
@@ -144,6 +155,10 @@ export const GridDirectory: FC = () => {
   useEffect(() => {
     fetchAllColumns();
   }, []);
+
+  if (!totalRecords) {
+    return <GridNoData />;
+  }
 
   return (
     <>
@@ -160,10 +175,16 @@ export const GridDirectory: FC = () => {
             rowSelection={rowSelection}
           />
           <GridPagination
-            currentPage={0}
+            currentPage={pagination.page}
+            onPageChange={(page) => {
+              setPagination({ ...pagination, page });
+            }}
+            onRowsPerPageChange={(e) => {
+              setPagination({ ...pagination, size: parseInt(e.target.value) });
+            }}
             pageCount={pageCount}
             rowCount={totalContacts}
-            rowsPerPage={50}
+            rowsPerPage={pagination.size}
           />
         </Stack>
       </Stack>
