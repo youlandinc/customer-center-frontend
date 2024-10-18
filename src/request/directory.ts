@@ -1,5 +1,6 @@
-import { get, post } from '@/request/axios';
+import { del, get, post, put } from '@/request/axios';
 import {
+  AddContactRequestParam,
   ColumnTypeEnum,
   DirectoryGridQueryCondition,
   DirectoryGridResponse,
@@ -8,6 +9,9 @@ import {
   ExcelUploadHistory,
   ExcelUploadHistoryDetailResponse,
   GetColumnsResponse,
+  HttpVariant,
+  SortColumnParam,
+  ValidateColumnData,
 } from '@/types';
 import { PreUploadExcelResponse } from '@/types/contacts';
 
@@ -36,6 +40,36 @@ export const _addNewColumn = (data: {
     'http://192.168.1.102:8080/customer/metadata/columns',
     data,
   );
+};
+
+export const _addNewContact = (param: AddContactRequestParam) => {
+  return post('http://192.168.1.102:8080/customer/es/record', param);
+};
+
+export const _sortColumn = (param: SortColumnParam) => {
+  return put('http://192.168.1.102:8080/customer/metadata/columns', param);
+};
+
+export const _deleteGridRecords = (param: {
+  tableId: number;
+  recordIds: string[];
+}) => {
+  return del('http://192.168.1.102:8080/customer/es/record', { data: param });
+};
+
+export const _exportGridRecords = (records: string[]) => {
+  return post('http://192.168.1.102:8080/customer/es/export', { records });
+};
+
+export const _validateColumnData = (param: ValidateColumnData) => {
+  return post<{ errorMessage: string; recordId: string; variant: HttpVariant }>(
+    'http://192.168.1.102:8080/customer/es/record/check',
+    param,
+  );
+};
+
+export const _fetchAllContacts = () => {
+  return get<number>('http://192.168.1.102:8080/customer/es/record/total');
 };
 
 export const _preUploadExcel = (params: FormData) => {

@@ -1,8 +1,3 @@
-import { Drawer, Icon, IconButton, Stack } from '@mui/material';
-import { enqueueSnackbar } from 'notistack';
-import { FC, useState } from 'react';
-import { useAsyncFn } from 'react-use';
-
 import {
   StyledAnchorMenus,
   StyledButton,
@@ -10,12 +5,16 @@ import {
   StyledDragAndDrop,
   StyledTextField,
 } from '@/components/atoms';
-import { useSwitch } from '@/hooks';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
-import { _addNewColumn } from '@/request';
-import { ColumnTypeEnum, HttpError } from '@/types';
+import { useSwitch } from '@/hooks';
+import { _addNewColumn, _sortColumn } from '@/request';
 import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
+import { ColumnTypeEnum, HttpError, SortColumnItem } from '@/types';
+import { Drawer, Icon, IconButton, Stack } from '@mui/material';
+import { enqueueSnackbar } from 'notistack';
+import { FC, useState } from 'react';
+import { useAsyncFn } from 'react-use';
 
 import AddColumn from './assets/icon_add_column.svg';
 import EditColumn from './assets/icon_edit_column.svg';
@@ -68,17 +67,16 @@ export const GridMoreBtn: FC = () => {
    leftOrder: null,
    rightOrder: null,
    },*/
-  const column = metadataColumns.map((item, index) => ({
-    id: item.columnId,
-    field: item.columnName,
-    headerName: item.columnLabel,
-    columnWidth: null,
-    sort: index,
-    visibility: true,
-    pinType: 'CENTER',
-    leftOrder: null,
-    rightOrder: null,
-  }));
+  const column = metadataColumns
+    .filter((item) => item.columnName !== 'id')
+    .map((item, index) => ({
+      field: item.columnName,
+      label: item.columnLabel,
+      sort: index,
+      visibility: item.active,
+      id: item.columnId,
+      disabled: item.columnName === 'email_address',
+    }));
 
   const [state, addNewColumn] = useAsyncFn(
     async (columnName: string) => {
@@ -104,9 +102,32 @@ export const GridMoreBtn: FC = () => {
     [tableId],
   );
 
+  const [sortState, sortColumn] = useAsyncFn(
+    async (column: SortColumnItem[]) => {
+      try {
+        const res = await _sortColumn({
+          tableId: tableId as number,
+          columns: column,
+        });
+        close();
+        setColumn(res.data.metadataColumns);
+      } catch (err) {
+        const { header, message, variant } = err as HttpError;
+        enqueueSnackbar(message, {
+          variant: variant || 'error',
+          autoHideDuration: AUTO_HIDE_DURATION,
+          isSimple: !header,
+          header,
+        });
+      }
+    },
+    [tableId],
+  );
+
   return (
     <>
       <IconButton
+        disabled={!metadataColumns.length}
         onClick={(e) => {
           setAnchorEl(e.currentTarget);
         }}
@@ -130,6 +151,7 @@ export const GridMoreBtn: FC = () => {
               setColumnName(e.target.value);
             }}
             size={'medium'}
+            sx={{ my: 2 }}
             value={columnName}
           />
         }
@@ -164,7 +186,18 @@ export const GridMoreBtn: FC = () => {
         open={visible}
         PaperProps={{ sx: { px: 3, py: 6, minWidth: 465 } }}
       >
-        <StyledDragAndDrop list={column as any} />
+        <StyledDragAndDrop
+          handleSave={async (columns) => {
+            const result: SortColumnItem[] = columns.map((item) => ({
+              columnId: item.id,
+              columnName: item.field,
+              active: item.visibility,
+            }));
+            await sortColumn(result);
+          }}
+          list={column}
+          loading={sortState.loading}
+        />
       </Drawer>
     </>
   );

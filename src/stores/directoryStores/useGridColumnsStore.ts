@@ -1,7 +1,7 @@
-import { AUTO_HIDE_DURATION } from '@/constant';
-
 import { create } from 'zustand';
 import { enqueueSnackbar } from 'notistack';
+
+import { AUTO_HIDE_DURATION } from '@/constant';
 
 import { _getAllColumns } from '@/request/directory';
 import { ColumnItem, ColumnTypeEnum, HttpError } from '@/types';

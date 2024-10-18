@@ -1,25 +1,29 @@
-import { FC, useRef, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
+import { FC, useEffect, useRef } from 'react';
 
-import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
+import { StyledTextFieldSearch } from '@/components/atoms';
+import { GridMoreBtn } from '@/components/molecules';
 
 import { useDebounceFn } from '@/hooks';
-import {
-  StyledGoogleAutoComplete,
-  StyledTextFieldSearch,
-} from '@/components/atoms';
-import { GridMoreBtn } from '@/components/molecules';
+
+import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
 
 type GridToolBarProps = {
   totalContacts: number;
 };
 
 export const GridToolBar: FC<GridToolBarProps> = ({ totalContacts }) => {
-  const { setKeyword } = useGridQueryConditionStore((state) => state);
+  const { setKeyword, keyword } = useGridQueryConditionStore((state) => state);
 
   const ref = useRef<HTMLInputElement | null>(null);
 
   const [, , updateQueryDebounce] = useDebounceFn(setKeyword, 500);
+
+  useEffect(() => {
+    if (ref.current && typeof keyword === 'string') {
+      ref.current!.value = keyword;
+    }
+  }, []);
 
   return (
     <>

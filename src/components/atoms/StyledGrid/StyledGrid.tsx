@@ -1,5 +1,7 @@
 import {
+  MRT_Row,
   MRT_TableContainer,
+  MRT_TableInstance,
   MRT_TableOptions,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -9,11 +11,14 @@ import { FC } from 'react';
 type StyledGridProps = MRT_TableOptions<any> & {
   loading?: boolean;
   columnOrder?: string[];
-  // handleSort?: (param: {
-  //   property: string; //.id as string,
-  //   label: string;
-  // }) => void;
   style?: React.CSSProperties;
+  rowSelection: Record<string, boolean>;
+  onRowClick?: (props: {
+    isDetailPanel?: boolean;
+    row: MRT_Row<any>;
+    staticRowIndex: number;
+    table: MRT_TableInstance<any>;
+  }) => void;
 };
 
 export const StyledGrid: FC<StyledGridProps> = ({
@@ -23,6 +28,10 @@ export const StyledGrid: FC<StyledGridProps> = ({
   data,
   rowCount,
   style,
+  getRowId,
+  rowSelection,
+  onRowClick,
+  ...rest
 }) => {
   // const router = useRouter();
 
@@ -52,34 +61,41 @@ export const StyledGrid: FC<StyledGridProps> = ({
     state: {
       columnOrder: columnOrder || [],
       showSkeletons: loading,
+      rowSelection,
     },
     initialState: {
       showProgressBars: false,
     },
-    getRowId: (row) => row.loanId, //default
+    getRowId: getRowId || ((row) => row.id), //default
     rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
     columnVirtualizerOptions: { overscan: 5 }, //optionally customize the column virtualizer
-    muiTableBodyRowProps: {
-      sx: {
-        '& .MuiTableCell-root:last-child': {
-          // borderBottom: 'none',
-          borderColor: '#EDF1FF',
-        },
-        boxShadow: 'none',
-        '& td': {},
-        '&:hover': {
-          '& td:after': {
-            background: '#F6F6F6',
+    muiTableBodyRowProps: (props) => {
+      return {
+        sx: {
+          '& .MuiTableCell-root:last-child': {
+            // borderBottom: 'none',
+            borderColor: '#EDF1FF',
+          },
+          boxShadow: 'none',
+          '& td': {},
+          '&:hover': {
+            '& td:after': {
+              background: '#F6F6F6',
+            },
+          },
+          '&:hover .MuiTableCell-root[data-pinned="true"]::before': {
+            bgcolor: '#F6F6F6',
+          },
+          '& .MuiTableCell-root[data-pinned="true"]::after': {
+            zIndex: -2,
           },
         },
-        '&:hover .MuiTableCell-root[data-pinned="true"]::before': {
-          bgcolor: '#F6F6F6',
+        onClick: () => {
+          onRowClick?.(props);
         },
-        '& .MuiTableCell-root[data-pinned="true"]::after': {
-          zIndex: -2,
-        },
-      },
+      };
     },
+    defaultColumn: {},
     muiTableBodyCellProps: ({ row: { original } }) => ({
       sx: {
         px: 1,
@@ -100,26 +116,6 @@ export const StyledGrid: FC<StyledGridProps> = ({
         // });
       },
     }),
-    muiTableHeadProps: {
-      sx: {
-        opacity: 1,
-        '& .MuiTableRow-head': {
-          boxShadow: 'none',
-        },
-        '& .Mui-TableHeadCell-Content-Wrapper': {
-          fontWeight: 600,
-          fontSize: 12,
-          lineHeight: '20px',
-          whiteSpace: 'nowrap',
-        },
-        '& .MuiTableCell-root': {
-          border: 'none',
-        },
-        '& .MuiTableCell-root:last-child': {
-          bgcolor: '#F4F6FA',
-        },
-      },
-    },
     muiTableHeadCellProps: (props) => ({
       sx: {
         bgcolor: '#F4F6FA',
@@ -174,6 +170,27 @@ export const StyledGrid: FC<StyledGridProps> = ({
       //     setHeaderTitle(props.column.columnDef.header);
       // },
     }),
+    muiTableHeadProps: {
+      sx: {
+        opacity: 1,
+        '& .MuiTableRow-head': {
+          boxShadow: 'none',
+        },
+        '& .Mui-TableHeadCell-Content-Wrapper': {
+          fontWeight: 600,
+          fontSize: 12,
+          lineHeight: '20px',
+          whiteSpace: 'nowrap',
+        },
+        '& .MuiTableCell-root': {
+          border: 'none',
+        },
+        '& .MuiTableCell-root:last-child': {
+          bgcolor: '#F4F6FA',
+        },
+      },
+    },
+
     muiTableContainerProps: {
       style: {
         maxHeight: 'calc(100vh - 412px)',
@@ -181,6 +198,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
         ...style,
       },
     },
+    ...rest,
   });
   return <MRT_TableContainer table={table} />;
 };
