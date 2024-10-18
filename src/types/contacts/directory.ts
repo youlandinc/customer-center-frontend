@@ -80,6 +80,7 @@ export type GridColumnItem = {
   label: string;
   sort: number;
   visibility: boolean;
+  disabled?: boolean;
 };
 
 export type AddContactRequestParam = {

@@ -133,6 +133,7 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
                           onChange={(e) => {
                             onSwitch(item, e.target.checked);
                           }}
+                          disabled={item.disabled}
                         />
                       </Stack>
                     )}

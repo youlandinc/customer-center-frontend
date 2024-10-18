@@ -108,31 +108,35 @@ export const GridDirectory: FC = () => {
 
   const columns = useMemo(() => {
     return metadataColumns.length
-      ? (metadataColumns.map((item) => ({
-          accessorKey: item.columnName,
-          header: item.columnLabel,
-          size: 150,
-          minSize: 100,
-          muiTableBodyCellProps: {
-            align: 'left',
-          },
-          muiTableHeadCellProps: {
-            align: 'left',
-          },
-          Cell: ({ renderedCellValue }) => {
-            return (
-              <Typography
-                fontSize={12}
-                sx={{
-                  ...ellipsisStyle,
-                  width: '100%',
-                }}
-              >
-                {renderedCellValue}
-              </Typography>
-            );
-          },
-        })) as MRT_ColumnDef<any>[])
+      ? (metadataColumns
+          .filter((item) => item.columnName !== 'id')
+          .filter((item) => item.active)
+          .map((item) => ({
+            accessorKey: item.columnName,
+            header: item.columnLabel,
+            size: 150,
+            minSize: 100,
+            muiTableBodyCellProps: {
+              align: 'left',
+            },
+            muiTableHeadCellProps: {
+              align: 'left',
+            },
+            enableHiding: true,
+            Cell: ({ renderedCellValue }) => {
+              return (
+                <Typography
+                  fontSize={12}
+                  sx={{
+                    ...ellipsisStyle,
+                    width: '100%',
+                  }}
+                >
+                  {renderedCellValue}
+                </Typography>
+              );
+            },
+          })) as MRT_ColumnDef<any>[])
       : [];
   }, [metadataColumns]);
 

@@ -67,13 +67,16 @@ export const GridMoreBtn: FC = () => {
    leftOrder: null,
    rightOrder: null,
    },*/
-  const column = metadataColumns.map((item, index) => ({
-    field: item.columnName,
-    label: item.columnLabel,
-    sort: index,
-    visibility: true,
-    id: item.columnId,
-  }));
+  const column = metadataColumns
+    .filter((item) => item.columnName !== 'id')
+    .map((item, index) => ({
+      field: item.columnName,
+      label: item.columnLabel,
+      sort: index,
+      visibility: item.active,
+      id: item.columnId,
+      disabled: item.columnName === 'email_address',
+    }));
 
   const [state, addNewColumn] = useAsyncFn(
     async (columnName: string) => {
