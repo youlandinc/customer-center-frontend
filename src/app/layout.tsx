@@ -71,6 +71,7 @@ const RootLayout = ({
     if (!token) {
       return;
     }
+    console.log(123);
     const eventSource = new EventSource(
       `${process.env.NEXT_PUBLIC_BASE_URL}/customer/task/notification?token=${token}`,
     );
