@@ -104,7 +104,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
         ),
       },
       'Loan Servicing': {
-        label: 'Loan Servicing',
+        label: 'Servicing Center',
         url: `${URL_DOC}/?token=${
           accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
         }`,
@@ -141,7 +141,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
     ) {
       result = fromServer.concat([
         {
-          label: 'Loan Servicing',
+          label: 'Servicing Center',
           url: `${URL_DOC}/?token=${
             accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
           }`,
