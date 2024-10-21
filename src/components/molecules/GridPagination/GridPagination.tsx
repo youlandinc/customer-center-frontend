@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import {
   Pagination,
   Stack,
@@ -9,7 +9,7 @@ import {
 
 type GridPaginationProps = {
   onPageChange?: (page: number) => void;
-  onRowsPerPageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onRowsPerPageChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   currentPage: number;
   pageCount?: number;
   rowCount: number;
@@ -22,7 +22,6 @@ export const GridPagination: FC<GridPaginationProps> = ({
   currentPage,
   pageCount,
   rowCount,
-  sx,
   rowsPerPage,
 }) => {
   return (

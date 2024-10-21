@@ -1,5 +1,4 @@
 import {
-  ColumnPiningDirectionEnum,
   ColumnTypeEnum,
   SearchOperationEnum,
   SortDirection,

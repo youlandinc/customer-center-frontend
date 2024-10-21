@@ -158,6 +158,7 @@ export const GridDirectory: FC = () => {
 
   useEffect(() => {
     fetchAllColumns();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!totalRecords) {
