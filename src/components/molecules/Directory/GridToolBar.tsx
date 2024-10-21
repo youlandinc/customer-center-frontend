@@ -23,6 +23,7 @@ export const GridToolBar: FC<GridToolBarProps> = ({ totalContacts }) => {
     if (ref.current && typeof keyword === 'string') {
       ref.current!.value = keyword;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
