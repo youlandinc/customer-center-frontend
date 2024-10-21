@@ -138,10 +138,9 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
               }
             };
 
-            eventSource.onerror = (e) => {
+            eventSource.onerror = () => {
               eventSource.close();
-              //eslint-disable-next-line no-console
-              console.log(e);
+              set({ sse: void 0 });
               throw new Error('SSE connection error');
             };
           },

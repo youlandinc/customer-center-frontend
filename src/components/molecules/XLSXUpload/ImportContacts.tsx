@@ -1,16 +1,17 @@
 import { FC, useMemo, useState } from 'react';
 import { Stack, Step, StepLabel, Stepper } from '@mui/material';
 
+import { DirectoryPageMode } from '@/types';
+import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
+
+const steps = ['Upload a file', 'Match columns', 'Import'];
+
 import {
   XLSXMatchColumn,
   XLSXPreUpload,
   XLSXUpload,
   XLSXUploadHeader,
-} from '@/components/molecules';
-import { DirectoryPageMode } from '@/types';
-import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
-
-const steps = ['Upload a file', 'Match columns', 'Import'];
+} from './index';
 
 export const ImportContacts: FC = () => {
   const { setPageMode } = useDirectoryStore((state) => state);

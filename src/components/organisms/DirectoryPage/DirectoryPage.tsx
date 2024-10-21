@@ -4,9 +4,9 @@ import { Stack, Typography } from '@mui/material';
 import {
   DirectoryHeader,
   GridDirectory,
+  ImportContacts,
   XLSXUploadStatus,
 } from '@/components/molecules';
-import { ImportContacts } from '@/components/organisms';
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
 import { DirectoryPageMode } from '@/types';
 
