@@ -112,7 +112,7 @@ export const GridDirectory: FC = () => {
           .filter((item) => item.columnName !== 'id')
           .filter((item) => item.active)
           .map((item) => ({
-            accessorKey: item.columnName,
+            accessorKey: item.columnName || ' ',
             header: item.columnLabel,
             size: 150,
             minSize: 100,

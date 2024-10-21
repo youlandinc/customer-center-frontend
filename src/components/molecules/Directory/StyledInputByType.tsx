@@ -1,7 +1,12 @@
-import { Box, Icon, Stack, Typography } from '@mui/material';
 import { FC, PropsWithChildren, ReactNode } from 'react';
+import { Box, Icon, Stack, Typography } from '@mui/material';
 
-import { StyledGoogleAutoComplete, StyledTextField } from '@/components/atoms';
+import {
+  StyledGoogleAutoComplete,
+  StyledTextField,
+  StyledTextFieldNumber,
+  StyledTextFieldPhone,
+} from '@/components/atoms';
 
 import { ColumnTypeEnum } from '@/types';
 
@@ -127,6 +132,26 @@ export const StyledInputByType: FC<StyledInputByTypeProps> = ({
           }}
           fullAddress={false}
           required={required}
+        />
+      );
+    case ColumnTypeEnum.number:
+      return (
+        <StyledTextFieldNumber
+          label={label}
+          onValueChange={(values) => {
+            handleChange?.(name, values.floatValue);
+          }}
+          value={value as any}
+        />
+      );
+    case ColumnTypeEnum.phone:
+      return (
+        <StyledTextFieldPhone
+          label={label}
+          onValueChange={(values) => {
+            handleChange?.(name, values.floatValue);
+          }}
+          value={value as any}
         />
       );
     default:

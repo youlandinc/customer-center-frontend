@@ -14,6 +14,8 @@ export * from './StyledUploadBox';
 
 export * from './StyledTextField';
 export * from './StyledTextFieldSearch';
+export * from './StyledTextFieldNumber';
+export * from './StyledTextFieldPhone';
 
 export * from './StyledSelectPopup';
 

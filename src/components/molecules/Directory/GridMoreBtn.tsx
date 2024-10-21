@@ -187,6 +187,7 @@ export const GridMoreBtn: FC = () => {
         PaperProps={{ sx: { px: 3, py: 6, minWidth: 465 } }}
       >
         <StyledDragAndDrop
+          handleCancel={close}
           handleSave={async (columns) => {
             const result: SortColumnItem[] = columns.map((item) => ({
               columnId: item.id,

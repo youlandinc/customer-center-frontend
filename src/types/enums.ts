@@ -10,6 +10,7 @@ export enum ColumnTypeEnum {
   address = 'ADDRESS',
   uuid = 'UUID',
   email = 'EMAIL',
+  phone = 'PHONE',
 }
 
 export enum SortDirection {

@@ -51,6 +51,16 @@ export const GridPagination: FC<GridPaginationProps> = ({
               sx: { display: 'none' },
             },
           },
+          select: {
+            MenuProps: {
+              MenuListProps: {
+                sx: {
+                  p: 0,
+                  '& .MuiMenuItem-root': { fontSize: 12 },
+                },
+              },
+            },
+          },
         }}
         sx={{
           color: 'text.secondary',
@@ -67,6 +77,9 @@ export const GridPagination: FC<GridPaginationProps> = ({
           '& .MuiInputBase-root': {
             ml: 0,
             mr: 3,
+          },
+          '& .MuiList-root': {
+            p: 0,
           },
         }}
       />
@@ -89,6 +102,9 @@ export const GridPagination: FC<GridPaginationProps> = ({
             '& svg path': {
               fill: 'background.disabled',
             },
+          },
+          '& .Mui-selected': {
+            bgcolor: '#F5F5F5 ',
           },
         }}
         variant="text"

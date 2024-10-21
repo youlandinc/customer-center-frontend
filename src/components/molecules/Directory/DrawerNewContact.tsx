@@ -54,7 +54,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
     [formData],
   );
 
-  const [validateState, validateColumnData] = useAsyncFn(
+  const [, validateColumnData] = useAsyncFn(
     async (param: Omit<ValidateColumnData, 'tableId'>) => {
       try {
         const res = await _validateColumnData({
@@ -96,7 +96,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
       return {
         columnName,
         columnId: Number(columnId),
-        columnValue: value,
+        columnValue: value.value,
       };
     });
     await addNewContact({ tableId: tableId as number, record: record });
@@ -126,6 +126,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
             flex={1}
             gap={3}
             overflow={'auto'}
+            pt={1}
             ref={formRef}
           >
             {metadataColumns.map((item) => {

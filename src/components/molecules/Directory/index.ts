@@ -6,3 +6,4 @@ export * from './GridMoreBtn';
 export * from './GridActionsCard';
 export * from './GridNoData';
 export * from './DrawerNewContact';
+export * from './DirectoryHeader';

@@ -8,6 +8,11 @@ import {
 import * as React from 'react';
 import { FC } from 'react';
 
+import CHECKBOX_STATIC from './assets/static.svg';
+import CHECKBOX_CHECKED from './assets/checked.svg';
+import CHECKBOX_INDETERMINATE from './assets/intermediate.svg';
+import { Icon } from '@mui/material';
+
 type StyledGridProps = MRT_TableOptions<any> & {
   loading?: boolean;
   columnOrder?: string[];
@@ -69,15 +74,32 @@ export const StyledGrid: FC<StyledGridProps> = ({
     getRowId: getRowId || ((row) => row.id), //default
     rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
     columnVirtualizerOptions: { overscan: 5 }, //optionally customize the column virtualizer
+    muiSelectCheckboxProps: {
+      icon: <Icon component={CHECKBOX_STATIC} sx={{ width: 20, height: 20 }} />,
+      checkedIcon: (
+        <Icon component={CHECKBOX_CHECKED} sx={{ width: 20, height: 20 }} />
+      ),
+    },
+    muiSelectAllCheckboxProps: {
+      icon: <Icon component={CHECKBOX_STATIC} sx={{ width: 20, height: 20 }} />,
+      checkedIcon: (
+        <Icon component={CHECKBOX_CHECKED} sx={{ width: 20, height: 20 }} />
+      ),
+      indeterminateIcon: (
+        <Icon
+          component={CHECKBOX_INDETERMINATE}
+          sx={{ width: 20, height: 20 }}
+        />
+      ),
+    },
+
     muiTableBodyRowProps: (props) => {
       return {
         sx: {
           '& .MuiTableCell-root:last-child': {
-            // borderBottom: 'none',
-            borderColor: '#EDF1FF',
+            borderColor: '#D2D6E1',
           },
           boxShadow: 'none',
-          '& td': {},
           '&:hover': {
             '& td:after': {
               background: '#F6F6F6',
@@ -89,17 +111,19 @@ export const StyledGrid: FC<StyledGridProps> = ({
           '& .MuiTableCell-root[data-pinned="true"]::after': {
             zIndex: -2,
           },
-          //muiTableBodyCellProps
           '& .MuiTableCell-root': {
-            px: 1,
-            py: 0,
+            px: 1.5,
+            py: 2.5,
             height: 32,
             borderRight: '1px solid',
             borderBottom: '1px solid',
-            borderColor: '#EDF1FF',
+            borderColor: '#D2D6E1',
             '&:last-of-type': {
               borderRight: 'none',
             },
+          },
+          '& .MuiTableCell-root:first-of-type': {
+            justifyContent: 'center',
           },
         },
         onClick: () => {
@@ -108,7 +132,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
       };
     },
     defaultColumn: {
-      muiTableHeadCellProps: (props) => ({
+      muiTableHeadCellProps: () => ({
         sx: {
           opacity: 1,
           minHeight: 36,
@@ -142,6 +166,14 @@ export const StyledGrid: FC<StyledGridProps> = ({
             borderWidth: '1px',
             height: 16,
           },
+          '&:first-of-type .Mui-TableHeadCell-Content-Labels': {
+            width: '100%',
+            justifyContent: 'center',
+            '& .Mui-TableHeadCell-Content-Wrapper': {
+              display: 'flex',
+              justifyContent: 'center',
+            },
+          },
         },
       }),
     },
@@ -171,10 +203,9 @@ export const StyledGrid: FC<StyledGridProps> = ({
         },
       },
     },
-
     muiTableContainerProps: {
       style: {
-        maxHeight: 'calc(100vh - 412px)',
+        maxHeight: 'calc(100vh - 402px)',
         borderBottom: '1px solid #ccc',
         ...style,
       },

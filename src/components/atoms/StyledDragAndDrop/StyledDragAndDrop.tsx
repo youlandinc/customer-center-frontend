@@ -17,6 +17,7 @@ export type StyledDragAndDropProps = {
   list: GridColumnItem[];
   handleSave?: (list: GridColumnItem[]) => void;
   loading?: boolean;
+  handleCancel?: () => void;
 };
 
 // a little function to help us with reordering the result
@@ -35,6 +36,7 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
   list,
   handleSave,
   loading,
+  handleCancel,
 }) => {
   const [items, setItems] = useState<GridColumnItem[]>([]);
   const onDragEnd = (result: DropResult) => {
@@ -130,10 +132,10 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
                         </Stack>
                         <Switch
                           checked={item.visibility}
+                          disabled={item.disabled}
                           onChange={(e) => {
                             onSwitch(item, e.target.checked);
                           }}
-                          disabled={item.disabled}
                         />
                       </Stack>
                     )}
@@ -148,6 +150,7 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
       <Stack direction={'row'} gap={6} justifyContent={'center'}>
         <StyledButton
           color={'info'}
+          onClick={handleCancel}
           size={'small'}
           sx={{ width: 208 }}
           variant={'outlined'}

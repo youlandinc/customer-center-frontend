@@ -1,7 +1,7 @@
 'use client';
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide } from '@/components/molecules';
-import { DirectoryOverview } from '@/components/organisms';
+import { DirectoryPage } from '@/components/organisms';
 
 //import 'normalize.css';
 //import 'reset.css';
@@ -9,7 +9,7 @@ import { DirectoryOverview } from '@/components/organisms';
 const Email = () => {
   return (
     <StyledLayout isHomepage={false} sideMenu={<CustomerSide />}>
-      <DirectoryOverview />
+      <DirectoryPage />
     </StyledLayout>
   );
 };
