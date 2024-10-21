@@ -3,8 +3,8 @@ import React, { FC, Fragment } from 'react';
 
 import { StyledButton } from '@/components/atoms';
 
-import DeleteIcon from './assets/icon_grid_delete.svg';
-import ExportIcon from './assets/icon_grid_export.svg';
+import ICON_DELETE from './assets/icon_grid_delete.svg';
+import ICON_EXPORT from './assets/icon_grid_export.svg';
 
 type ExportLoanTypeProps = {
   onClose?: () => void;
@@ -25,13 +25,13 @@ export const GridActionsCard: FC<ExportLoanTypeProps> = ({
 }) => {
   const btns = [
     {
-      icon: ExportIcon,
+      icon: ICON_EXPORT,
       label: 'Export',
       loading: exportLoading,
       onClick: handleExport,
     },
     {
-      icon: DeleteIcon,
+      icon: ICON_DELETE,
       label: 'Delete',
       loading: deleteLoading,
       onClick: handleDelete,

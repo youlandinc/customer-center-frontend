@@ -6,7 +6,7 @@ import { DrawerNewContact } from '@/components/molecules';
 import { useSwitch } from '@/hooks';
 import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
-import UserIcon from './assets/icon_user.svg';
+import ICON_USER from './assets/icon_user.svg';
 
 export const CreateNewContact: FC = () => {
   const { metadataColumns } = useGridColumnsStore((state) => state);
@@ -22,7 +22,7 @@ export const CreateNewContact: FC = () => {
         sx={{ px: 1.5, height: 'auto !important', py: '6px' }}
         variant={'text'}
       >
-        <Icon component={UserIcon} sx={{ width: 24, height: 24, mr: 0.75 }} />
+        <Icon component={ICON_USER} sx={{ width: 24, height: 24, mr: 0.75 }} />
         <Typography color={'text.primary'} variant={'body2'}>
           Create a contact
         </Typography>

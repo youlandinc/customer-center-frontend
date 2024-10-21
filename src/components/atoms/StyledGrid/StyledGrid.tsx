@@ -125,6 +125,9 @@ export const StyledGrid: FC<StyledGridProps> = ({
           '& .MuiTableCell-root:first-of-type': {
             justifyContent: 'center',
           },
+          '&:last-of-type .MuiTableCell-root': {
+            borderBottom: 'none',
+          },
         },
         onClick: () => {
           onRowClick?.(props);

@@ -16,9 +16,9 @@ import { enqueueSnackbar } from 'notistack';
 import { FC, useState } from 'react';
 import { useAsyncFn } from 'react-use';
 
-import AddColumn from './assets/icon_add_column.svg';
-import EditColumn from './assets/icon_edit_column.svg';
-import MoreIcon from './assets/icon_more.svg';
+import ICON_ADD from './assets/icon_add_column.svg';
+import ICON_EDIT_COLUMN from './assets/icon_edit_column.svg';
+import ICON_MORE from './assets/icon_more.svg';
 
 export const GridMoreBtn: FC = () => {
   const { tableId, metadataColumns, setColumn } = useGridColumnsStore(
@@ -40,7 +40,7 @@ export const GridMoreBtn: FC = () => {
   const menus = [
     {
       label: 'Edit columns',
-      icon: EditColumn,
+      icon: ICON_EDIT_COLUMN,
       handleClick: () => {
         setAnchorEl(null);
         open();
@@ -48,7 +48,7 @@ export const GridMoreBtn: FC = () => {
     },
     {
       label: 'Add new column',
-      icon: AddColumn,
+      icon: ICON_ADD,
       handleClick: () => {
         setAnchorEl(null);
         dialogOpen();
@@ -133,7 +133,7 @@ export const GridMoreBtn: FC = () => {
         }}
         sx={{ p: 0 }}
       >
-        <Icon component={MoreIcon} sx={{ width: 24, height: 24 }} />
+        <Icon component={ICON_MORE} sx={{ width: 24, height: 24 }} />
       </IconButton>
       <StyledAnchorMenus
         anchorEl={anchorEl}

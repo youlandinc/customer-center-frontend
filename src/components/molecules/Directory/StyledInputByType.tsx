@@ -10,7 +10,7 @@ import {
 
 import { ColumnTypeEnum } from '@/types';
 
-import NOTIFICATION_ERROR from './assets/icon_validate_error.svg';
+import ICON_NOTIFICATION_ERROR from './assets/icon_validate_error.svg';
 
 type StyledInputByTypeProps = {
   type: ColumnTypeEnum;
@@ -41,7 +41,7 @@ const StyledError: FC<StyledErrorProps> = ({ type, message, slot }) => {
             minWidth={303}
             width={'100%'}
           >
-            <Icon component={NOTIFICATION_ERROR} sx={{ flexShrink: 0 }} />
+            <Icon component={ICON_NOTIFICATION_ERROR} sx={{ flexShrink: 0 }} />
             <Typography
               color={'error'}
               flex={1}
