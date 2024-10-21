@@ -4,6 +4,10 @@ import {
   ColumnTypeEnum,
   DirectoryGridQueryCondition,
   DirectoryGridResponse,
+  ExcelColumnMappingProps,
+  ExcelMergeStrategyProps,
+  ExcelUploadHistory,
+  ExcelUploadHistoryDetailResponse,
   GetColumnsResponse,
   HttpVariant,
   SortColumnParam,
@@ -69,4 +73,30 @@ export const _preUploadExcel = (params: FormData) => {
       'Content-Type': 'multipart/form-data',
     },
   });
+};
+
+export const _startImportExcel = (params: {
+  taskId: PreUploadExcelResponse['taskId'];
+  columnMappingList: ExcelColumnMappingProps[];
+  mergeStrategy: ExcelMergeStrategyProps;
+}) => {
+  return post('/customer/task/execute', params);
+};
+
+export const _fetchImportHistories = () => {
+  return get<ExcelUploadHistory[]>('/customer/task/list');
+};
+
+export const _fetchImportHistoriesDetail = (id: string | number) => {
+  return get<ExcelUploadHistoryDetailResponse>(`/customer/task/detail/${id}`);
+};
+
+export const _fetchImportHistoryInvalidExcel = (id: string | number) => {
+  return post(
+    `/customer/task/download/invalid/${id}`,
+    {},
+    {
+      responseType: 'blob',
+    },
+  );
 };

@@ -1,15 +1,13 @@
 'use client';
-
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide } from '@/components/molecules';
-import { ImportContacts } from '@/components/organisms';
 
-const Directory = () => {
+const DataDetail = ({ params }: { params: { slug: string } }) => {
   return (
     <StyledLayout isHomepage={false} sideMenu={<CustomerSide />}>
-      <ImportContacts />
+      {JSON.stringify(params)}
     </StyledLayout>
   );
 };
 
-export default Directory;
+export default DataDetail;

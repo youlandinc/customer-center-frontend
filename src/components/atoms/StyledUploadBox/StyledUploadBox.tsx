@@ -24,7 +24,7 @@ import {
 
 import { StyledButton } from '@/components/atoms';
 
-import ICON_UPLOAD from '@/components/molecules/XLSXPreUpload/assets/icon_upload.svg';
+import ICON_UPLOAD from '@/components/molecules/XLSXUpload/assets/icon_upload.svg';
 
 interface StyledUploadBoxProps {
   loading?: boolean;
@@ -145,9 +145,10 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
         }
       }}
       sx={{
-        outline: isDragging
+        border: isDragging
           ? '2px dashed hsla(222,42%,55%,.8)'
-          : '1px dashed #D2D6E1',
+          : '2px dashed #D2D6E1',
+        flex: 1,
         ...sx,
       }}
       width={'100%'}
