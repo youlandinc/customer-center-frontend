@@ -1,5 +1,4 @@
-'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { Stack, Step, StepLabel, Stepper } from '@mui/material';
 
 import {
@@ -8,16 +7,13 @@ import {
   XLSXUpload,
   XLSXUploadHeader,
 } from '@/components/molecules';
+import { DirectoryPageMode } from '@/types';
+import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
 
 const steps = ['Upload a file', 'Match columns', 'Import'];
 
-interface ImportContactsProps {
-  back: () => void;
-}
-
-export const ImportContacts = ({
-  back = () => console.log('cancel import'),
-}) => {
+export const ImportContacts: FC = () => {
+  const { setPageMode } = useDirectoryStore((state) => state);
   const [activeStep, setActiveStep] = useState(0);
 
   const renderNode = useMemo(() => {
@@ -42,8 +38,10 @@ export const ImportContacts = ({
   }, [activeStep]);
 
   return (
-    <Stack gap={3} height={'100%'} overflow={'auto'} px={8} py={6}>
-      <XLSXUploadHeader backStep={back} />
+    <Stack flex={1} gap={3}>
+      <XLSXUploadHeader
+        backStep={() => setPageMode(DirectoryPageMode.default)}
+      />
 
       <Stack width={660}>
         <Stepper activeStep={activeStep}>

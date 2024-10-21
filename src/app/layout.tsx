@@ -1,11 +1,9 @@
 'use client';
-import Script from 'next/script';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
-import NProgress from 'nprogress';
 
 import localFont from 'next/font/local';
-import { Router } from 'next/router';
+import Script from 'next/script';
 
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -48,46 +46,6 @@ const RootLayout = ({
   children: ReactNode;
 }>) => {
   const breakpoints = useBreakpoints();
-
-  useEffect(() => {
-    const handleRouteStart = () => NProgress.start();
-    const handleRouteDone = () => NProgress.done();
-    Router.events.on('routeChangeStart', handleRouteStart);
-    Router.events.on('routeChangeComplete', handleRouteDone);
-    Router.events.on('routeChangeError', handleRouteDone);
-
-    return () => {
-      Router.events.off('routeChangeStart', handleRouteStart);
-      Router.events.off('routeChangeComplete', handleRouteDone);
-      Router.events.off('routeChangeError', handleRouteDone);
-    };
-  }, []);
-
-  useEffect(() => {
-    const storage = localStorage?.getItem('PERSIST_DATA');
-    const accessToken = storage ? JSON.parse(storage)?.state?.accessToken : '';
-    const token =
-      accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION');
-    if (!token) {
-      return;
-    }
-    console.log(123);
-    const eventSource = new EventSource(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/customer/task/notification?token=${token}`,
-    );
-
-    eventSource.onmessage = (e) => {
-      if (e.data === 'heartbeat') {
-        return;
-      }
-      const data = JSON.parse(e.data);
-      console.log(data);
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, []);
 
   return (
     <html lang="en">

@@ -25,26 +25,24 @@ export type TableImportStoreActions = {
 export type TableImportStoreProps = TableImportStoreState &
   TableImportStoreActions;
 
-export const useTableImportStore = create<TableImportStoreProps>()(
-  (set, get) => ({
-    taskId: '',
-    fileName: '',
-    fileColumns: [],
-    fileContent: [],
-    columnMappingList: [],
-    setTaskId: (taskId) => set({ taskId }),
-    setFileName: (fileName) => set({ fileName }),
-    setFileColumns: (columns) => set({ fileColumns: columns }),
-    setFileContent: (content) => set({ fileContent: content }),
-    setColumnMappingList: (mappingList) =>
-      set({ columnMappingList: mappingList }),
-    reset: () =>
-      set({
-        taskId: '',
-        fileName: '',
-        fileColumns: [],
-        fileContent: [],
-        columnMappingList: [],
-      }),
-  }),
-);
+export const useTableImportStore = create<TableImportStoreProps>()((set) => ({
+  taskId: '',
+  fileName: '',
+  fileColumns: [],
+  fileContent: [],
+  columnMappingList: [],
+  setTaskId: (taskId) => set({ taskId }),
+  setFileName: (fileName) => set({ fileName }),
+  setFileColumns: (columns) => set({ fileColumns: columns }),
+  setFileContent: (content) => set({ fileContent: content }),
+  setColumnMappingList: (mappingList) =>
+    set({ columnMappingList: mappingList }),
+  reset: () =>
+    set({
+      taskId: '',
+      fileName: '',
+      fileColumns: [],
+      fileContent: [],
+      columnMappingList: [],
+    }),
+}));

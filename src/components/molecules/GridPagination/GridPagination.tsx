@@ -28,7 +28,7 @@ export const GridPagination: FC<GridPaginationProps> = ({
   return (
     <Stack
       alignItems={'center'}
-      direction={'row'}
+      flexDirection={'row'}
       justifyContent={'flex-end'}
       spacing={6}
     >

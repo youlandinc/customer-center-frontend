@@ -19,13 +19,15 @@ export const StyledLayout: FC<LayoutProps> = ({
   sideMenu,
   children,
 }) => {
-  const { isHydration, initialized, fetchUserInfo } = useUserStore(
-    (state) => state,
-  );
+  const { isHydration, initialized, fetchUserInfo, createSSE, sse } =
+    useUserStore((state) => state);
 
   useEffect(
     () => {
       if (isHydration) {
+        if (!sse) {
+          createSSE();
+        }
         if (!initialized) {
           fetchUserInfo();
         }

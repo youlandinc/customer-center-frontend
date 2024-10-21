@@ -100,7 +100,7 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
                       <Stack
                         bgcolor={snapshot.isDragging ? '#EDEFF2' : 'none'}
                         borderRadius={snapshot.isDragging ? 2 : 0}
-                        direction={'row'}
+                        flexDirection={'row'}
                         justifyContent={'space-between'}
                         p={1}
                         ref={provided.innerRef}
@@ -120,7 +120,7 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
                       >
                         <Stack
                           alignItems={'center'}
-                          direction={'row'}
+                          flexDirection={'row'}
                           spacing={3}
                         >
                           <DragIndicatorIcon
@@ -147,7 +147,7 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
           </Droppable>
         </DragDropContext>
       </Stack>
-      <Stack direction={'row'} gap={6} justifyContent={'center'}>
+      <Stack flexDirection={'row'} gap={6} justifyContent={'center'}>
         <StyledButton
           color={'info'}
           onClick={handleCancel}

@@ -28,7 +28,7 @@ export const GridToolBar: FC<GridToolBarProps> = ({ totalContacts }) => {
   return (
     <>
       <Stack
-        direction={'row'}
+        flexDirection={'row'}
         gap={3}
         justifyContent={'space-between'}
         mb={1.5}
@@ -37,7 +37,7 @@ export const GridToolBar: FC<GridToolBarProps> = ({ totalContacts }) => {
         <Typography variant={'subtitle1'}>
           {totalContacts.toLocaleString()} Contacts
         </Typography>
-        <Stack alignItems={'center'} direction={'row'} gap={3}>
+        <Stack alignItems={'center'} flexDirection={'row'} gap={3}>
           <StyledTextFieldSearch
             handleClear={() => {
               ref.current!.value = '';

@@ -66,7 +66,7 @@ export const StyledAnchorMenus: FC<StyledActionsMenuProps> = ({
           selected={item?.isSelected}
           sx={{ p: '14px 24px' }}
         >
-          <Stack alignItems={'center'} direction={'row'} gap={1.25}>
+          <Stack alignItems={'center'} flexDirection={'row'} gap={1.25}>
             {item?.icon && (
               <Icon
                 component={item.icon}

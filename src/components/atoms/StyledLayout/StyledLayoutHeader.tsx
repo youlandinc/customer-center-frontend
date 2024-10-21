@@ -425,7 +425,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
       >
         <Stack
           alignItems={'center'}
-          direction={'row'}
+          flexDirection={'row'}
           justifyContent={'space-between'}
           mb={3}
         >

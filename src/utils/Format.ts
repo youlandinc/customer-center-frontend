@@ -1,5 +1,4 @@
 import { POSTypeOf } from './TypeOf';
-import { format } from 'date-fns';
 
 export const POSFormatDollar = (
   amount: number | undefined | string | null,
@@ -40,19 +39,19 @@ export const POSFormatPercent = (
   );
 };
 
-export const POSFormatDate = (
-  date: string | Date,
-  timeFormat = 'yyyy-MM-dd HH:mm:ss O',
-  options?: {
-    locale?: Locale;
-    weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-    firstWeekContainsDate?: number;
-    useAdditionalWeekYearTokens?: boolean;
-    useAdditionalDayOfYearTokens?: boolean;
-  },
-): string => {
-  return format(new Date(date), timeFormat, options);
-};
+//export const POSFormatDate = (
+//  date: string | Date,
+//  timeFormat = 'yyyy-MM-dd HH:mm:ss O',
+//  options?: {
+//    locale?: Locale;
+//    weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+//    firstWeekContainsDate?: number;
+//    useAdditionalWeekYearTokens?: boolean;
+//    useAdditionalDayOfYearTokens?: boolean;
+//  },
+//): string => {
+//  return format(new Date(date), timeFormat, options);
+//};
 
 export const POSFormatUSPhoneToText = (entry = '') => {
   if (POSTypeOf(entry) === 'Null') {

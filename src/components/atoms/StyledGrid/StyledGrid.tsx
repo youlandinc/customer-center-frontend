@@ -205,7 +205,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
     },
     muiTableContainerProps: {
       style: {
-        maxHeight: 'calc(100vh - 402px)',
+        maxHeight: 'calc(100vh - 430px)',
         borderBottom: '1px solid #ccc',
         ...style,
       },

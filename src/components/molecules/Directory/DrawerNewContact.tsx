@@ -161,7 +161,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
             })}
           </Stack>
         )}
-        <Stack direction={'row'} gap={6} justifyContent={'center'}>
+        <Stack flexDirection={'row'} gap={6} justifyContent={'center'}>
           <StyledButton
             color={'info'}
             onClick={() => {

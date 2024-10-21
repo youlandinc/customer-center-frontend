@@ -156,7 +156,7 @@ export const GridMoreBtn: FC = () => {
           />
         }
         footer={
-          <Stack direction={'row'} gap={1.5} justifyContent={'center'}>
+          <Stack flexDirection={'row'} gap={1.5} justifyContent={'center'}>
             <StyledButton
               color={'info'}
               onClick={dialogClose}

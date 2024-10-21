@@ -2,8 +2,14 @@ import { FC } from 'react';
 import { Icon, Stack, Typography } from '@mui/material';
 
 import ICON_CLOSE from './assets/icon_close.svg';
+import { useUserStore } from '@/providers';
+import { ExcelUploadStatus } from '@/types';
 
 export const XLSXUploadStatus: FC = () => {
+  const { notificationList, deleteNotification } = useUserStore(
+    (state) => state,
+  );
+
   return (
     <Stack
       gap={3}
@@ -13,15 +19,40 @@ export const XLSXUploadStatus: FC = () => {
         bottom: 48,
       }}
       width={340}
-      zIndex={9999}
+      zIndex={999}
     >
-      <ProgressStatus />
-      <CompletedStatus />
+      {notificationList.map((notification, index) => {
+        switch (notification.type) {
+          case ExcelUploadStatus.processing: {
+            return (
+              <ProgressStatus
+                count={notification?.data?.count}
+                key={`${notification.taskId}-${index}`}
+                total={notification?.data?.total}
+              />
+            );
+          }
+          case ExcelUploadStatus.completed: {
+            return (
+              <CompletedStatus
+                key={`${notification.taskId}-${index}`}
+                newAdd={notification?.data?.newAdd}
+                onClickToClose={() => deleteNotification(notification.taskId)}
+                unchanged={notification?.data?.unchange}
+                updated={notification?.data?.updated}
+              />
+            );
+          }
+        }
+      })}
     </Stack>
   );
 };
 
-const ProgressStatus = () => {
+const ProgressStatus: FC<{ total: number; count: number }> = ({
+  total,
+  count,
+}) => {
   return (
     <Stack
       alignItems={'center'}
@@ -38,7 +69,7 @@ const ProgressStatus = () => {
       <Stack flexDirection={'row'} width={'100%'}>
         <Typography variant={'subtitle1'}>Importing contacts</Typography>
         <Typography ml={'auto'} variant={'body2'}>
-          180 / 343
+          {count} / {total}
         </Typography>
       </Stack>
 
@@ -57,8 +88,9 @@ const ProgressStatus = () => {
           sx={{
             top: 0,
             left: 0,
+            transition: 'width 0.3s',
           }}
-          width={'80%'}
+          width={`${Math.ceil((count / total) * 100)}%`}
         />
       </Stack>
     </Stack>
@@ -68,7 +100,10 @@ const ProgressStatus = () => {
 export const CompletedStatus: FC<{
   onClickToClose?: () => void;
   onClickToDetail?: () => void;
-}> = ({ onClickToClose, onClickToDetail }) => {
+  newAdd: number;
+  updated: number;
+  unchanged: number;
+}> = ({ onClickToClose, onClickToDetail, newAdd, updated, unchanged }) => {
   return (
     <Stack
       alignItems={'center'}
@@ -102,7 +137,7 @@ export const CompletedStatus: FC<{
       </Stack>
 
       <Typography flexWrap={'wrap'} variant={'body2'} width={'100%'}>
-        160 new - 1 existing - 3 not imported 160
+        {newAdd} new - {updated} existing - {unchanged} not imported
       </Typography>
 
       <Typography

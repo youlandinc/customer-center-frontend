@@ -109,3 +109,8 @@ export type ValidateColumnData = {
   columnValue: unknown;
   tableId: number;
 };
+
+export enum DirectoryPageMode {
+  default = 'DEFAULT',
+  import = 'IMPORT',
+}

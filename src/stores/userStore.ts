@@ -5,7 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 
 import { SystemLogout } from '@/utils';
 import { AUTO_HIDE_DURATION } from '@/constant';
-import { HttpError } from '@/types';
+import { HttpError, SSEEvent } from '@/types';
 import {
   _fetchUserDetailByAccountId,
   _fetchUserInfoWithToken,
@@ -20,6 +20,8 @@ export type UserState = {
   initialized: boolean;
   setting: any;
   licensedProduct: any[];
+  sse: EventSource | undefined;
+  notificationList: any[];
 };
 
 export type UserStateActions = {
@@ -27,6 +29,9 @@ export type UserStateActions = {
   setAccessToken: (token: string) => void;
   loginSystem: (cb?: () => void) => Promise<void>;
   fetchUserInfo: () => Promise<void>;
+  createSSE: () => Promise<void>;
+  updateNotificationList: (notificationList: any[]) => void;
+  deleteNotification: (taskId: string | number) => void;
 };
 
 export type UserStore = UserState & UserStateActions;
@@ -39,6 +44,8 @@ export const defaultInitState: UserState = {
   initialized: false,
   setting: {},
   licensedProduct: [],
+  sse: void 0,
+  notificationList: [],
 };
 
 export const createUserStore = (initState: UserState = defaultInitState) => {
@@ -92,6 +99,61 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
                 isSimple: !header,
                 header,
               });
+            }
+          },
+          createSSE: async () => {
+            const token =
+              get().accessToken ||
+              localStorage?.getItem('USER_LOGIN_INFORMATION');
+            if (!token || get().sse) {
+              return;
+            }
+
+            const eventSource = new EventSource(
+              `${process.env.NEXT_PUBLIC_BASE_URL}/customer/task/notification?token=${token}`,
+            );
+
+            set({ sse: eventSource });
+
+            eventSource.onmessage = (e) => {
+              if (e.data === 'heart-beating:alive' || e.data === 'heartbeat') {
+                return;
+              }
+              const data = JSON.parse(e.data);
+              switch (data.event) {
+                case SSEEvent.async_import_data: {
+                  const list = get().notificationList;
+                  const { taskId } = data.content;
+                  const index = list.findIndex(
+                    (item) => item.taskId === taskId,
+                  );
+                  if (index !== -1) {
+                    list.splice(index, 1, data.content);
+                  } else {
+                    list.push(data.content);
+                  }
+                  get().updateNotificationList(list);
+                  break;
+                }
+              }
+            };
+
+            eventSource.onerror = (e) => {
+              eventSource.close();
+              //eslint-disable-next-line no-console
+              console.log(e);
+              throw new Error('SSE connection error');
+            };
+          },
+          updateNotificationList: (notificationList) => {
+            set({ notificationList });
+          },
+          deleteNotification: (taskId) => {
+            const list = get().notificationList;
+            const index = list.findIndex((item) => item.taskId === taskId);
+            if (index !== -1) {
+              list.splice(index, 1);
+              get().updateNotificationList(list);
             }
           },
         }),

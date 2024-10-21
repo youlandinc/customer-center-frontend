@@ -1,10 +1,10 @@
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
-import { Icon, Stack, Typography } from '@mui/material';
+import { Icon, Typography } from '@mui/material';
 import { FC } from 'react';
 
 import { StyledButton } from '@/components/atoms';
 import { DrawerNewContact } from '@/components/molecules';
 import { useSwitch } from '@/hooks';
+import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
 import UserIcon from './assets/icon_user.svg';
 
@@ -22,12 +22,10 @@ export const CreateNewContact: FC = () => {
         sx={{ px: 1.5, height: 'auto !important', py: '6px' }}
         variant={'text'}
       >
-        <Stack alignItems={'center'} direction={'row'} gap={'6px'}>
-          <Icon component={UserIcon} sx={{ width: 24, height: 24 }} />
-          <Typography color={'text.primary'} variant={'body2'}>
-            Create a contact
-          </Typography>
-        </Stack>
+        <Icon component={UserIcon} sx={{ width: 24, height: 24, mr: 0.75 }} />
+        <Typography color={'text.primary'} variant={'body2'}>
+          Create a contact
+        </Typography>
       </StyledButton>
       <DrawerNewContact onClose={close} open={visible} />
     </>

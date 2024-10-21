@@ -41,3 +41,13 @@ export interface ExcelUploadHistoryDetailResponse extends ExcelUploadHistory {
   unchangedContacts: number;
   importedContacts: number;
 }
+
+export enum ExcelUploadStatus {
+  completed = 'COMPLETED',
+  failed = 'FAILED',
+  processing = 'PROCESSING',
+}
+
+export enum SSEEvent {
+  async_import_data = 'ASYNC_IMPORT_DATA',
+}
