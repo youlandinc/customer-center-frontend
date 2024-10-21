@@ -5,6 +5,7 @@ import {
   MRT_TableContainer,
   useMaterialReactTable,
 } from 'material-react-table';
+import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { enqueueSnackbar } from 'notistack';
 import { uniqueId } from 'lodash';
@@ -24,6 +25,8 @@ import ICON_WARNING from './assets/icon_warning.svg';
 import ICON_SUCCESS from './assets/icon_success.svg';
 
 export const XLSXUploadReportDetail: FC<{ id: string | number }> = ({ id }) => {
+  const router = useRouter();
+
   const { loading } = useAsync(async () => {
     if (!id) {
       return;
@@ -266,6 +269,7 @@ export const XLSXUploadReportDetail: FC<{ id: string | number }> = ({ id }) => {
 
         <StyledButton
           color={'info'}
+          onClick={() => router.back()}
           size={'small'}
           sx={{ ml: 'auto' }}
           variant={'outlined'}
