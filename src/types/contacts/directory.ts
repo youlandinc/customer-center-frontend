@@ -1,5 +1,6 @@
 import {
   ColumnTypeEnum,
+  FilterOperationEnum,
   SearchOperationEnum,
   SortDirection,
 } from '@/types/enums';
@@ -114,4 +115,11 @@ export type ValidateColumnData = {
 export enum DirectoryPageMode {
   default = 'DEFAULT',
   import = 'IMPORT',
+}
+
+export interface FilterProps {
+  filterId: string | number;
+  columnId?: string | number;
+  operation?: FilterOperationEnum | string;
+  operationText?: string;
 }

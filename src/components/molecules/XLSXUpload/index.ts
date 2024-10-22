@@ -6,3 +6,5 @@ export * from './XLSXUpload';
 
 export * from './XLSXUploadReportDetail';
 export * from './XLSXUploadStatus';
+
+export * from './ImportContacts';

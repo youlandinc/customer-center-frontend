@@ -36,3 +36,14 @@ export enum SearchOperationEnum {
   between = 'BETWEEN',
   not_between = 'NOT_BETWEEN',
 }
+
+export enum FilterOperationEnum {
+  equals = 'EQUALS',
+  not = 'NOT',
+  contains = 'CONTAINS',
+  not_contains = 'NOT_CONTAINS',
+  starts_with = 'STARTS_WITH',
+  not_starts_with = 'NOT_STARTS_WITH',
+  ends_with = 'ENDS_WITH',
+  not_ends_with = 'NOT_ENDS_WITH',
+}

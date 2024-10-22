@@ -8,7 +8,10 @@ import { StyledButton } from '@/components/atoms';
 import { StyledInputByType } from '@/components/molecules/Directory/StyledInputByType';
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useDebounceFn, useSwitch } from '@/hooks';
-import { _addNewContact, _validateColumnData } from '@/request/directory';
+import {
+  _addNewContact,
+  _validateColumnData,
+} from '@/request/contacts/directory';
 import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
 

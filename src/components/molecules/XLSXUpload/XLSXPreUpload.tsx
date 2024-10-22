@@ -14,7 +14,7 @@ import { StyledButton, StyledUploadBox } from '@/components/atoms';
 
 import { useTableImportStore } from '@/stores/directoryStores/useTableImportStore';
 import { ExcelContentProps, ExcelHeaderProps, HttpError } from '@/types';
-import { _preUploadExcel } from '@/request/directory';
+import { _preUploadExcel } from '@/request/contacts/directory';
 
 export const XLSXPreUpload: FC<{ nextStep: () => void }> = ({ nextStep }) => {
   const { enqueueSnackbar } = useSnackbar();
