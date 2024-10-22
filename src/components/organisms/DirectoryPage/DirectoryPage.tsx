@@ -7,8 +7,9 @@ import {
   ImportContacts,
   XLSXUploadStatus,
 } from '@/components/molecules';
-import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
+
 import { DirectoryPageMode } from '@/types';
+import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
 
 export const DirectoryPage: FC = () => {
   const { pageMode } = useDirectoryStore((state) => state);

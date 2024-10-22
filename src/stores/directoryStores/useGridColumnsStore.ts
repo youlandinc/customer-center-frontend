@@ -3,7 +3,7 @@ import { enqueueSnackbar } from 'notistack';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 
-import { _getAllColumns } from '@/request/directory';
+import { _getAllColumns } from '@/request/contacts/directory';
 import { ColumnItem, ColumnTypeEnum, HttpError } from '@/types';
 
 export type ColumnsStoreStates = {
@@ -23,6 +23,11 @@ type ColumnsStoreStoresActions = {
     columnLabel: string;
     columnType: ColumnTypeEnum;
   }[];
+  getColumnOptions: () => {
+    value: number | string;
+    label: string;
+    key: string;
+  }[];
 };
 
 export const useGridColumnsStore = create<
@@ -40,6 +45,14 @@ export const useGridColumnsStore = create<
       columnName: column.columnName,
       columnLabel: column.columnLabel,
       columnType: column.columnType,
+    }));
+  },
+  getColumnOptions: () => {
+    const columns = get().metadataColumns;
+    return columns.map((column) => ({
+      value: column.columnId,
+      label: column.columnLabel,
+      key: column.columnName,
     }));
   },
   setColumn: (data) => {

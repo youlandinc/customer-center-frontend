@@ -31,7 +31,6 @@ export const StyledAnchorMenus: FC<StyledActionsMenuProps> = ({
   menus,
   sx,
   paperSx,
-
   ...rest
 }) => {
   return (
@@ -39,7 +38,6 @@ export const StyledAnchorMenus: FC<StyledActionsMenuProps> = ({
       slotProps={{
         paper: {
           sx: {
-            // minWidth: 160,
             boxShadow:
               '0px 10px 10px 0px rgba(17, 52, 227, 0.10), 0px 0px 2px 0px rgba(17, 52, 227, 0.10)',
             borderRadius: 2,

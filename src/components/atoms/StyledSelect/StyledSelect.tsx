@@ -1,81 +1,91 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { FC } from 'react';
+import {
+  BaseSelectProps,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SxProps,
+} from '@mui/material';
 
-import { StyledSelectProps } from './StyledSelect.types';
+export interface StyledSelectProps extends BaseSelectProps {
+  options: Option[];
+  sxList?: SxProps;
+}
 
 export const StyledSelect: FC<StyledSelectProps> = ({
   label,
-  labelId,
-  id,
   value,
   onChange,
   options,
   sx,
+  sxList,
   required = false,
-  onOpen,
-  onClose,
-  open,
+  size = 'medium',
+  ...rest
 }) => {
   return (
     <FormControl
       required={required}
+      size={size}
       sx={{
         width: '100%',
-        '& .MuiOutlinedInput-root': {
-          padding: 0,
-          border: 'none',
-          '& .MuiInputLabel-outlined': {
-            transform: 'translate(14px, 18px) scale(1)',
-          },
-          '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-            transform: 'translate(14px, -6px) scale(0.75)',
+        '& .Mui-disabled': {
+          color: 'text.disabled',
+          cursor: 'not-allowed',
+        },
+        '& .MuiInputBase-formControl': {
+          borderRadius: 2,
+        },
+        '& .MuiInputLabel-formControl.Mui-focused': {
+          color: 'text.primary',
+        },
+        '& .Mui-focused': {
+          '& .MuiOutlinedInput-notchedOutline': {
+            border: '1px solid #202939 !important',
           },
           '& .MuiOutlinedInput-input': {
-            padding: '16.5px 32px 16.5px 14px',
-          },
-          '& fieldset': {
-            border: '1px solid',
-            borderColor: 'border.normal',
-            borderRadius: 3,
-          },
-          '&.Mui-focused fieldset': {
-            border: '1px solid',
-            borderColor: 'border.focus',
-          },
-          '&:hover fieldset': {
-            border: '1px solid',
-            borderColor: 'text.primary',
-          },
-        },
-        '& .MuiInputLabel-root': {
-          color: 'text.secondary',
-          '&.Mui-focused': {
-            color: 'text.secondary',
+            background: 'transparent',
           },
         },
         ...sx,
       }}
     >
-      <InputLabel id={labelId}>{label}</InputLabel>
+      <InputLabel>{label}</InputLabel>
       <Select
-        id={id}
+        defaultValue={''}
         label={label}
-        labelId={labelId}
         MenuProps={{
           disableScrollLock: true,
           MenuListProps: {
             sx: {
-              m: 0,
               p: 0,
+              m: 0,
+              '& .MuiMenuItem-root:hover': {
+                bgcolor: 'rgba(144, 149, 163, 0.1) !important',
+              },
+              '& .Mui-selected': {
+                bgcolor: 'hsla(,100%,95%,1) !important',
+              },
+              '& .Mui-selected:hover': {
+                bgcolor: 'hsla(,100%,92%,1) !important',
+              },
+              '& .MuiMenuItem-root': {
+                fontSize: 14,
+                color: 'text.primary',
+                p: 1.5,
+              },
+              ...sxList,
             },
+          },
+          PaperProps: {
+            style: { marginTop: 12, borderRadius: 8 },
           },
         }}
         onChange={onChange}
-        onClose={onClose}
-        onOpen={onOpen}
-        open={open}
         value={value}
         variant={'outlined'}
+        {...rest}
       >
         {options.map((item) => (
           <MenuItem

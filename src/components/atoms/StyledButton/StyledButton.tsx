@@ -53,7 +53,7 @@ export const StyledButton: FC<StyledButtonProps> = ({
           },
         },
         '&.MuiButton-outlined': {
-          border: '2px solid',
+          border: '1px solid',
           borderColor:
             color !== 'primary'
               ? `${color}.main`
