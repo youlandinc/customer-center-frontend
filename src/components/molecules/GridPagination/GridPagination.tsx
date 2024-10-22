@@ -28,8 +28,8 @@ export const GridPagination: FC<GridPaginationProps> = ({
     <Stack
       alignItems={'center'}
       flexDirection={'row'}
+      gap={6}
       justifyContent={'flex-end'}
-      spacing={6}
     >
       <TablePagination
         component={'div'}
@@ -85,7 +85,7 @@ export const GridPagination: FC<GridPaginationProps> = ({
 
       <Pagination
         count={pageCount}
-        onChange={(event: React.ChangeEvent<unknown>, value: number) => {
+        onChange={(event: ChangeEvent<unknown>, value: number) => {
           onPageChange?.(value - 1);
         }}
         page={currentPage + 1}

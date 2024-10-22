@@ -4,6 +4,7 @@ import { enqueueSnackbar } from 'notistack';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useAsyncFn } from 'react-use';
 import useSWR from 'swr';
+import { useRouter } from 'next/navigation';
 
 import { StyledGrid } from '@/components/atoms';
 import {
@@ -32,6 +33,8 @@ export const GridDirectory: FC = () => {
   const { keyword } = useGridQueryConditionStore((state) => state);
   const newContact = useGridNewContactStore((state) => state.data);
   const { totalRecords, setTotalRecords } = useGridStore((state) => state);
+
+  const router = useRouter();
 
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState({
@@ -175,9 +178,8 @@ export const GridDirectory: FC = () => {
             data={data || []}
             getRowId={(row) => row.id}
             loading={isLoading || loading}
-            //TODO
-            onRowClick={() => {
-              return;
+            onRowClick={({ row }) => {
+              router.push(`/contacts/directory/detail/${tableId}/${row.id}`);
             }}
             onRowSelectionChange={setRowSelection}
             rowCount={0}

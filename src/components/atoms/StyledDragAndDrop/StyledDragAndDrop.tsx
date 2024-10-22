@@ -101,10 +101,10 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
                         bgcolor={snapshot.isDragging ? '#EDEFF2' : 'none'}
                         borderRadius={snapshot.isDragging ? 2 : 0}
                         flexDirection={'row'}
+                        gap={3}
                         justifyContent={'space-between'}
                         p={1}
                         ref={provided.innerRef}
-                        spacing={3}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         sx={{
@@ -121,7 +121,7 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
                         <Stack
                           alignItems={'center'}
                           flexDirection={'row'}
-                          spacing={3}
+                          gap={3}
                         >
                           <DragIndicatorIcon
                             sx={{ fontSize: 24, color: 'info.main' }}

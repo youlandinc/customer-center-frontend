@@ -1,3 +1,5 @@
+import { SxProps } from '@mui/material';
+
 import { IAddress } from '@/types';
 
 export interface StyledGoogleAutoCompleteProps {
@@ -10,6 +12,8 @@ export interface StyledGoogleAutoCompleteProps {
   zipcodeLabel?: string;
   required?: boolean;
   placeholder?: string;
+  size?: 'small' | 'medium';
+  sx?: SxProps;
 }
 
 export interface _StyledGoogleAutoCompleteProps {
@@ -22,6 +26,8 @@ export interface _StyledGoogleAutoCompleteProps {
   label?: string;
   required?: boolean;
   placeholder?: string;
+  size?: 'small' | 'medium';
+  sx?: SxProps;
 }
 
 interface MainTextMatchedSubstrings {

@@ -50,7 +50,7 @@ export type DirectoryGridQueryCondition = {
   ];
 };
 
-type RecordsItem = {
+export type RecordsItem = {
   columnId: number;
   columnLabel: string;
   columnName: string;
@@ -82,13 +82,15 @@ export type GridColumnItem = {
   disabled?: boolean;
 };
 
+export type RecordItem = {
+  columnId: number;
+  columnName: string;
+  columnValue: unknown;
+};
+
 export type AddContactRequestParam = {
   tableId: number;
-  record: {
-    columnId: number;
-    columnName: string;
-    columnValue: unknown;
-  }[];
+  record: RecordItem[];
 };
 
 export type SortColumnItem = {

@@ -3,6 +3,7 @@ import {
   Box,
   Grid2 as Grid,
   Stack,
+  SxProps,
   TextField,
   Typography,
 } from '@mui/material';
@@ -35,6 +36,7 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
   stateLabel,
   zipcodeLabel,
   placeholder,
+  sx,
 }) => {
   const { formatAddress } = address;
 
@@ -153,6 +155,8 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
             onInputChange={(e, val) =>
               address.changeFieldValue('formatAddress', val)
             }
+            size={'small'}
+            sx={sx}
             value={formatAddress}
           />
         </Stack>
@@ -182,7 +186,12 @@ const _StyledGoogleAutoComplete: FC<_StyledGoogleAutoCompleteProps> = ({
     <Autocomplete
       disabled={disabled}
       id="youland-google-map-autoComplete"
-      sx={StyledGoogleAutoCompleteStyles.inside.autoComplete}
+      sx={
+        {
+          ...StyledGoogleAutoCompleteStyles.inside.autoComplete,
+          ...rest?.sx,
+        } as SxProps
+      }
       {...rest}
       autoComplete={false}
       autoSelect={false}
@@ -226,8 +235,8 @@ const _StyledGoogleAutoComplete: FC<_StyledGoogleAutoCompleteProps> = ({
           <TextField
             {...params}
             fullWidth
-            label={label || 'Street address'}
-            placeholder={placeholder || 'Property street address'}
+            label={label}
+            placeholder={placeholder}
             required={required}
             sx={{
               width: '100%',
