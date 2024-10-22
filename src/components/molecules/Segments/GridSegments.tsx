@@ -68,7 +68,7 @@ export const GridSegments = () => {
             >
               {format(
                 new Date(renderedCellValue as string),
-                'LLL L, yyyy, h:m a',
+                'LLL d, yyyy, h:m a..aa',
               )}
             </Typography>
           );
