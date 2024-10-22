@@ -1,13 +1,12 @@
 'use client';
-import { Typography } from '@mui/material';
-
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide } from '@/components/molecules';
+import { SegmentsPage } from '@/components/organisms';
 
 const Segments = () => {
   return (
     <StyledLayout isHomepage={false} sideMenu={<CustomerSide />}>
-      <Typography>Segments</Typography>
+      <SegmentsPage />
     </StyledLayout>
   );
 };

@@ -172,10 +172,19 @@ export const GridDirectory: FC = () => {
     <>
       <Stack gap={1.5}>
         <GridToolBar totalContacts={totalContacts} />
-        <Stack bgcolor={'#fff'} border={'1px solid #ccc'} gap={3}>
+        <Stack
+          bgcolor={'#fff'}
+          border={'1px solid #ccc'}
+          borderRadius={2}
+          gap={3}
+        >
           <StyledGrid
             columns={columns}
             data={data || []}
+            enableBatchRowSelection={true}
+            enableMultiRowSelection={true}
+            enableRowSelection={true}
+            enableSelectAll={true}
             getRowId={(row) => row.id}
             loading={isLoading || loading}
             onRowClick={({ row }) => {
@@ -184,6 +193,12 @@ export const GridDirectory: FC = () => {
             onRowSelectionChange={setRowSelection}
             rowCount={0}
             rowSelection={rowSelection}
+            style={{
+              maxHeight: 'calc(100vh - 430px)',
+              borderBottom: '1px solid #ccc',
+              borderTopLeftRadius: '8px',
+              borderTopRightRadius: '8px',
+            }}
           />
           <GridPagination
             currentPage={pagination.page}
