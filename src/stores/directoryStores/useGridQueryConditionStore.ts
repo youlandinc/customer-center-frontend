@@ -22,6 +22,9 @@ type GridQueryConditionStoreActions = {
     key: string,
     value: string | number | FilterOperationEnum,
   ) => void;
+  setSegmentsFilters: (value: {
+    [key: string]: Array<FilterProps & any>;
+  }) => void;
 };
 
 export const useGridQueryConditionStore = create<
@@ -32,6 +35,9 @@ export const useGridQueryConditionStore = create<
   segmentsFilters: {},
   setKeyword: (keyword) => set({ keyword }),
   setSegmentId: (segmentId) => set({ segmentId }),
+  setSegmentsFilters: (value) => {
+    set({ segmentsFilters: value });
+  },
   createSegmentsFiltersGroup: () => {
     set({
       segmentsFilters: {
