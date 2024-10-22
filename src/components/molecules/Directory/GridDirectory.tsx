@@ -133,6 +133,8 @@ export const GridDirectory: FC = () => {
                   sx={{
                     ...ellipsisStyle,
                     width: '100%',
+                    textDecoration:
+                      item.columnName === 'name' ? 'underline' : 'none',
                   }}
                 >
                   {renderedCellValue}
