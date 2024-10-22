@@ -1,3 +1,4 @@
+import { InputBaseProps } from '@mui/material/InputBase';
 import { NumberFormatValues } from 'react-number-format';
 import { SxProps } from '@mui/material';
 
@@ -19,4 +20,5 @@ export interface StyledTextFieldNumberProps {
   error?: boolean | undefined;
   size?: 'small' | 'medium';
   InputProps?: any;
+  onBlur?: InputBaseProps['onBlur'];
 }

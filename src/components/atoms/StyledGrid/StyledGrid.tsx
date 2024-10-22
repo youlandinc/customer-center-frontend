@@ -11,19 +11,21 @@ import { FC } from 'react';
 import CHECKBOX_STATIC from './assets/static.svg';
 import CHECKBOX_CHECKED from './assets/checked.svg';
 import CHECKBOX_INDETERMINATE from './assets/intermediate.svg';
-import { Icon } from '@mui/material';
+import { Icon, SxProps } from '@mui/material';
 
 type StyledGridProps = MRT_TableOptions<any> & {
   loading?: boolean;
   columnOrder?: string[];
   style?: React.CSSProperties;
-  rowSelection: Record<string, boolean>;
+  rowSelection?: Record<string, boolean>;
   onRowClick?: (props: {
     isDetailPanel?: boolean;
     row: MRT_Row<any>;
     staticRowIndex: number;
     table: MRT_TableInstance<any>;
   }) => void;
+  muiTableBodyRowSx?: SxProps;
+  muiTableHeadSx?: SxProps;
 };
 
 export const StyledGrid: FC<StyledGridProps> = ({
@@ -34,8 +36,10 @@ export const StyledGrid: FC<StyledGridProps> = ({
   rowCount,
   style,
   getRowId,
-  rowSelection,
+  rowSelection = {},
   onRowClick,
+  muiTableBodyRowSx,
+  muiTableHeadSx,
   ...rest
 }) => {
   // const router = useRouter();
@@ -44,25 +48,11 @@ export const StyledGrid: FC<StyledGridProps> = ({
     columns: columns,
     data: data,
     rowCount: rowCount,
-    enableRowSelection: true,
-    enableMultiRowSelection: true,
-    enableBatchRowSelection: true,
-    enableSelectAll: true,
-    enableExpandAll: false, //hide expand all double arrow in column header
-    enableExpanding: false,
-    enableBottomToolbar: false, //pipelineType === PipelineDisplayMode.LIST_MODE,
-    paginateExpandedRows: false, //When rows are expanded, do not count sub-rows as number of rows on the page towards pagination
-    enableTopToolbar: false,
     enableColumnActions: false, //pipelineType === PipelineDisplayMode.LIST_MODE,
-    enableColumnOrdering: false,
     enableSorting: false,
-    enableColumnDragging: false,
-    enableGrouping: false,
     enableColumnResizing: true,
     enableRowVirtualization: true,
     enableColumnVirtualization: true,
-    enableColumnPinning: false,
-    manualPagination: true,
     state: {
       columnOrder: columnOrder || [],
       showSkeletons: loading,
@@ -92,7 +82,6 @@ export const StyledGrid: FC<StyledGridProps> = ({
         />
       ),
     },
-
     muiTableBodyRowProps: (props) => {
       return {
         sx: {
@@ -125,6 +114,10 @@ export const StyledGrid: FC<StyledGridProps> = ({
           '& .MuiTableCell-root:first-of-type': {
             justifyContent: 'center',
           },
+          '&:last-of-type .MuiTableCell-root': {
+            borderBottom: 'none',
+          },
+          ...muiTableBodyRowSx,
         },
         onClick: () => {
           onRowClick?.(props);
@@ -201,12 +194,11 @@ export const StyledGrid: FC<StyledGridProps> = ({
           height: 16,
           borderColor: '#D2D6E1',
         },
+        ...muiTableHeadSx,
       },
     },
     muiTableContainerProps: {
       style: {
-        maxHeight: 'calc(100vh - 430px)',
-        borderBottom: '1px solid #ccc',
         ...style,
       },
     },

@@ -10,6 +10,7 @@ import {
   ExcelUploadHistoryDetailResponse,
   GetColumnsResponse,
   HttpVariant,
+  RecordsItem,
   SortColumnParam,
   ValidateColumnData,
 } from '@/types';
@@ -63,8 +64,18 @@ export const _validateColumnData = (param: ValidateColumnData) => {
   );
 };
 
-export const _fetchAllContacts = () => {
-  return get<number>('/customer/es/record/total');
+export const _fetchContactDetail = (tableId: number, recordId: string) => {
+  return get<
+    Omit<DirectoryGridResponse, 'totalRecords' | 'metadataValues'> & {
+      metadataValues: RecordsItem[];
+    }
+  >(`/customer/es/record/${tableId}/${recordId}`);
+};
+
+export const _updateContact = (
+  param: AddContactRequestParam & { recordId: string },
+) => {
+  return put('/customer/es/record', param);
 };
 
 export const _preUploadExcel = (params: FormData) => {

@@ -55,6 +55,7 @@ export const StyledTextFieldNumber: FC<StyledTextFieldNumberProps> = ({
         {...rest}
         id="formatted-numberformat-input"
         name="numberformat"
+        onBlur={rest.onBlur}
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         onChange={handledChange}

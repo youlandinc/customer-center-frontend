@@ -1,27 +1,28 @@
-import { FC, PropsWithChildren, ReactNode } from 'react';
-import { Box, Icon, Stack, Typography } from '@mui/material';
-
 import {
   StyledGoogleAutoComplete,
   StyledTextField,
   StyledTextFieldNumber,
   StyledTextFieldPhone,
+  StyledTextFieldProps,
 } from '@/components/atoms';
 
 import { ColumnTypeEnum } from '@/types';
+import { Icon, Stack, Typography } from '@mui/material';
+import { FC, PropsWithChildren, ReactNode } from 'react';
 
-import NOTIFICATION_ERROR from './assets/icon_validate_error.svg';
+import ICON_NOTIFICATION_ERROR from './assets/icon_validate_error.svg';
 
 type StyledInputByTypeProps = {
   type: ColumnTypeEnum;
-  label: string;
+  label?: string;
   name: string;
   required?: boolean;
   handleChange?: (key: string, value: unknown) => void;
   value: unknown;
   errorMessage?: ReactNode;
   isValidate?: boolean;
-};
+  errorSlot?: ReactNode;
+} & StyledTextFieldProps;
 
 type StyledErrorProps = {
   type: ColumnTypeEnum;
@@ -41,7 +42,7 @@ const StyledError: FC<StyledErrorProps> = ({ type, message, slot }) => {
             minWidth={303}
             width={'100%'}
           >
-            <Icon component={NOTIFICATION_ERROR} sx={{ flexShrink: 0 }} />
+            <Icon component={ICON_NOTIFICATION_ERROR} sx={{ flexShrink: 0 }} />
             <Typography
               color={'error'}
               flex={1}
@@ -82,6 +83,10 @@ export const StyledInputByType: FC<StyledInputByTypeProps> = ({
   value,
   errorMessage,
   isValidate,
+  errorSlot,
+  size,
+  sx,
+  onBlur,
 }) => {
   switch (type) {
     case ColumnTypeEnum.text:
@@ -90,29 +95,19 @@ export const StyledInputByType: FC<StyledInputByTypeProps> = ({
         <WrapInputError
           errorMessage={errorMessage}
           isValidate={isValidate}
-          slot={
-            <Box
-              color={'action.active'}
-              component={'a'}
-              fontSize={12}
-              ml={'auto'}
-              onClick={() => {
-                return;
-              }}
-              sx={{ textDecoration: 'underline', cursor: 'pointer' }}
-            >
-              See the contact
-            </Box>
-          }
+          slot={errorSlot}
           type={type}
         >
           <StyledTextField
             error={!!errorMessage}
             label={label}
+            onBlur={onBlur}
             onChange={(e) => {
               handleChange?.(name, e.target.value);
             }}
             required={required}
+            size={size}
+            sx={sx}
             type={type.toLocaleLowerCase()}
             value={value}
           />
@@ -131,16 +126,22 @@ export const StyledInputByType: FC<StyledInputByTypeProps> = ({
             },
           }}
           fullAddress={false}
+          label={label}
           required={required}
+          size={size}
+          sx={sx}
         />
       );
     case ColumnTypeEnum.number:
       return (
         <StyledTextFieldNumber
           label={label}
+          onBlur={onBlur}
           onValueChange={(values) => {
             handleChange?.(name, values.floatValue);
           }}
+          size={size}
+          sx={sx}
           value={value as any}
         />
       );
@@ -148,9 +149,12 @@ export const StyledInputByType: FC<StyledInputByTypeProps> = ({
       return (
         <StyledTextFieldPhone
           label={label}
+          onBlur={onBlur}
           onValueChange={(values) => {
             handleChange?.(name, values.floatValue);
           }}
+          size={size}
+          sx={sx}
           value={value as any}
         />
       );
@@ -158,9 +162,12 @@ export const StyledInputByType: FC<StyledInputByTypeProps> = ({
       return (
         <StyledTextField
           label={label}
+          onBlur={onBlur}
           onChange={(e) => {
             handleChange?.(name, e.target.value);
           }}
+          size={size}
+          sx={sx}
           value={value}
         />
       );

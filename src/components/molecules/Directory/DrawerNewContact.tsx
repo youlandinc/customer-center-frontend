@@ -1,7 +1,8 @@
-import { Drawer, DrawerProps, Stack, Typography } from '@mui/material';
+import { Box, Drawer, DrawerProps, Stack, Typography } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import { FC, useRef, useState } from 'react';
 import { useAsyncFn } from 'react-use';
+import { useRouter } from 'next/navigation';
 
 import { StyledButton } from '@/components/atoms';
 import { StyledInputByType } from '@/components/molecules/Directory/StyledInputByType';
@@ -14,7 +15,12 @@ import {
 import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
 
-import { AddContactRequestParam, HttpError, ValidateColumnData } from '@/types';
+import {
+  AddContactRequestParam,
+  ColumnTypeEnum,
+  HttpError,
+  ValidateColumnData,
+} from '@/types';
 
 type DrawerNewContactProps = DrawerProps & { onClose?: () => void };
 
@@ -26,6 +32,9 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
   const setNewContact = useGridNewContactStore((state) => state.setNewContact);
   const [formData, setFormData] = useState({} as Record<string, any>);
   const formRef = useRef<HTMLFormElement>(null);
+
+  const router = useRouter();
+
   const {
     visible: continueShow,
     open: continueOpen,
@@ -70,7 +79,8 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
             ...prev,
             [key]: {
               value: param.columnValue,
-              errorMessage: res.data?.errorMessage,
+              errorMessage: res.data.errorMessage,
+              recordId: res.data.recordId,
             },
           }));
         }
@@ -137,6 +147,24 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
               return (
                 <StyledInputByType
                   errorMessage={formData[key]?.errorMessage}
+                  errorSlot={
+                    item.columnType === ColumnTypeEnum.email ? (
+                      <Box
+                        color={'action.active'}
+                        component={'a'}
+                        fontSize={12}
+                        ml={'auto'}
+                        onClick={() => {
+                          router.push(
+                            `/contacts/directory/detail/${tableId}/${formData[key]?.recordId}`,
+                          );
+                        }}
+                        sx={{ textDecoration: 'underline', cursor: 'pointer' }}
+                      >
+                        See the contact
+                      </Box>
+                    ) : undefined
+                  }
                   handleChange={(key, value) => {
                     if (item.unique) {
                       validateDebounce({

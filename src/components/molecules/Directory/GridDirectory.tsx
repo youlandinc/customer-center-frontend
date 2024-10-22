@@ -4,6 +4,7 @@ import { enqueueSnackbar } from 'notistack';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useAsyncFn } from 'react-use';
 import useSWR from 'swr';
+import { useRouter } from 'next/navigation';
 
 import { StyledGrid } from '@/components/atoms';
 import {
@@ -32,6 +33,8 @@ export const GridDirectory: FC = () => {
   const { keyword } = useGridQueryConditionStore((state) => state);
   const newContact = useGridNewContactStore((state) => state.data);
   const { totalRecords, setTotalRecords } = useGridStore((state) => state);
+
+  const router = useRouter();
 
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState({
@@ -169,19 +172,33 @@ export const GridDirectory: FC = () => {
     <>
       <Stack gap={1.5}>
         <GridToolBar totalContacts={totalContacts} />
-        <Stack bgcolor={'#fff'} border={'1px solid #ccc'} gap={3}>
+        <Stack
+          bgcolor={'#fff'}
+          border={'1px solid #ccc'}
+          borderRadius={2}
+          gap={3}
+        >
           <StyledGrid
             columns={columns}
             data={data || []}
+            enableBatchRowSelection={true}
+            enableMultiRowSelection={true}
+            enableRowSelection={true}
+            enableSelectAll={true}
             getRowId={(row) => row.id}
             loading={isLoading || loading}
-            //TODO
-            onRowClick={() => {
-              return;
+            onRowClick={({ row }) => {
+              router.push(`/contacts/directory/detail/${tableId}/${row.id}`);
             }}
             onRowSelectionChange={setRowSelection}
             rowCount={0}
             rowSelection={rowSelection}
+            style={{
+              maxHeight: 'calc(100vh - 430px)',
+              borderBottom: '1px solid #ccc',
+              borderTopLeftRadius: '8px',
+              borderTopRightRadius: '8px',
+            }}
           />
           <GridPagination
             currentPage={pagination.page}
