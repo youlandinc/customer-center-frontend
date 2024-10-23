@@ -112,7 +112,7 @@ export enum DirectoryPageMode {
 
 export interface FilterProps {
   filterId: string | number;
-  columnId?: string | number;
+  columnName?: string | number;
   operation?: FilterOperationEnum | string;
   operationText?: string;
 }

@@ -120,7 +120,8 @@ export const DirectoryHeader: FC = () => {
         }
         if (
           v.some(
-            (item) => !item.columnId || !item.operation || !item.operationText,
+            (item) =>
+              !item.columnName || !item.operation || !item.operationText,
           )
         ) {
           setShowFooter(false);
@@ -205,13 +206,13 @@ export const DirectoryHeader: FC = () => {
                     onChangeSegmentsFilters(
                       index,
                       filterIndex,
-                      'columnId',
+                      'columnName',
                       e.target.value as unknown as string | number,
                     );
                   }}
                   options={COLUMN_OPTIONS}
                   size={'small'}
-                  value={filter.columnId}
+                  value={filter.columnName}
                 />
                 <StyledSelect
                   label={'Condition'}
@@ -258,7 +259,7 @@ export const DirectoryHeader: FC = () => {
               onClick={() => {
                 addSegmentsFilters(index, {
                   filterId: '',
-                  columnId: '',
+                  columnName: '',
                   operation: '',
                   operationText: '',
                 });
