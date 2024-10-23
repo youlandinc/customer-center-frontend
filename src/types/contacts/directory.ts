@@ -123,3 +123,15 @@ export interface FilterProps {
   operation?: FilterOperationEnum | string;
   operationText?: string;
 }
+
+export interface SegmentOptionResponseData {
+  isSelect: boolean;
+  segmentsId: number;
+  segmentsName: string;
+}
+
+export type SegmentOptionResponseList = SegmentOptionResponseData[];
+
+export interface SegmentOption extends Option {
+  isSelect: boolean;
+}

@@ -65,8 +65,8 @@ export const DirectoryHeader: FC = () => {
 
   const createSegment = useCallback(async () => {
     const postData = {
-      metadataTableId: tableId,
-      metadataTableName: tableName,
+      tableId,
+      tableName,
       segmentName,
       segmentsFilters: segmentsFilters!,
     };
@@ -83,8 +83,16 @@ export const DirectoryHeader: FC = () => {
       });
     } finally {
       setCreateLoading(false);
+      close();
     }
-  }, [enqueueSnackbar, segmentsFilters, segmentName, tableId, tableName]);
+  }, [
+    tableId,
+    tableName,
+    segmentName,
+    segmentsFilters,
+    enqueueSnackbar,
+    close,
+  ]);
 
   useEffect(() => {
     useGridQueryConditionStore.subscribe((state, prevState) => {

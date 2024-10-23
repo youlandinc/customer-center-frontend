@@ -17,6 +17,9 @@ export const _fetchUserLicensedProduct = () => {
 };
 
 export const _fetchUserDetailByAccountId = (param: { accountId: string }) => {
-  //return post<User.UserDetail>('/usercenter/api/user/query/detail', param);
   return post('/usercenter/api/user/query/detail', param);
+};
+
+export const _updateUserConfig = (params: { segmentId: string | number }) => {
+  return post('/customer/user/config', params);
 };
