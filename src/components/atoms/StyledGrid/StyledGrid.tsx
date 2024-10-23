@@ -51,6 +51,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
     enableSorting: false,
     enableRowVirtualization: true,
     enableColumnVirtualization: true,
+    manualPagination: true,
     state: {
       columnOrder: columnOrder || [],
       showSkeletons: loading,
