@@ -5,6 +5,18 @@ import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStor
 import { useTableImportStore } from '@/stores/directoryStores/useTableImportStore';
 
 import { StyledButton, StyledSelectPopup } from '@/components/atoms';
+import { ExcelColumnMappingProps } from '@/types';
+
+const hasDuplicateId = (arr: ExcelColumnMappingProps[]) => {
+  const seenIds = new Set();
+  for (const item of arr) {
+    if (seenIds.has(item.executeColumnId)) {
+      return true;
+    }
+    seenIds.add(item.executeColumnId);
+  }
+  return false;
+};
 
 export const XLSXMatchColumn: FC<{
   backStep: () => void;
@@ -124,10 +136,11 @@ export const XLSXMatchColumn: FC<{
           Back
         </StyledButton>
         <StyledButton
-          disabled={columnMappingList.some((item) => !item.executeColumnId)}
-          onClick={() => {
-            nextStep();
-          }}
+          disabled={
+            columnMappingList.some((item) => !item.executeColumnId) ||
+            hasDuplicateId(columnMappingList)
+          }
+          onClick={nextStep}
           size={'small'}
         >
           Continue

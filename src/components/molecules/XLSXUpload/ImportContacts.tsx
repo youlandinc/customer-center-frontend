@@ -32,11 +32,14 @@ export const ImportContacts: FC = () => {
         return (
           <XLSXUpload
             backStep={() => setActiveStep(1)}
-            nextStep={() => setActiveStep(0)}
+            nextStep={() => {
+              setActiveStep(0);
+              setPageMode(DirectoryPageMode.default);
+            }}
           />
         );
     }
-  }, [activeStep]);
+  }, [activeStep, setPageMode]);
 
   return (
     <Stack flex={1} gap={3}>

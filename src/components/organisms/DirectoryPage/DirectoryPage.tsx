@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 
 import {
@@ -12,7 +12,15 @@ import { DirectoryPageMode } from '@/types';
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
 
 export const DirectoryPage: FC = () => {
-  const { pageMode } = useDirectoryStore((state) => state);
+  const { pageMode, setPageMode } = useDirectoryStore((state) => state);
+
+  useEffect(
+    () => {
+      setPageMode(DirectoryPageMode.default);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <Stack gap={3} height={'100%'} overflow={'auto'} px={8} py={6}>

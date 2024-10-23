@@ -13,10 +13,7 @@ import { useSnackbar } from 'notistack';
 import { NotUndefined } from '@/utils';
 import { StyledButton } from '@/components/atoms';
 
-import {
-  _fetchSegmentDetailsBySegmentId,
-  _fetchSegmentOptions,
-} from '@/request/contacts/segments';
+import { _fetchSegmentOptions } from '@/request/contacts/segments';
 
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
 import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
@@ -38,13 +35,16 @@ export const HeaderFilter: FC = () => {
     segmentsFilters,
     setSegmentsFilters,
   } = useGridQueryConditionStore((state) => state);
-  const { setSegmentOptions, segmentOptions } = useDirectoryStore(
-    (state) => state,
-  );
+  const {
+    setSegmentOptions,
+    segmentOptions,
+    fetchSegmentDetails,
+    setSelectSegmentId,
+    selectSegmentId,
+  } = useDirectoryStore((state) => state);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [selectLoading, setSelectLoading] = useState(false);
-  const [selectId, setSelectId] = useState<number | string>(-1);
 
   useAsync(async () => {
     await fetchOptions();
@@ -76,38 +76,18 @@ export const HeaderFilter: FC = () => {
     }
   }, [enqueueSnackbar, setSegmentOptions]);
 
-  const fetchOptionDetails = useCallback(
-    async (id: string | number) => {
-      const groupBy = (input: any[], key: string) => {
-        return input.reduce((acc, currentValue) => {
-          const groupKey = currentValue[key];
-          if (!acc[groupKey]) {
-            acc[groupKey] = [];
-          }
-          acc[groupKey].push(currentValue);
-          return acc;
-        }, {});
-      };
-
-      const { data } = await _fetchSegmentDetailsBySegmentId(id);
-      const temp = groupBy(data, 'group');
-
-      setSegmentsFilters(temp);
-    },
-    [setSegmentsFilters],
-  );
-
   const onClickToSelect = useCallback(
     async (id: string | number) => {
       const postData = {
         segmentId: id,
       };
-      setSelectId(id);
+      setSelectSegmentId(id);
       setSelectLoading(true);
+
       try {
         await _updateUserConfig(postData);
         await fetchOptions();
-        await fetchOptionDetails(id);
+        setSegmentsFilters(await fetchSegmentDetails(id));
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {
@@ -121,7 +101,13 @@ export const HeaderFilter: FC = () => {
         setSelectLoading(false);
       }
     },
-    [enqueueSnackbar, fetchOptionDetails, fetchOptions],
+    [
+      enqueueSnackbar,
+      fetchOptions,
+      fetchSegmentDetails,
+      setSegmentsFilters,
+      setSelectSegmentId,
+    ],
   );
 
   return (
@@ -140,8 +126,8 @@ export const HeaderFilter: FC = () => {
         variant={'text'}
       >
         <Typography color={'text.primary'} variant={'body2'}>
-          {segmentOptions?.find((item) => item.value === selectId)?.label ||
-            'Load segment'}
+          {segmentOptions?.find((item) => item.value === selectSegmentId)
+            ?.label || 'Load segment'}
         </Typography>
         <Icon component={ICON_ARROW} sx={{ width: 24, height: 24, ml: 0.75 }} />
       </StyledButton>
@@ -184,13 +170,13 @@ export const HeaderFilter: FC = () => {
               await onClickToSelect(item.value);
             }}
             selected={
-              parseInt(selectId + '') > -1
-                ? selectId === item.value
+              parseInt(selectSegmentId + '') > -1
+                ? selectSegmentId === item.value
                 : item.isSelect
             }
             sx={{ p: '14px 24px' }}
           >
-            {selectId === item.value && selectLoading ? (
+            {selectSegmentId === item.value && selectLoading ? (
               <CircularProgress size={20} />
             ) : (
               <Typography component={'div'} variant={'body2'}>
@@ -205,7 +191,10 @@ export const HeaderFilter: FC = () => {
       Object.keys(segmentsFilters!).length > 0 ? (
         <StyledButton
           color={'info'}
-          onClick={clearSegmentsFiltersGroup}
+          onClick={() => {
+            clearSegmentsFiltersGroup();
+            setSelectSegmentId('');
+          }}
           size={'small'}
           variant={'text'}
         >
