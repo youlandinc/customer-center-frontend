@@ -16,7 +16,10 @@ import {
 } from '@/types';
 import { TypeOf } from '@/utils';
 import { useSwitch } from '@/hooks';
-import { _createNewSegment } from '@/request/contacts/segments';
+import {
+  _createNewSegment,
+  _updateExistSegment,
+} from '@/request/contacts/segments';
 
 import {
   StyledButton,
@@ -37,8 +40,10 @@ export const DirectoryHeader: FC = () => {
     addSegmentsFilters,
     deleteSegmentsFilters,
     onChangeSegmentsFilters,
+    setSegmentsFilters,
   } = useGridQueryConditionStore((state) => state);
-  const { setPageMode } = useDirectoryStore((state) => state);
+  const { setPageMode, fetchSegmentDetails, selectSegmentId } =
+    useDirectoryStore((state) => state);
   const { getColumnOptions, tableId, tableName } = useGridColumnsStore(
     (state) => state,
   );
@@ -62,6 +67,7 @@ export const DirectoryHeader: FC = () => {
   const [showFooter, setShowFooter] = useState(false);
   const [segmentName, setSegmentName] = useState('');
   const [createLoading, setCreateLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
 
   const createSegment = useCallback(async () => {
     const postData = {
@@ -119,6 +125,33 @@ export const DirectoryHeader: FC = () => {
       }
     });
   }, []);
+
+  const onClickToSaveChanges = async () => {
+    if (selectSegmentId) {
+      const postData = {
+        segmentsId: selectSegmentId,
+        segmentsFilters: segmentsFilters!,
+      };
+      setUpdateLoading(true);
+      try {
+        await _updateExistSegment(postData);
+      } catch (err) {
+        const { header, message, variant } = err as HttpError;
+        enqueueSnackbar(message, {
+          variant: variant || 'error',
+          autoHideDuration: AUTO_HIDE_DURATION,
+          isSimple: !header,
+          header,
+        });
+      } finally {
+        setUpdateLoading(false);
+      }
+    }
+  };
+
+  const onClickToCancelChanges = async () => {
+    setSegmentsFilters(await fetchSegmentDetails(selectSegmentId));
+  };
 
   return (
     <>
@@ -270,13 +303,20 @@ export const DirectoryHeader: FC = () => {
           <Stack flexDirection={'row'} gap={3} ml={'auto'}>
             <StyledButton
               color={'info'}
+              onClick={onClickToCancelChanges}
               size={'small'}
               sx={{ width: 'fit-content' }}
               variant={'outlined'}
             >
               Cancel
             </StyledButton>
-            <StyledButton size={'small'} sx={{ width: 'fit-content' }}>
+            <StyledButton
+              disabled={updateLoading}
+              loading={updateLoading}
+              onClick={onClickToSaveChanges}
+              size={'small'}
+              sx={{ width: 'fit-content' }}
+            >
               <Icon
                 component={ICON_SAVE}
                 sx={{ width: 20, height: 20, mr: 0.75 }}

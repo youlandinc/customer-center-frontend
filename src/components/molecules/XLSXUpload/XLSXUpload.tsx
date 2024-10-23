@@ -29,8 +29,7 @@ export const XLSXUpload: FC<{
       mergeStrategy: mergeStrategy as ExcelMergeStrategyProps,
     };
     try {
-      const res = await _startImportExcel(postData);
-      console.log(res);
+      await _startImportExcel(postData);
       nextStep?.();
     } catch (err) {
       const { header, message, variant } = err as HttpError;
