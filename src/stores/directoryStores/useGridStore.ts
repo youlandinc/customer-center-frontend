@@ -9,7 +9,7 @@ type DirectoryStoresActions = {
 export const useGridStore = create<
   DirectoryStoresStates & DirectoryStoresActions
 >((set) => ({
-  totalRecords: 1,
+  totalRecords: 0,
   setTotalRecords: (total) => {
     set({ totalRecords: total });
   },
