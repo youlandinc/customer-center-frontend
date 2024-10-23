@@ -134,9 +134,9 @@ export const GridDirectory: FC = () => {
   );
 
   const [exportState, exportGridRecords] = useAsyncFn(
-    async (recordIds: string[]) => {
+    async (recordIds: string[], tableId: number) => {
       try {
-        await _exportGridRecords(recordIds).then((res) => {
+        await _exportGridRecords(recordIds, tableId).then((res) => {
           const fileName = res.headers['content-disposition']
             .split(';')[1]
             .split('filename=')[1];
@@ -285,7 +285,7 @@ export const GridDirectory: FC = () => {
           await deleteGridRecords(rowSelectionIds);
         }}
         handleExport={async () => {
-          await exportGridRecords(rowSelectionIds);
+          await exportGridRecords(rowSelectionIds, tableId as number);
         }}
         open={actionsCardShow}
       />

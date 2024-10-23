@@ -53,10 +53,10 @@ export const _deleteGridRecords = (param: {
   return del('/customer/es/record', { data: param });
 };
 
-export const _exportGridRecords = (records: string[]) => {
+export const _exportGridRecords = (records: string[], tableId: number) => {
   return post(
     '/customer/es/export',
-    { records },
+    { records, tableId },
     {
       responseType: 'blob',
     },
