@@ -11,7 +11,7 @@ import { ExcelColumnMappingProps } from '@/types';
 const hasDuplicateId = (arr: ExcelColumnMappingProps[]) => {
   const seenIds = new Set();
   for (const item of arr) {
-    if (seenIds.has(item.executeColumnId)) {
+    if (item.executeColumnId != -1 && seenIds.has(item.executeColumnId)) {
       return true;
     }
     seenIds.add(item.executeColumnId);
