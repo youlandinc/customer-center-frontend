@@ -1,4 +1,5 @@
 import { SxProps } from '@mui/material';
+import { InputBaseProps } from '@mui/material/InputBase';
 
 import { IAddress } from '@/types';
 
@@ -14,7 +15,7 @@ export interface StyledGoogleAutoCompleteProps {
   placeholder?: string;
   size?: 'small' | 'medium';
   sx?: SxProps;
-  onBlur?: () => void;
+  onBlur?: InputBaseProps['onBlur'];
 }
 
 export interface _StyledGoogleAutoCompleteProps {
@@ -29,7 +30,7 @@ export interface _StyledGoogleAutoCompleteProps {
   placeholder?: string;
   size?: 'small' | 'medium';
   sx?: SxProps;
-  onBlur?: () => void;
+  onBlur?: InputBaseProps['onBlur'];
 }
 
 interface MainTextMatchedSubstrings {
