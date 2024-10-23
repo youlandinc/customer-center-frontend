@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Box, Fade, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { enqueueSnackbar } from 'notistack';
 import { FC, useEffect, useMemo, useState } from 'react';
@@ -167,7 +167,17 @@ export const GridDirectory: FC = () => {
   }, []);
 
   if (!totalRecords) {
-    return <GridNoData />;
+    return (
+      <>
+        {!isLoading && !loading && (
+          <Fade in={!isLoading && !loading}>
+            <Box>
+              <GridNoData />
+            </Box>
+          </Fade>
+        )}
+      </>
+    );
   }
 
   return (
