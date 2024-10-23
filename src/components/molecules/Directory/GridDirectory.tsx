@@ -1,3 +1,4 @@
+import { createFile } from '@/utils/UnknowHandler';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Box, Fade, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
@@ -135,7 +136,15 @@ export const GridDirectory: FC = () => {
   const [exportState, exportGridRecords] = useAsyncFn(
     async (recordIds: string[]) => {
       try {
-        await _exportGridRecords(recordIds);
+        await _exportGridRecords(recordIds).then((res) => {
+          const fileName = res.headers['content-disposition']
+            .split(';')[1]
+            .split('filename=')[1];
+          const blob = new Blob([res.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8',
+          });
+          createFile(blob, fileName);
+        });
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {

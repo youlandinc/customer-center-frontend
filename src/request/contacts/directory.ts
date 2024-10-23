@@ -54,7 +54,13 @@ export const _deleteGridRecords = (param: {
 };
 
 export const _exportGridRecords = (records: string[]) => {
-  return post('/customer/es/export', { records });
+  return post(
+    '/customer/es/export',
+    { records },
+    {
+      responseType: 'blob',
+    },
+  );
 };
 
 export const _validateColumnData = (param: ValidateColumnData) => {
