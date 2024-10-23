@@ -8,9 +8,9 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 
-import CHECKBOX_STATIC from './assets/static.svg';
-import CHECKBOX_CHECKED from './assets/checked.svg';
-import CHECKBOX_INDETERMINATE from './assets/intermediate.svg';
+import ICON_CHECKBOX_STATIC from './assets/icon_static.svg';
+import ICON_CHECKBOX_CHECKED from './assets/icon_checked.svg';
+import ICON_CHECKBOX_INDETERMINATE from './assets/icon_intermediate.svg';
 
 type StyledGridProps = MRT_TableOptions<any> & {
   loading?: boolean;
@@ -64,19 +64,29 @@ export const StyledGrid: FC<StyledGridProps> = ({
     rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
     columnVirtualizerOptions: { overscan: 5 }, //optionally customize the column virtualizer
     muiSelectCheckboxProps: {
-      icon: <Icon component={CHECKBOX_STATIC} sx={{ width: 20, height: 20 }} />,
+      icon: (
+        <Icon component={ICON_CHECKBOX_STATIC} sx={{ width: 20, height: 20 }} />
+      ),
       checkedIcon: (
-        <Icon component={CHECKBOX_CHECKED} sx={{ width: 20, height: 20 }} />
+        <Icon
+          component={ICON_CHECKBOX_CHECKED}
+          sx={{ width: 20, height: 20 }}
+        />
       ),
     },
     muiSelectAllCheckboxProps: {
-      icon: <Icon component={CHECKBOX_STATIC} sx={{ width: 20, height: 20 }} />,
+      icon: (
+        <Icon component={ICON_CHECKBOX_STATIC} sx={{ width: 20, height: 20 }} />
+      ),
       checkedIcon: (
-        <Icon component={CHECKBOX_CHECKED} sx={{ width: 20, height: 20 }} />
+        <Icon
+          component={ICON_CHECKBOX_CHECKED}
+          sx={{ width: 20, height: 20 }}
+        />
       ),
       indeterminateIcon: (
         <Icon
-          component={CHECKBOX_INDETERMINATE}
+          component={ICON_CHECKBOX_INDETERMINATE}
           sx={{ width: 20, height: 20 }}
         />
       ),
