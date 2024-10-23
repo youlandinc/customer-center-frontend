@@ -56,6 +56,19 @@ export const GridDirectory: FC = () => {
 
   useEffect(
     () => {
+      for (const [, v] of Object.entries(segmentsFilters!)) {
+        if (v.length === 0) {
+          return;
+        }
+        if (
+          v.some(
+            (item) =>
+              !item.columnName || !item.operation || !item.operationText,
+          )
+        ) {
+          return;
+        }
+      }
       updateQueryDebounce();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
