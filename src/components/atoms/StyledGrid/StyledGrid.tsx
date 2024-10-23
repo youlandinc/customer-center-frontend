@@ -73,6 +73,11 @@ export const StyledGrid: FC<StyledGridProps> = ({
           sx={{ width: 20, height: 20 }}
         />
       ),
+      sx: {
+        padding: 0,
+        height: 20,
+        m: 0,
+      },
     },
     muiSelectAllCheckboxProps: {
       icon: (
@@ -90,6 +95,11 @@ export const StyledGrid: FC<StyledGridProps> = ({
           sx={{ width: 20, height: 20 }}
         />
       ),
+      sx: {
+        padding: 0,
+        height: 20,
+        m: 0,
+      },
     },
     muiTableBodyRowProps: (props) => {
       return {
@@ -112,7 +122,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
           '& .MuiTableCell-root': {
             px: 1.5,
             py: 2.5,
-            height: 32,
+            height: 60,
             borderRight: '1px solid',
             borderBottom: '1px solid',
             borderColor: '#D2D6E1',
@@ -137,7 +147,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
       muiTableHeadCellProps: () => ({
         sx: {
           opacity: 1,
-          minHeight: 36,
+          // minHeight: 36,
           px: 1,
           py: 1.25,
           justifyContent: 'center',
@@ -194,6 +204,8 @@ export const StyledGrid: FC<StyledGridProps> = ({
         '& .MuiTableCell-root': {
           border: 'none',
           bgcolor: '#F8F9FC',
+          px: 1.5,
+          py: 1.25,
         },
         '& .MuiTableCell-root:last-child': {
           bgcolor: '#F8F9FC',
