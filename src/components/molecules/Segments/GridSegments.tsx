@@ -39,6 +39,7 @@ export const GridSegments = () => {
               sx={{
                 ...ellipsisStyle,
                 width: '100%',
+                textDecoration: 'underline',
               }}
             >
               {renderedCellValue}
@@ -68,7 +69,7 @@ export const GridSegments = () => {
             >
               {format(
                 new Date(renderedCellValue as string),
-                'LLL d, yyyy, h:m a..aa',
+                'LLL d, yyyy, h:m aa',
               )}
             </Typography>
           );
