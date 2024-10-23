@@ -26,7 +26,7 @@ type ColumnsStoreStoresActions = {
   getColumnOptions: () => {
     value: number | string;
     label: string;
-    key: string;
+    key: number | string;
   }[];
 };
 
@@ -50,9 +50,9 @@ export const useGridColumnsStore = create<
   getColumnOptions: () => {
     const columns = get().metadataColumns;
     return columns.map((column) => ({
-      value: column.columnId,
+      value: column.columnName,
       label: column.columnLabel,
-      key: column.columnName,
+      key: column.columnId,
     }));
   },
   setColumn: (data) => {

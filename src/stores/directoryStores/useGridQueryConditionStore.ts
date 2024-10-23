@@ -54,7 +54,7 @@ export const useGridQueryConditionStore = create<
         0: [
           {
             filterId: '',
-            columnId: '',
+            columnName: '',
             operation: '',
             operationText: '',
           },
@@ -70,7 +70,7 @@ export const useGridQueryConditionStore = create<
         [index]: [
           {
             filterId: '',
-            columnId: '',
+            columnName: '',
             operation: '',
             operationText: '',
           },
