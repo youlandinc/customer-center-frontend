@@ -37,6 +37,7 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
   zipcodeLabel,
   placeholder,
   sx,
+  onBlur,
 }) => {
   const { formatAddress } = address;
 
@@ -152,6 +153,7 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
             fullAddress={fullAddress}
             handledPlaceSelect={handledPlaceSelect}
             inputValue={formatAddress}
+            onBlur={onBlur}
             onInputChange={(e, val) =>
               address.changeFieldValue('formatAddress', val)
             }

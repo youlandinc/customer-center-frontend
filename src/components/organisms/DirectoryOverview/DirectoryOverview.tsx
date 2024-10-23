@@ -168,7 +168,7 @@ export const DirectoryOverview: FC<DirectoryOverviewProps> = ({
                           '& input': { p: '0px !important' },
                         },
                         '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                          border: 'none',
+                          border: 'none !important',
                         },
                       }}
                       type={item.columnType}
