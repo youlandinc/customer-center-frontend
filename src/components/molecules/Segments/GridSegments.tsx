@@ -44,7 +44,6 @@ export const GridSegments = () => {
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
                 width: '100%',
-                textDecoration: 'underline',
               }}
             >
               {renderedCellValue}
