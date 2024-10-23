@@ -204,7 +204,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
         '& .MuiTableCell-root': {
           border: 'none',
           bgcolor: '#F8F9FC',
-          px: 1.5,
+          pl: 1.5,
           py: 1.25,
         },
         '& .MuiTableCell-root:last-child': {
