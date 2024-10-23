@@ -128,6 +128,7 @@ export const StyledInputByType: FC<StyledInputByTypeProps> = ({
           }}
           fullAddress={false}
           label={label}
+          onBlur={onBlur}
           required={required}
           size={size}
           sx={sx}
