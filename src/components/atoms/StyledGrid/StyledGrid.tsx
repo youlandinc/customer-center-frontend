@@ -107,6 +107,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
     muiTableBodyRowProps: (props) => {
       return {
         sx: {
+          p: 0,
           '& .MuiTableCell-root:last-child': {
             borderColor: '#D2D6E1',
           },

@@ -91,7 +91,7 @@ export const GridDirectory: FC = () => {
             size: pagination.size,
             searchFilter: {
               keyword,
-              querySegmentsFilters,
+              segmentsFilters: querySegmentsFilters,
               segmentId,
             },
           },
