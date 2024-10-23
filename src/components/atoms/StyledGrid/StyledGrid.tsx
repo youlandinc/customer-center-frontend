@@ -49,7 +49,6 @@ export const StyledGrid: FC<StyledGridProps> = ({
     rowCount: rowCount,
     enableColumnActions: false, //pipelineType === PipelineDisplayMode.LIST_MODE,
     enableSorting: false,
-    enableColumnResizing: true,
     enableRowVirtualization: true,
     enableColumnVirtualization: true,
     state: {
@@ -77,7 +76,9 @@ export const StyledGrid: FC<StyledGridProps> = ({
         padding: 0,
         height: 20,
         m: 0,
+        width: 'fit-content',
       },
+      title: '',
     },
     muiSelectAllCheckboxProps: {
       icon: (
@@ -99,7 +100,9 @@ export const StyledGrid: FC<StyledGridProps> = ({
         padding: 0,
         height: 20,
         m: 0,
+        width: 'fit-content',
       },
+      title: '',
     },
     muiTableBodyRowProps: (props) => {
       return {
@@ -176,7 +179,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
           },
           '& .MuiDivider-root': {
             borderWidth: '1px',
-            height: 16,
+            height: 20,
           },
           '&:first-of-type .Mui-TableHeadCell-Content-Labels': {
             width: '100%',
@@ -209,6 +212,15 @@ export const StyledGrid: FC<StyledGridProps> = ({
         },
         '& .MuiTableCell-root:last-child': {
           bgcolor: '#F8F9FC',
+        },
+        '& .MuiTableCell-root:first-of-type::after': {
+          content: "''",
+          position: 'absolute',
+          right: 0,
+          top: 10,
+          width: 2,
+          bgcolor: '#D2D6E1',
+          height: 20,
         },
         '& .MuiDivider-root': {
           borderWidth: '1px',

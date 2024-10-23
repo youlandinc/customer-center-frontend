@@ -157,7 +157,7 @@ export const GridDirectory: FC = () => {
           .map((item) => ({
             accessorKey: item.columnName || ' ',
             header: item.columnLabel,
-            size: 150,
+            size: 250,
             minSize: 100,
             muiTableBodyCellProps: {
               align: 'left',
@@ -236,6 +236,7 @@ export const GridDirectory: FC = () => {
             columns={columns}
             data={data || []}
             enableBatchRowSelection={true}
+            enableColumnResizing={true}
             enableMultiRowSelection={true}
             enableRowSelection={true}
             enableSelectAll={true}
