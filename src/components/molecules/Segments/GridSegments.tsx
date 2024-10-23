@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { format } from 'date-fns';
 

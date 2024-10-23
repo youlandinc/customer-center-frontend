@@ -1,5 +1,5 @@
 import { Box, Fade, Icon, Stack, Typography } from '@mui/material';
-import React, { FC, Fragment } from 'react';
+import { FC, Fragment } from 'react';
 
 import { StyledButton } from '@/components/atoms';
 
