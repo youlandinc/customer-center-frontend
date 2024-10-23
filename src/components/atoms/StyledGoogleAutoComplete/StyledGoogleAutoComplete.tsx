@@ -11,13 +11,13 @@ import { FC, useCallback, useState } from 'react';
 import { LocationOnOutlined } from '@mui/icons-material';
 import parse from 'autosuggest-highlight/parse';
 
+import { useGooglePlacesSearch } from '@/hooks';
+import { RATE_PROPERTY_STATE } from '@/constant';
+
 import {
   StyledSelect,
   StyledTextField as StyledTextFieldInput,
 } from '@/components/atoms';
-import { RATE_PROPERTY_STATE } from '@/constant';
-
-import { useGooglePlacesSearch } from '@/hooks';
 
 import {
   _StyledGoogleAutoCompleteProps,

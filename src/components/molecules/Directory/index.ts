@@ -1,11 +1,13 @@
-export * from './GridDirectory';
-export * from './GridToolBar';
+export * from './DirectoryHeader';
+export * from './HeaderFilter';
+
 export * from './CreateNewContact';
-export * from './GridColumns';
+export * from './DrawerNewContact';
+
+export * from './GridToolBar';
 export * from './GridMoreBtn';
 export * from './GridActionsCard';
+export * from './GridDirectory';
 export * from './GridNoData';
-export * from './DrawerNewContact';
-export * from './DirectoryHeader';
 
-export * from './HeaderFilter';
+export * from './StyledInputByType';

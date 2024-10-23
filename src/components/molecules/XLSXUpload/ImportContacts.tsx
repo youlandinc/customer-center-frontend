@@ -1,8 +1,9 @@
 import { FC, useMemo, useState } from 'react';
 import { Stack, Step, StepLabel, Stepper } from '@mui/material';
 
-import { DirectoryPageMode } from '@/types';
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
+
+import { DirectoryPageMode } from '@/types';
 
 const steps = ['Upload a file', 'Match columns', 'Import'];
 

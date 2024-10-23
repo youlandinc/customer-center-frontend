@@ -1,6 +1,6 @@
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import { Stack, Switch, Typography } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
+import { Stack, Switch, Typography } from '@mui/material';
+import { DragIndicator } from '@mui/icons-material';
 
 import {
   DragDropContext,
@@ -123,7 +123,7 @@ export const StyledDragAndDrop: FC<StyledDragAndDropProps> = ({
                           flexDirection={'row'}
                           gap={3}
                         >
-                          <DragIndicatorIcon
+                          <DragIndicator
                             sx={{ fontSize: 24, color: 'info.main' }}
                           />
                           <Typography variant={'body2'}>

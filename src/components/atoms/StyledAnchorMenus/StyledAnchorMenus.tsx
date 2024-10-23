@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { ElementType, FC, ReactNode } from 'react';
 import {
   Icon,
   Menu,
@@ -11,7 +11,7 @@ import {
 
 interface ActionMenuProps {
   label: ReactNode;
-  icon?: React.ElementType;
+  icon?: ElementType;
   path?: string;
   handleClick?: (event?: unknown) => void;
   hidden?: boolean;

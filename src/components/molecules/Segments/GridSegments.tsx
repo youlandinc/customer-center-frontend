@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { format } from 'date-fns';
 import { MRT_ColumnDef } from 'material-react-table';
+import { format } from 'date-fns';
 import useSWR from 'swr';
 
 import { StyledGrid } from '@/components/atoms';
-import { ellipsisStyle, GridPagination } from '@/components/molecules';
+import { GridPagination } from '@/components/molecules';
 
 import { _fetchSegmentsList } from '@/request/segments';
 
@@ -40,7 +40,9 @@ export const GridSegments = () => {
             <Typography
               fontSize={14}
               sx={{
-                ...ellipsisStyle,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
                 width: '100%',
                 textDecoration: 'underline',
               }}
@@ -66,7 +68,9 @@ export const GridSegments = () => {
             <Typography
               fontSize={14}
               sx={{
-                ...ellipsisStyle,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
                 width: '100%',
               }}
             >
@@ -95,7 +99,9 @@ export const GridSegments = () => {
             <Typography
               fontSize={14}
               sx={{
-                ...ellipsisStyle,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
                 width: '100%',
               }}
             >

@@ -1,16 +1,19 @@
 import { FC, useCallback, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Fade, Icon, Skeleton, Stack, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useAsync } from 'react-use';
+import { useSnackbar } from 'notistack';
 import {
   MRT_TableContainer,
   useMaterialReactTable,
 } from 'material-react-table';
 import { format } from 'date-fns';
 import { uniqueId } from 'lodash';
-import { useAsync } from 'react-use';
-import { enqueueSnackbar } from 'notistack';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
+
+import { StyledButton } from '@/components/atoms';
+import { genColumns } from '@/components/molecules';
 
 import {
   _fetchImportHistoriesDetail,
@@ -18,14 +21,12 @@ import {
 } from '@/request';
 import { ExcelContentProps, ExcelHeaderProps, HttpError } from '@/types';
 
-import { StyledButton } from '@/components/atoms';
-import { genColumns } from '@/components/molecules';
-
 import ICON_WARNING from './assets/icon_warning.svg';
 import ICON_SUCCESS from './assets/icon_success.svg';
 
 export const XLSXUploadReportDetail: FC<{ id: string | number }> = ({ id }) => {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { loading } = useAsync(async () => {
     if (!id) {
@@ -94,7 +95,7 @@ export const XLSXUploadReportDetail: FC<{ id: string | number }> = ({ id }) => {
     } finally {
       setDownloadLoading(false);
     }
-  }, [id]);
+  }, [enqueueSnackbar, id]);
 
   const [fileName, setFileName] = useState('123.xlsx');
   const [updateDate, setUpdateDate] = useState(

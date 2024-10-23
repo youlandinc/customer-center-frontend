@@ -1,3 +1,5 @@
+import { CSSProperties, FC } from 'react';
+import { Icon, SxProps } from '@mui/material';
 import {
   MRT_Row,
   MRT_TableContainer,
@@ -5,18 +7,15 @@ import {
   MRT_TableOptions,
   useMaterialReactTable,
 } from 'material-react-table';
-import * as React from 'react';
-import { FC } from 'react';
 
 import CHECKBOX_STATIC from './assets/static.svg';
 import CHECKBOX_CHECKED from './assets/checked.svg';
 import CHECKBOX_INDETERMINATE from './assets/intermediate.svg';
-import { Icon, SxProps } from '@mui/material';
 
 type StyledGridProps = MRT_TableOptions<any> & {
   loading?: boolean;
   columnOrder?: string[];
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   rowSelection?: Record<string, boolean>;
   onRowClick?: (props: {
     isDetailPanel?: boolean;

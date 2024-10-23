@@ -34,6 +34,9 @@ import ICON_CLOSE from './assets/icon_close.svg';
 import ICON_SAVE from './assets/icon_save.svg';
 
 export const DirectoryHeader: FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const { visible, open, close } = useSwitch(false);
+
   const {
     segmentsFilters,
     addSegmentsFiltersGroup,
@@ -48,9 +51,6 @@ export const DirectoryHeader: FC = () => {
     (state) => state,
   );
   const COLUMN_OPTIONS = getColumnOptions();
-
-  const { enqueueSnackbar } = useSnackbar();
-  const { visible, open, close } = useSwitch(false);
 
   const filterGroup = useMemo(() => {
     const result: FilterProps[][] = [];

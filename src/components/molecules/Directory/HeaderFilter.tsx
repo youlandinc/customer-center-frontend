@@ -7,25 +7,24 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { useSearchParams } from 'next/navigation';
 import { useAsync } from 'react-use';
 import { useSnackbar } from 'notistack';
-import { useSearchParams } from 'next/navigation';
 
 import { NotUndefined } from '@/utils';
-import { StyledButton } from '@/components/atoms';
-
-import { _fetchSegmentOptions } from '@/request/contacts/segments';
+import { AUTO_HIDE_DURATION } from '@/constant';
 
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
 import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
 
+import { StyledButton } from '@/components/atoms';
+
+import { _fetchSegmentOptions, _updateUserConfig } from '@/request';
+import { HttpError, SegmentOption } from '@/types';
+
 import ICON_ARROW from './assets/icon_arrow.svg';
 import ICON_FILTER_ADD from './assets/icon_filter_add.svg';
 import ICON_FILTER_CLEAR from './assets/icon_filter_clear.svg';
-
-import { HttpError, SegmentOption } from '@/types';
-import { AUTO_HIDE_DURATION } from '@/constant';
-import { _updateUserConfig } from '@/request';
 
 export const HeaderFilter: FC = () => {
   const searchParams = useSearchParams();

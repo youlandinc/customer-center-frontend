@@ -1,3 +1,8 @@
+import { FC, PropsWithChildren, ReactNode } from 'react';
+import { Icon, Stack, Typography } from '@mui/material';
+
+import { ColumnTypeEnum } from '@/types';
+
 import {
   StyledGoogleAutoComplete,
   StyledTextField,
@@ -5,10 +10,6 @@ import {
   StyledTextFieldPhone,
   StyledTextFieldProps,
 } from '@/components/atoms';
-
-import { ColumnTypeEnum } from '@/types';
-import { Icon, Stack, Typography } from '@mui/material';
-import { FC, PropsWithChildren, ReactNode } from 'react';
 
 import ICON_NOTIFICATION_ERROR from './assets/icon_validate_error.svg';
 

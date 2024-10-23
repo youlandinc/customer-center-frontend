@@ -1,20 +1,22 @@
-import { Box, Drawer, DrawerProps, Stack, Typography } from '@mui/material';
-import { enqueueSnackbar } from 'notistack';
 import { FC, useRef, useState } from 'react';
-import { useAsyncFn } from 'react-use';
+import { Box, Drawer, DrawerProps, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { useAsyncFn } from 'react-use';
+import { useSnackbar } from 'notistack';
 
-import { StyledButton } from '@/components/atoms';
-import { StyledInputByType } from '@/components/molecules/Directory/StyledInputByType';
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useDebounceFn, useSwitch } from '@/hooks';
+
+import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
+import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
+
+import { StyledButton } from '@/components/atoms';
+import { StyledInputByType } from './index';
+
 import {
   _addNewContact,
   _validateColumnData,
 } from '@/request/contacts/directory';
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
-import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
-
 import {
   AddContactRequestParam,
   ColumnTypeEnum,
@@ -28,18 +30,19 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
   open,
   onClose,
 }) => {
-  const { metadataColumns, tableId } = useGridColumnsStore((state) => state);
-  const setNewContact = useGridNewContactStore((state) => state.setNewContact);
-  const [formData, setFormData] = useState({} as Record<string, any>);
-  const formRef = useRef<HTMLFormElement>(null);
-
   const router = useRouter();
-
+  const { enqueueSnackbar } = useSnackbar();
   const {
     visible: continueShow,
     open: continueOpen,
     close: continueClose,
   } = useSwitch();
+
+  const { metadataColumns, tableId } = useGridColumnsStore((state) => state);
+  const { setNewContact } = useGridNewContactStore((state) => state);
+
+  const [formData, setFormData] = useState({} as Record<string, any>);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleClose = () => {
     onClose?.();

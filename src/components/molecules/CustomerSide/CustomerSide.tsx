@@ -1,7 +1,7 @@
 'use client';
 import { FC } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 import { Box, Icon, Stack, Typography } from '@mui/material';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { MENU_CONFIG } from './data';
 

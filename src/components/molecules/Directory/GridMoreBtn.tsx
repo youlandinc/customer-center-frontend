@@ -1,3 +1,13 @@
+import { FC, useState } from 'react';
+import { Drawer, Icon, IconButton, Stack } from '@mui/material';
+import { useAsyncFn } from 'react-use';
+import { useSnackbar } from 'notistack';
+
+import { useSwitch } from '@/hooks';
+import { AUTO_HIDE_DURATION } from '@/constant';
+
+import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
+
 import {
   StyledAnchorMenus,
   StyledButton,
@@ -6,15 +16,8 @@ import {
   StyledTextField,
 } from '@/components/atoms';
 
-import { AUTO_HIDE_DURATION } from '@/constant';
-import { useSwitch } from '@/hooks';
 import { _addNewColumn, _sortColumn } from '@/request';
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 import { ColumnTypeEnum, HttpError, SortColumnItem } from '@/types';
-import { Drawer, Icon, IconButton, Stack } from '@mui/material';
-import { enqueueSnackbar } from 'notistack';
-import { FC, useState } from 'react';
-import { useAsyncFn } from 'react-use';
 
 import ICON_ADD from './assets/icon_add_column.svg';
 import ICON_EDIT_COLUMN from './assets/icon_edit_column.svg';
@@ -24,18 +27,16 @@ export const GridMoreBtn: FC = () => {
   const { tableId, metadataColumns, setColumn } = useGridColumnsStore(
     (state) => state,
   );
-
-  const [columnName, setColumnName] = useState<string>('');
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
+  const { enqueueSnackbar } = useSnackbar();
   const { visible, open, close } = useSwitch();
-
   const {
     visible: dialogShow,
     open: dialogOpen,
     close: dialogClose,
   } = useSwitch();
+
+  const [columnName, setColumnName] = useState<string>('');
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const menus = [
     {

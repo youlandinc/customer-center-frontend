@@ -13,10 +13,10 @@ import { format } from 'date-fns';
 import { useSwitch } from '@/hooks';
 import { AUTO_HIDE_DURATION } from '@/constant';
 
+import { StyledButton } from '@/components/atoms';
+
 import { _fetchImportHistories } from '@/request';
 import { ExcelUploadHistory, HttpError } from '@/types';
-
-import { StyledButton } from '@/components/atoms';
 
 import ICON_CLOSE from './assets/icon_close.svg';
 

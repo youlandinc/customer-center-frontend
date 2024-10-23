@@ -5,6 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 
 import { SystemLogout } from '@/utils';
 import { AUTO_HIDE_DURATION } from '@/constant';
+
 import { HttpError, SSEEvent } from '@/types';
 import {
   _fetchUserDetailByAccountId,

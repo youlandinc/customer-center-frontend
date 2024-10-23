@@ -5,10 +5,11 @@ import { useSnackbar } from 'notistack';
 import { AUTO_HIDE_DURATION } from '@/constant';
 
 import { useTableImportStore } from '@/stores/directoryStores/useTableImportStore';
-import { ExcelMergeStrategyProps, HttpError } from '@/types';
-import { _startImportExcel } from '@/request';
 
 import { StyledButton } from '@/components/atoms';
+
+import { _startImportExcel } from '@/request';
+import { ExcelMergeStrategyProps, HttpError } from '@/types';
 
 export const XLSXUpload: FC<{
   backStep: () => void;

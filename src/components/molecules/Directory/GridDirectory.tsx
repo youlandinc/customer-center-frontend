@@ -1,18 +1,10 @@
 import { FC, useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Box, Fade, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
+import { useRouter } from 'next/navigation';
 import { useAsyncFn } from 'react-use';
-import { enqueueSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 import useSWR from 'swr';
-
-import {
-  ellipsisStyle,
-  GridActionsCard,
-  GridNoData,
-  GridPagination,
-  GridToolBar,
-} from '@/components/molecules';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { HttpError } from '@/types';
@@ -23,6 +15,12 @@ import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQuer
 import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
 import { StyledGrid } from '@/components/atoms';
+import {
+  GridActionsCard,
+  GridNoData,
+  GridPagination,
+  GridToolBar,
+} from '@/components/molecules';
 
 import {
   _deleteGridRecords,
@@ -31,6 +29,7 @@ import {
 } from '@/request';
 
 export const GridDirectory: FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const { metadataColumns, fetchAllColumns, tableId, loading } =
     useGridColumnsStore((state) => state);
   const { keyword, segmentsFilters, segmentId } = useGridQueryConditionStore(
@@ -138,7 +137,9 @@ export const GridDirectory: FC = () => {
                 <Typography
                   fontSize={14}
                   sx={{
-                    ...ellipsisStyle,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
                     width: '100%',
                     textDecoration:
                       item.columnName === 'name' ? 'underline' : 'none',

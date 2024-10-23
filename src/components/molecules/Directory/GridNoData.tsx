@@ -1,7 +1,9 @@
-import { DrawerNewContact } from '@/components/molecules/Directory/DrawerNewContact';
-import { useSwitch } from '@/hooks';
-import { Box, Icon, Stack, Typography } from '@mui/material';
 import { FC } from 'react';
+import { Box, Icon, Stack, Typography } from '@mui/material';
+
+import { useSwitch } from '@/hooks';
+
+import { DrawerNewContact } from '@/components/molecules/Directory/DrawerNewContact';
 
 import ICON_NO_DATA from './assets/icon_no_data.svg';
 

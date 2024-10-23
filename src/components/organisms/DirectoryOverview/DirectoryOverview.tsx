@@ -1,17 +1,17 @@
+import { FC, useEffect, useRef, useState } from 'react';
 import { Fade, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { enqueueSnackbar } from 'notistack';
-import { FC, useEffect, useRef, useState } from 'react';
 import { useAsyncFn } from 'react-use';
-
-import { StyledButton } from '@/components/atoms';
-import { StyledInputByType } from '@/components/molecules/Directory/StyledInputByType';
+import { useSnackbar } from 'notistack';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useSwitch } from '@/hooks';
 
 import { _fetchContactDetail, _updateContact } from '@/request';
 import { HttpError, RecordItem } from '@/types';
+
+import { StyledButton } from '@/components/atoms';
+import { StyledInputByType } from '@/components/molecules';
 
 type DirectoryOverviewProps = {
   tableId: number;
@@ -23,6 +23,7 @@ export const DirectoryOverview: FC<DirectoryOverviewProps> = ({
   id,
 }) => {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [formData, setFormData] = useState({} as Record<string, any>);
   const formRef = useRef<HTMLFormElement>(null);
