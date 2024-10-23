@@ -230,14 +230,14 @@ export const DirectoryHeader: FC = () => {
                 />
                 <StyledTextField
                   label={'Text'}
-                  onChange={(e) => {
+                  onChange={(e) =>
                     onChangeSegmentsFilters(
                       index,
                       filterIndex,
                       'operationText',
                       e.target.value,
-                    );
-                  }}
+                    )
+                  }
                   size={'small'}
                   value={filter.operationText}
                 />

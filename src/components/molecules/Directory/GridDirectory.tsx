@@ -8,6 +8,7 @@ import useSWR from 'swr';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { HttpError } from '@/types';
+import { useDebounceFn } from '@/hooks';
 
 import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
@@ -46,6 +47,21 @@ export const GridDirectory: FC = () => {
     size: 50,
   });
 
+  const [querySegmentsFilters, setQuerySegmentsFilters] = useState({});
+
+  const [, , updateQueryDebounce] = useDebounceFn(
+    () => setQuerySegmentsFilters(segmentsFilters!),
+    500,
+  );
+
+  useEffect(
+    () => {
+      updateQueryDebounce();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [segmentsFilters],
+  );
+
   const {
     data: list,
     isLoading,
@@ -59,7 +75,7 @@ export const GridDirectory: FC = () => {
             size: pagination.size,
             searchFilter: {
               keyword,
-              segmentsFilters,
+              querySegmentsFilters,
               segmentId,
             },
           },
