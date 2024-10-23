@@ -232,7 +232,7 @@ export const GridSegments = () => {
       setSegmentId('');
       setSegmentName('');
     }
-  }, [enqueueSnackbar, mutate, segmentId, segmentName]);
+  }, [enqueueSnackbar, mutate, renameClose, segmentId, segmentName]);
 
   const onClickToDelete = useCallback(async () => {
     if (!segmentId) {
