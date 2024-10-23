@@ -1,15 +1,18 @@
+import { useMemo, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
-import { MRT_ColumnDef } from 'material-react-table';
-import React, { useMemo, useState } from 'react';
-import useSWR from 'swr';
+import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
-
-import { ellipsisStyle, GridPagination } from '@/components/molecules';
-import { _fetchSegmentsList } from '@/request/segments';
+import { MRT_ColumnDef } from 'material-react-table';
+import useSWR from 'swr';
 
 import { StyledGrid } from '@/components/atoms';
+import { ellipsisStyle, GridPagination } from '@/components/molecules';
+
+import { _fetchSegmentsList } from '@/request/segments';
 
 export const GridSegments = () => {
+  const router = useRouter();
+
   const [pagination, setPagination] = useState({
     page: 0,
     size: 50,
@@ -122,6 +125,12 @@ export const GridSegments = () => {
               bgcolor: '#D2D6E1',
               height: 20,
             },
+        }}
+        onRowClick={({ row }) => {
+          const { id } = row;
+          const params = new URLSearchParams();
+          params.set('id', id);
+          router.push(`/contacts/directory?${params.toString()}`);
         }}
         style={{
           borderBottom: '1px solid #ccc',

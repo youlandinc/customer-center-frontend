@@ -191,7 +191,10 @@ export const HeaderFilter: FC = () => {
       Object.keys(segmentsFilters!).length > 0 ? (
         <StyledButton
           color={'info'}
-          onClick={clearSegmentsFiltersGroup}
+          onClick={() => {
+            clearSegmentsFiltersGroup();
+            setSelectSegmentId('');
+          }}
           size={'small'}
           variant={'text'}
         >
