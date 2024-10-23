@@ -38,6 +38,7 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
   placeholder,
   sx,
   onBlur,
+  size,
 }) => {
   const { formatAddress } = address;
 
@@ -90,6 +91,7 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
               handledPlaceSelect={handledPlaceSelect}
               inputValue={formatAddress}
               label={label}
+              onBlur={onBlur}
               onInputChange={(e, val) => {
                 if (!val) {
                   address.reset();
@@ -99,6 +101,7 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
               }}
               placeholder={placeholder}
               required={required}
+              size={size}
               value={formatAddress}
             />
           </Stack>
@@ -153,11 +156,12 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
             fullAddress={fullAddress}
             handledPlaceSelect={handledPlaceSelect}
             inputValue={formatAddress}
+            label={label}
             onBlur={onBlur}
             onInputChange={(e, val) =>
               address.changeFieldValue('formatAddress', val)
             }
-            size={'small'}
+            size={size}
             sx={sx}
             value={formatAddress}
           />
