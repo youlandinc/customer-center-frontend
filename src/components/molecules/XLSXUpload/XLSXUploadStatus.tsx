@@ -1,14 +1,21 @@
 import { FC } from 'react';
+import { useRouter } from 'next/navigation';
 import { Icon, Stack, Typography } from '@mui/material';
 
-import ICON_CLOSE from './assets/icon_close.svg';
 import { useUserStore } from '@/providers';
 import { ExcelUploadStatus } from '@/types';
 
+import ICON_CLOSE from './assets/icon_close.svg';
+
 export const XLSXUploadStatus: FC = () => {
+  const router = useRouter();
   const { notificationList, deleteNotification } = useUserStore(
     (state) => state,
   );
+
+  const onClickToDetail = (taskId: string | number) => {
+    router.push(`/contacts/directory/report/${taskId}`);
+  };
 
   return (
     <Stack
@@ -38,6 +45,7 @@ export const XLSXUploadStatus: FC = () => {
                 key={`${notification.taskId}-${index}`}
                 newAdd={notification?.data?.newAdd}
                 onClickToClose={() => deleteNotification(notification.taskId)}
+                onClickToDetail={() => onClickToDetail(notification.taskId)}
                 unchanged={notification?.data?.unchange}
                 updated={notification?.data?.updated}
               />

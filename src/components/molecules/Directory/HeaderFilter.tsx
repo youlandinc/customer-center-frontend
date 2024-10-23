@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { useAsync } from 'react-use';
 import { useSnackbar } from 'notistack';
+import { useSearchParams } from 'next/navigation';
 
 import { NotUndefined } from '@/utils';
 import { StyledButton } from '@/components/atoms';
@@ -27,13 +28,14 @@ import { AUTO_HIDE_DURATION } from '@/constant';
 import { _updateUserConfig } from '@/request';
 
 export const HeaderFilter: FC = () => {
+  const searchParams = useSearchParams();
   const { enqueueSnackbar } = useSnackbar();
 
   const {
     createSegmentsFiltersGroup,
     clearSegmentsFiltersGroup,
     segmentsFilters,
-    setSegmentsFilters,
+    setOriginalSegmentsFilters,
   } = useGridQueryConditionStore((state) => state);
   const {
     setSegmentOptions,
@@ -47,6 +49,13 @@ export const HeaderFilter: FC = () => {
   const [selectLoading, setSelectLoading] = useState(false);
 
   useAsync(async () => {
+    if (
+      searchParams.get('segmentId') &&
+      searchParams.get('segmentId') !== selectSegmentId
+    ) {
+      await onClickToSelect(searchParams.get('segmentId')!);
+      return;
+    }
     await fetchOptions();
   }, []);
 
@@ -87,7 +96,7 @@ export const HeaderFilter: FC = () => {
       try {
         await _updateUserConfig(postData);
         await fetchOptions();
-        setSegmentsFilters(await fetchSegmentDetails(id));
+        setOriginalSegmentsFilters(await fetchSegmentDetails(id));
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {
@@ -105,7 +114,7 @@ export const HeaderFilter: FC = () => {
       enqueueSnackbar,
       fetchOptions,
       fetchSegmentDetails,
-      setSegmentsFilters,
+      setOriginalSegmentsFilters,
       setSelectSegmentId,
     ],
   );
@@ -126,7 +135,7 @@ export const HeaderFilter: FC = () => {
         variant={'text'}
       >
         <Typography color={'text.primary'} variant={'body2'}>
-          {segmentOptions?.find((item) => item.value === selectSegmentId)
+          {segmentOptions?.find((item) => item.value == selectSegmentId)
             ?.label || 'Load segment'}
         </Typography>
         <Icon component={ICON_ARROW} sx={{ width: 24, height: 24, ml: 0.75 }} />

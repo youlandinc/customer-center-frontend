@@ -130,7 +130,7 @@ export const GridSegments = () => {
         onRowClick={({ row }) => {
           const { id } = row;
           const params = new URLSearchParams();
-          params.set('id', id);
+          params.set('segmentId', id);
           router.push(`/contacts/directory?${params.toString()}`);
         }}
         style={{

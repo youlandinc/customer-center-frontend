@@ -1,7 +1,6 @@
 import {
   ColumnTypeEnum,
   FilterOperationEnum,
-  SearchOperationEnum,
   SortDirection,
 } from '@/types/enums';
 
@@ -27,20 +26,14 @@ export type GetColumnsResponse = {
   metadataColumns: ColumnItem[];
 };
 
-type SearchAdditionalProp = {
-  filterId: number;
-  columnId: number;
-  columnName: string;
-  operation: SearchOperationEnum;
-  operationText: string;
-};
-
 export type DirectoryGridQueryCondition = {
   page: number;
   size: number;
   searchFilter: Partial<{
-    segmentId: number;
-    segmentFiler: Record<string, SearchAdditionalProp[]>;
+    segmentId: number | string;
+    segmentsFilters: {
+      [key: string]: FilterProps[];
+    };
     keyword: string;
   }>;
   sort: [

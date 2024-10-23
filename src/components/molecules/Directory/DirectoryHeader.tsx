@@ -102,7 +102,10 @@ export const DirectoryHeader: FC = () => {
 
   useEffect(() => {
     useGridQueryConditionStore.subscribe((state, prevState) => {
-      if (state.segmentsFilters !== prevState.segmentsFilters) {
+      if (
+        state.segmentsFilters !== prevState.segmentsFilters &&
+        state.originalSegmentsFilters !== state.segmentsFilters
+      ) {
         setShowFooter(true);
       }
       if (

@@ -79,7 +79,7 @@ export const XLSXUploadReportDetail: FC<{ id: string | number }> = ({ id }) => {
         document.body.removeChild(a);
       }
     };
-
+    setDownloadLoading(true);
     try {
       const res = await _fetchImportHistoryInvalidExcel(id);
       handler(res.data);
@@ -404,9 +404,11 @@ export const XLSXUploadReportDetail: FC<{ id: string | number }> = ({ id }) => {
             >
               <StyledButton
                 color={'info'}
+                disabled={downloadLoading}
+                loading={downloadLoading}
                 onClick={onClickToDownload}
                 size={'small'}
-                sx={{ width: 'fit-content' }}
+                sx={{ width: 220 }}
                 variant={'outlined'}
               >
                 Download invalid contacts

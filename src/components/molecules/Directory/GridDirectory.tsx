@@ -30,7 +30,9 @@ import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStor
 export const GridDirectory: FC = () => {
   const { metadataColumns, fetchAllColumns, tableId, loading } =
     useGridColumnsStore((state) => state);
-  const { keyword } = useGridQueryConditionStore((state) => state);
+  const { keyword, segmentsFilters, segmentId } = useGridQueryConditionStore(
+    (state) => state,
+  );
   const newContact = useGridNewContactStore((state) => state.data);
   const { totalRecords, setTotalRecords } = useGridStore((state) => state);
 
@@ -55,6 +57,8 @@ export const GridDirectory: FC = () => {
             size: pagination.size,
             searchFilter: {
               keyword,
+              segmentsFilters,
+              segmentId,
             },
           },
           metadataColumns,
