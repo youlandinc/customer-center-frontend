@@ -1,13 +1,3 @@
-import { FC, useState } from 'react';
-import { Drawer, Icon, IconButton, Stack } from '@mui/material';
-import { useAsyncFn } from 'react-use';
-import { useSnackbar } from 'notistack';
-
-import { useSwitch } from '@/hooks';
-import { AUTO_HIDE_DURATION } from '@/constant';
-
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
-
 import {
   StyledAnchorMenus,
   StyledButton,
@@ -15,16 +5,24 @@ import {
   StyledDragAndDrop,
   StyledTextField,
 } from '@/components/atoms';
+import { AUTO_HIDE_DURATION } from '@/constant';
+
+import { useSwitch } from '@/hooks';
 
 import { _addNewColumn, _sortColumn } from '@/request';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 import { ColumnTypeEnum, HttpError, SortColumnItem } from '@/types';
+import { Drawer, Icon, IconButton, Stack } from '@mui/material';
+import { useSnackbar } from 'notistack';
+import { FC, useState } from 'react';
+import { useAsyncFn } from 'react-use';
 
 import ICON_ADD from './assets/icon_add_column.svg';
 import ICON_EDIT_COLUMN from './assets/icon_edit_column.svg';
 import ICON_MORE from './assets/icon_more.svg';
 
 export const GridMoreBtn: FC = () => {
-  const { tableId, metadataColumns, setColumn } = useGridColumnsStore(
+  const { tableId, metadataColumns, setColumn } = useGridStore(
     (state) => state,
   );
   const { enqueueSnackbar } = useSnackbar();

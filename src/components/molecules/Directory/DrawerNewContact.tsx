@@ -1,28 +1,26 @@
-import { FC, useRef, useState } from 'react';
-import { Box, Drawer, DrawerProps, Stack, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import { useAsyncFn } from 'react-use';
-import { useSnackbar } from 'notistack';
+import { StyledButton } from '@/components/atoms';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useDebounceFn, useSwitch } from '@/hooks';
-
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
-import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
-
-import { StyledButton } from '@/components/atoms';
-import { StyledInputByType } from './index';
 
 import {
   _addNewContact,
   _validateColumnData,
 } from '@/request/contacts/directory';
+import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 import {
   AddContactRequestParam,
   ColumnTypeEnum,
   HttpError,
   ValidateColumnData,
 } from '@/types';
+import { Box, Drawer, DrawerProps, Stack, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useSnackbar } from 'notistack';
+import { FC, useRef, useState } from 'react';
+import { useAsyncFn } from 'react-use';
+import { StyledInputByType } from './index';
 
 type DrawerNewContactProps = DrawerProps & { onClose?: () => void };
 
@@ -38,7 +36,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
     close: continueClose,
   } = useSwitch();
 
-  const { metadataColumns, tableId } = useGridColumnsStore((state) => state);
+  const { metadataColumns, tableId } = useGridStore((state) => state);
   const { setNewContact } = useGridNewContactStore((state) => state);
 
   const [formData, setFormData] = useState({} as Record<string, any>);

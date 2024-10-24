@@ -1,20 +1,10 @@
-import { createFile } from '@/utils/UnknowHandler';
-import { FC, useEffect, useMemo, useState } from 'react';
 import { Box, Fade, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useRouter } from 'next/navigation';
-import { useAsyncFn } from 'react-use';
 import { useSnackbar } from 'notistack';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { useAsync, useAsyncFn } from 'react-use';
 import useSWR from 'swr';
-
-import { AUTO_HIDE_DURATION } from '@/constant';
-import { HttpError } from '@/types';
-import { useDebounceFn } from '@/hooks';
-
-import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
-import { useGridStore } from '@/stores/directoryStores/useGridStore';
-import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
 import { StyledGrid } from '@/components/atoms';
 import {
@@ -24,16 +14,27 @@ import {
   GridToolBar,
 } from '@/components/molecules';
 
+import { AUTO_HIDE_DURATION } from '@/constant';
+import { useDebounceFn } from '@/hooks';
+
 import {
   _deleteGridRecords,
   _exportGridRecords,
   _getGridListById,
 } from '@/request';
 
+import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
+import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
+
+import { HttpError } from '@/types';
+import { createFile } from '@/utils/UnknowHandler';
+
 export const GridDirectory: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const { metadataColumns, fetchAllColumns, tableId, loading } =
-    useGridColumnsStore((state) => state);
+  const { metadataColumns, fetchAllColumns, tableId } = useGridStore(
+    (state) => state,
+  );
   const { keyword, segmentsFilters, segmentId } = useGridQueryConditionStore(
     (state) => state,
   );
@@ -78,6 +79,10 @@ export const GridDirectory: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [segmentsFilters],
   );
+
+  const { loading } = useAsync(async () => {
+    await fetchAllColumns();
+  }, []);
 
   const {
     data: list,
@@ -213,7 +218,7 @@ export const GridDirectory: FC = () => {
   const rowSelectionIds = Object.entries(rowSelection).map((item) => item[0]);
 
   useEffect(() => {
-    fetchAllColumns();
+    // fetchAllColumns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
