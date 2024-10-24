@@ -107,7 +107,7 @@ export const HeaderFilter: FC = () => {
         sx={{ pl: '0 !important' }}
         variant={'text'}
       >
-        {segmentOptions.length === 0 || selectLoading ? (
+        {selectLoading ? (
           <Skeleton height={28} width={100} />
         ) : (
           <Typography
