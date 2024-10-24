@@ -99,6 +99,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
       ),
       sx: {
         padding: 0,
+        pr: '6px',
         height: 20,
         m: 0,
         width: 'fit-content',
@@ -145,6 +146,15 @@ export const StyledGrid: FC<StyledGridProps> = ({
         },
         onClick: () => {
           onRowClick?.(props);
+        },
+      };
+    },
+    muiTableBodyProps: (props) => {
+      return {
+        sx: {
+          '& .Mui-selected .MuiTableCell-root': {
+            bgcolor: '#F6F7F8',
+          },
         },
       };
     },
@@ -215,6 +225,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
         '& .MuiTableCell-root:last-child': {
           bgcolor: '#F8F9FC',
         },
+
         '& .MuiTableCell-root:first-of-type::after': {
           content: "''",
           position: 'absolute',
