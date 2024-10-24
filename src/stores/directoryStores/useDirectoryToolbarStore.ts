@@ -77,7 +77,7 @@ export const useDirectoryToolbarStore = create<
     });
   },
   clearSegmentsFiltersGroup: () => {
-    set({ segmentsFilters: {} });
+    set({ segmentsFilters: {}, originalSegmentsFilters: {} });
   },
   addSegmentsFilters: (index, data) => {
     set({

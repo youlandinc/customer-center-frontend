@@ -109,41 +109,39 @@ export const HeaderFilter: FC = () => {
         variant={'text'}
       >
         {selectLoading ? (
-          <Skeleton height={28} width={100} />
+          <Skeleton height={40} width={100} />
         ) : (
-          <Typography
-            color={
-              segmentOptions.length === 0 || selectLoading
-                ? 'text.secondary'
-                : 'text.primary'
-            }
-            sx={{
-              maxWidth: 240,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-            variant={'body2'}
-          >
-            {segmentOptions?.find((item) => item.isSelect)?.label ||
-              'Load segment'}
-          </Typography>
+          <>
+            <Typography
+              color={
+                segmentOptions.length === 0 ? 'text.secondary' : 'text.primary'
+              }
+              sx={{
+                maxWidth: 240,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+              variant={'body2'}
+            >
+              {selectedSegmentId && selectedSegmentId != -1
+                ? (segmentOptions?.find((item) => item.isSelect)?.label ??
+                  'Load segment')
+                : 'Load segment'}
+            </Typography>
+            <Icon
+              component={ICON_ARROW}
+              sx={{
+                width: 24,
+                height: 24,
+                ml: 0.75,
+                '& path': {
+                  fill: selectLoading ? '#9095A3' : '#202939',
+                },
+              }}
+            />
+          </>
         )}
-
-        <Icon
-          component={ICON_ARROW}
-          sx={{
-            width: 24,
-            height: 24,
-            ml: 0.75,
-            '& path': {
-              fill:
-                segmentOptions.length === 0 || selectLoading
-                  ? '#9095A3'
-                  : '#202939',
-            },
-          }}
-        />
       </StyledButton>
 
       <Menu
