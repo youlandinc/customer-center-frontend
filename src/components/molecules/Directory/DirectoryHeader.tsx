@@ -35,7 +35,6 @@ export const DirectoryHeader: FC = () => {
 
   const {
     setPageMode,
-    fetchSegmentDetails,
     selectedSegmentId,
     fetchSegmentsOptions,
     setSelectedSegmentId,
@@ -43,12 +42,14 @@ export const DirectoryHeader: FC = () => {
   const { columnOptions, tableId, tableName } = useGridStore((state) => state);
   const {
     segmentsFilters,
+    originalSegmentsFilters,
     addSegmentsFiltersGroup,
     addSegmentsFilters,
     deleteSegmentsFilters,
     onChangeSegmentsFilters,
     setSegmentsFilters,
     clearSegmentsFiltersGroup,
+    setOriginalSegmentsFilters,
   } = useDirectoryToolbarStore((state) => state);
 
   const [showFooter, setShowFooter] = useState(false);
@@ -105,14 +106,18 @@ export const DirectoryHeader: FC = () => {
   ]);
 
   const onClickToSaveChanges = useCallback(async () => {
+    if (!selectedSegmentId && selectedSegmentId != -1) {
+      return;
+    }
     if (selectedSegmentId) {
       const postData = {
         segmentsId: selectedSegmentId,
-        segmentsFilters: segmentsFilters!,
+        segmentsFilters: segmentsFilters,
       };
       setUpdateLoading(true);
       try {
         await _updateExistSegment(postData);
+        setOriginalSegmentsFilters(segmentsFilters);
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {
@@ -125,7 +130,12 @@ export const DirectoryHeader: FC = () => {
         setUpdateLoading(false);
       }
     }
-  }, [enqueueSnackbar, segmentsFilters, selectedSegmentId]);
+  }, [
+    enqueueSnackbar,
+    segmentsFilters,
+    selectedSegmentId,
+    setOriginalSegmentsFilters,
+  ]);
 
   const onClickToCancelChanges = useCallback(async () => {
     if (selectedSegmentId == -1) {
@@ -149,12 +159,12 @@ export const DirectoryHeader: FC = () => {
       }
       clearSegmentsFiltersGroup();
     } else {
-      setSegmentsFilters(await fetchSegmentDetails(selectedSegmentId));
+      setSegmentsFilters(originalSegmentsFilters);
     }
   }, [
     clearSegmentsFiltersGroup,
     enqueueSnackbar,
-    fetchSegmentDetails,
+    originalSegmentsFilters,
     selectedSegmentId,
     setSegmentsFilters,
   ]);
