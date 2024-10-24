@@ -78,6 +78,7 @@ export const useDirectoryStore = create<
     };
 
     const { data } = await _fetchSegmentDetailsBySegmentId(id);
+    set({ selectedSegmentId: id });
     return groupBy(data, 'group');
   },
   updateSelectedSegment: async (id) => {

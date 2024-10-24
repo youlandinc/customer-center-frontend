@@ -11,7 +11,6 @@ import {
 import { useAsync } from 'react-use';
 import { useSnackbar } from 'notistack';
 
-import { NotUndefined } from '@/utils';
 import { AUTO_HIDE_DURATION } from '@/constant';
 
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
@@ -124,7 +123,7 @@ export const HeaderFilter: FC = () => {
               }}
               variant={'body2'}
             >
-              {selectedSegmentId && selectedSegmentId != -1
+              {!!selectedSegmentId && selectedSegmentId != -1
                 ? (segmentOptions?.find((item) => item.isSelect)?.label ??
                   'Load segment')
                 : 'Load segment'}
@@ -206,8 +205,7 @@ export const HeaderFilter: FC = () => {
         ))}
       </Menu>
 
-      {NotUndefined(segmentsFilters) &&
-      Object.keys(segmentsFilters!).length > 0 ? (
+      {Object.keys(segmentsFilters!).length > 0 ? (
         <StyledButton
           color={'info'}
           onClick={onClickToClearFilter}

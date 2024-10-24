@@ -2,7 +2,6 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Fade, Icon, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
-import { TypeOf } from '@/utils';
 import { useSwitch } from '@/hooks';
 import { AUTO_HIDE_DURATION, FILTER_OPERATIONS } from '@/constant';
 
@@ -129,6 +128,10 @@ export const DirectoryHeader: FC = () => {
   }, [enqueueSnackbar, segmentsFilters, selectedSegmentId]);
 
   const onClickToCancelChanges = useCallback(async () => {
+    if (selectedSegmentId == -1) {
+      clearSegmentsFiltersGroup();
+      return;
+    }
     if (!selectedSegmentId) {
       const postData = {
         segmentId: -1,
@@ -158,21 +161,15 @@ export const DirectoryHeader: FC = () => {
 
   useEffect(() => {
     useDirectoryToolbarStore.subscribe((state, prevState) => {
-      if (
-        state.segmentsFilters !== prevState.segmentsFilters &&
-        state.originalSegmentsFilters !== state.segmentsFilters
-      ) {
-        setShowFooter(true);
-      }
-      if (
-        Object.keys(state.segmentsFilters!).length === 0 ||
-        TypeOf(state.segmentsFilters) === 'Undefined'
-      ) {
+      if (Object.keys(state.segmentsFilters).length === 0) {
         setShowFooter(false);
+        return;
       }
-      for (const [, v] of Object.entries(state.segmentsFilters!)) {
+
+      for (const [, v] of Object.entries(state.segmentsFilters)) {
         if (v.length === 0) {
           setShowFooter(false);
+          return;
         }
         if (
           v.some(
@@ -180,6 +177,15 @@ export const DirectoryHeader: FC = () => {
               !item.columnName || !item.operation || !item.operationText,
           )
         ) {
+          setShowFooter(false);
+          return;
+        }
+      }
+
+      if (state.segmentsFilters !== prevState.segmentsFilters) {
+        if (state.originalSegmentsFilters !== state.segmentsFilters) {
+          setShowFooter(true);
+        } else {
           setShowFooter(false);
         }
       }
@@ -323,7 +329,7 @@ export const DirectoryHeader: FC = () => {
         </StyledButton>
       )}
 
-      <Fade in={showFooter} mountOnEnter timeout={100} unmountOnExit>
+      {showFooter && (
         <Stack flexDirection={'row'}>
           <StyledButton
             onClick={open}
@@ -343,7 +349,7 @@ export const DirectoryHeader: FC = () => {
             >
               Cancel
             </StyledButton>
-            {!!selectedSegmentId && (
+            {!!selectedSegmentId && selectedSegmentId != -1 && (
               <StyledButton
                 disabled={updateLoading}
                 loading={updateLoading}
@@ -360,7 +366,7 @@ export const DirectoryHeader: FC = () => {
             )}
           </Stack>
         </Stack>
-      </Fade>
+      )}
 
       <StyledDialog
         content={
