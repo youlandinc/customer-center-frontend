@@ -152,8 +152,11 @@ export const StyledGrid: FC<StyledGridProps> = ({
     muiTableBodyProps: (props) => {
       return {
         sx: {
-          '& .Mui-selected .MuiTableCell-root': {
+          '& .Mui-selected td::after': {
             bgcolor: '#F6F7F8',
+          },
+          '& .Mui-selected:hover td::after': {
+            bgcolor: '#EDEFF2',
           },
         },
       };
