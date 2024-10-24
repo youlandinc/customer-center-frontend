@@ -38,6 +38,7 @@ export const DirectoryHeader: FC = () => {
     selectedSegmentId,
     fetchSegmentsOptions,
     setSelectedSegmentId,
+    updateSelectedSegment,
   } = useDirectoryStore((state) => state);
   const { columnOptions, tableId, tableName } = useGridStore((state) => state);
   const {
@@ -170,35 +171,32 @@ export const DirectoryHeader: FC = () => {
   ]);
 
   useEffect(() => {
-    useDirectoryToolbarStore.subscribe((state, prevState) => {
-      if (Object.keys(state.segmentsFilters).length === 0) {
-        setShowFooter(false);
+    return useDirectoryToolbarStore.subscribe((state, prevState) => {
+      if (state.segmentsFilters === prevState.segmentsFilters) {
         return;
       }
 
-      for (const [, v] of Object.entries(state.segmentsFilters)) {
-        if (v.length === 0) {
-          setShowFooter(false);
-          return;
+      const shouldShowFooter = () => {
+        if (Object.keys(state.segmentsFilters).length === 0) {
+          return false;
         }
-        if (
-          v.some(
-            (item) =>
-              !item.columnName || !item.operation || !item.operationText,
-          )
-        ) {
-          setShowFooter(false);
-          return;
-        }
-      }
 
-      if (state.segmentsFilters !== prevState.segmentsFilters) {
-        if (state.originalSegmentsFilters !== state.segmentsFilters) {
-          setShowFooter(true);
-        } else {
-          setShowFooter(false);
+        const hasValidSegments = Object.values(state.segmentsFilters).every(
+          (segment) =>
+            segment.length > 0 &&
+            segment.every(
+              (item) => item.columnName && item.operation && item.operationText,
+            ),
+        );
+
+        if (!hasValidSegments) {
+          return false;
         }
-      }
+
+        return state.originalSegmentsFilters !== state.segmentsFilters;
+      };
+
+      setShowFooter(shouldShowFooter());
     });
   }, []);
 
@@ -288,7 +286,13 @@ export const DirectoryHeader: FC = () => {
                 />
                 <Icon
                   component={ICON_CLOSE}
-                  onClick={() => deleteSegmentsFilters(index, filterIndex)}
+                  onClick={async () => {
+                    const result = deleteSegmentsFilters(index, filterIndex);
+                    if (Object.keys(result).length === 0) {
+                      clearSegmentsFiltersGroup();
+                      await updateSelectedSegment(-1);
+                    }
+                  }}
                   sx={{
                     width: 24,
                     height: 24,
