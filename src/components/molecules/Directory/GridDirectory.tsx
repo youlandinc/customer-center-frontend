@@ -219,17 +219,12 @@ export const GridDirectory: FC = () => {
   const actionsCardShow = Object.keys(rowSelection).length > 0;
   const rowSelectionIds = Object.entries(rowSelection).map((item) => item[0]);
 
-  useEffect(() => {
-    // fetchAllColumns();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   if (!totalRecords) {
     return (
       <>
         {!isLoading && !loading && (
           <Fade in={!isLoading && !loading}>
-            <Box>
+            <Box height={'100%'}>
               <GridNoData />
             </Box>
           </Fade>
