@@ -23,7 +23,7 @@ export const XLSXMatchColumn: FC<{
   backStep: () => void;
   nextStep: () => void;
 }> = ({ backStep, nextStep }) => {
-  const { columnOptions } = useGridStore();
+  const { matchColumnOptions } = useGridStore();
   const {
     fileColumns,
     fileContent,
@@ -104,7 +104,7 @@ export const XLSXMatchColumn: FC<{
                     list[index].executeColumnId = e.target.value;
                     setColumnMappingList(list);
                   }}
-                  options={columnOptions}
+                  options={matchColumnOptions}
                   sx={{ flex: 1, maxWidth: 300 }}
                   value={columnMappingList[index].executeColumnId}
                 />
