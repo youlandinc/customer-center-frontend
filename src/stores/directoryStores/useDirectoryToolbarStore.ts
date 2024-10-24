@@ -16,7 +16,12 @@ export type useDirectoryToolbarStoreActions = {
   createSegmentsFiltersGroup: () => void;
   clearSegmentsFiltersGroup: () => void;
   addSegmentsFilters: (index: number, data: FilterProps) => void;
-  deleteSegmentsFilters: (index: number, filterIndex: number) => void;
+  deleteSegmentsFilters: (
+    index: number,
+    filterIndex: number,
+  ) => {
+    [key: string | number]: FilterProps[];
+  };
   onChangeSegmentsFilters: (
     index: number,
     filterIndex: number,
@@ -110,6 +115,8 @@ export const useDirectoryToolbarStore = create<
     set({
       segmentsFilters: result,
     });
+
+    return result;
   },
   onChangeSegmentsFilters: (index, filterIndex, key, value) => {
     set({
