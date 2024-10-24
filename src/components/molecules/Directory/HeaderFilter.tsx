@@ -19,7 +19,7 @@ import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryT
 
 import { StyledButton } from '@/components/atoms';
 
-import { _updateUserConfig } from '@/request';
+import { _updateSelectedSegment } from '@/request';
 import { HttpError } from '@/types';
 
 import ICON_ARROW from './assets/icon_arrow.svg';
@@ -66,7 +66,7 @@ export const HeaderFilter: FC = () => {
       setSelectLoading(true);
 
       try {
-        await _updateUserConfig(postData);
+        await _updateSelectedSegment(postData);
         await fetchSegmentsOptions();
         setOriginalSegmentsFilters(await fetchSegmentDetails(id));
       } catch (err) {
@@ -90,6 +90,25 @@ export const HeaderFilter: FC = () => {
       setSelectedSegmentId,
     ],
   );
+
+  const onClickToClearFilter = useCallback(async () => {
+    const postData = {
+      segmentId: -1,
+    };
+    try {
+      clearSegmentsFiltersGroup();
+      setSelectedSegmentId('');
+      await _updateSelectedSegment(postData);
+    } catch (err) {
+      const { header, message, variant } = err as HttpError;
+      enqueueSnackbar(message, {
+        variant: variant || 'error',
+        autoHideDuration: AUTO_HIDE_DURATION,
+        isSimple: !header,
+        header,
+      });
+    }
+  }, [clearSegmentsFiltersGroup, enqueueSnackbar, setSelectedSegmentId]);
 
   return (
     <Stack flexDirection={'row'} gap={3}>
@@ -192,10 +211,7 @@ export const HeaderFilter: FC = () => {
       Object.keys(segmentsFilters!).length > 0 ? (
         <StyledButton
           color={'info'}
-          onClick={() => {
-            clearSegmentsFiltersGroup();
-            setSelectedSegmentId('');
-          }}
+          onClick={onClickToClearFilter}
           size={'small'}
           variant={'text'}
         >

@@ -31,3 +31,9 @@ export const _renameExistSegment = (params: {
 export const _deleteExistSegment = (segmentId: string | number) => {
   return del(`/customer/segments/delete/${segmentId}`);
 };
+
+export const _updateSelectedSegment = (params: {
+  segmentId: string | number;
+}) => {
+  return post('/customer/user/config', params);
+};
