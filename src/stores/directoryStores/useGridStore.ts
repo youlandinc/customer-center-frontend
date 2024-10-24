@@ -13,6 +13,7 @@ type DirectoryStoresStates = {
   tableLabel: string;
   tableName: string;
   metadataColumns: ColumnItem[];
+  columnsFilterByActive: ColumnItem[];
   matchColumnOptions: {
     value: number | string;
     label: string;
@@ -43,16 +44,31 @@ export const useGridStore = create<
 
   loading: false,
   metadataColumns: [],
+  columnsFilterByActive: [],
   matchColumnOptions: [],
   columnOptions: [],
 
   setColumn: (data) => {
-    set({ metadataColumns: data });
+    set({
+      metadataColumns: data,
+      columnsFilterByActive: data.filter(
+        (item) => item.active && item.columnName !== 'id',
+      ),
+    });
   },
   fetchAllColumns: async () => {
     try {
       set({ loading: true });
       const { data } = await _getAllColumns();
+
+      const metadataColumns = data.metadataColumns.filter(
+        (item) => item.columnName !== 'id',
+      );
+
+      const columnsFilterByActive = metadataColumns.filter(
+        (item) => item.active,
+      );
+
       const matchColumnOptions = data.metadataColumns.map((column) => ({
         value: column.columnId,
         label: column.columnLabel,
@@ -66,7 +82,8 @@ export const useGridStore = create<
       }));
 
       set({
-        metadataColumns: data.metadataColumns,
+        metadataColumns,
+        columnsFilterByActive,
         matchColumnOptions,
         columnOptions,
         tableLabel: data.tableLabel,

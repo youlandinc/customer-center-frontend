@@ -14,6 +14,7 @@ export const GridNoData: FC = () => {
       <Stack
         alignItems={'center'}
         flex={1}
+        height={'100%'}
         justifyContent={'center'}
         textAlign={'center'}
       >
