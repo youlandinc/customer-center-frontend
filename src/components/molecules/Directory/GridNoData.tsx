@@ -3,7 +3,7 @@ import { Box, Icon, Stack, Typography } from '@mui/material';
 
 import { useSwitch } from '@/hooks';
 
-import { DrawerNewContact } from '@/components/molecules/Directory/DrawerNewContact';
+import { DrawerNewContact } from './index';
 
 import ICON_NO_DATA from './assets/icon_no_data.svg';
 

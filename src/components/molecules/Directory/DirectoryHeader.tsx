@@ -2,24 +2,13 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Fade, Icon, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
+import { TypeOf } from '@/utils';
+import { useSwitch } from '@/hooks';
 import { AUTO_HIDE_DURATION, FILTER_OPERATIONS } from '@/constant';
 
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
-import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
-
-import {
-  DirectoryPageMode,
-  FilterOperationEnum,
-  FilterProps,
-  HttpError,
-} from '@/types';
-import { TypeOf } from '@/utils';
-import { useSwitch } from '@/hooks';
-import {
-  _createNewSegment,
-  _updateExistSegment,
-} from '@/request/contacts/segments';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
+import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryToolbarStore';
 
 import {
   StyledButton,
@@ -28,6 +17,14 @@ import {
   StyledTextField,
 } from '@/components/atoms';
 import { CreateNewContact, HeaderFilter } from './index';
+
+import { _createNewSegment, _updateExistSegment } from '@/request';
+import {
+  DirectoryPageMode,
+  FilterOperationEnum,
+  FilterProps,
+  HttpError,
+} from '@/types';
 
 import ICON_UPLOAD from './assets/icon_upload.svg';
 import ICON_CLOSE from './assets/icon_close.svg';
@@ -38,19 +35,27 @@ export const DirectoryHeader: FC = () => {
   const { visible, open, close } = useSwitch(false);
 
   const {
+    setPageMode,
+    fetchSegmentDetails,
+    selectedSegmentId,
+    fetchSegmentsOptions,
+    setSelectedSegmentId,
+  } = useDirectoryStore((state) => state);
+  const { columnOptions, tableId, tableName } = useGridStore((state) => state);
+  const {
     segmentsFilters,
     addSegmentsFiltersGroup,
     addSegmentsFilters,
     deleteSegmentsFilters,
     onChangeSegmentsFilters,
     setSegmentsFilters,
-  } = useGridQueryConditionStore((state) => state);
-  const { setPageMode, fetchSegmentDetails, selectSegmentId } =
-    useDirectoryStore((state) => state);
-  const { getColumnOptions, tableId, tableName } = useGridColumnsStore(
-    (state) => state,
-  );
-  const COLUMN_OPTIONS = getColumnOptions();
+    clearSegmentsFiltersGroup,
+  } = useDirectoryToolbarStore((state) => state);
+
+  const [showFooter, setShowFooter] = useState(false);
+  const [segmentName, setSegmentName] = useState('');
+  const [createLoading, setCreateLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
 
   const filterGroup = useMemo(() => {
     const result: FilterProps[][] = [];
@@ -64,12 +69,7 @@ export const DirectoryHeader: FC = () => {
     return result;
   }, [segmentsFilters]);
 
-  const [showFooter, setShowFooter] = useState(false);
-  const [segmentName, setSegmentName] = useState('');
-  const [createLoading, setCreateLoading] = useState(false);
-  const [updateLoading, setUpdateLoading] = useState(false);
-
-  const createSegment = useCallback(async () => {
+  const onClickToCreateSegment = useCallback(async () => {
     const postData = {
       tableId,
       tableName,
@@ -78,7 +78,9 @@ export const DirectoryHeader: FC = () => {
     };
     setCreateLoading(true);
     try {
-      await _createNewSegment(postData);
+      const { data } = await _createNewSegment(postData);
+      await fetchSegmentsOptions();
+      setSelectedSegmentId(data);
     } catch (err) {
       const { header, message, variant } = err as HttpError;
       enqueueSnackbar(message, {
@@ -90,18 +92,57 @@ export const DirectoryHeader: FC = () => {
     } finally {
       setCreateLoading(false);
       close();
+      setSegmentName('');
     }
   }, [
     tableId,
     tableName,
     segmentName,
     segmentsFilters,
+    fetchSegmentsOptions,
+    setSelectedSegmentId,
     enqueueSnackbar,
     close,
   ]);
 
+  const onClickToSaveChanges = useCallback(async () => {
+    if (selectedSegmentId) {
+      const postData = {
+        segmentsId: selectedSegmentId,
+        segmentsFilters: segmentsFilters!,
+      };
+      setUpdateLoading(true);
+      try {
+        await _updateExistSegment(postData);
+      } catch (err) {
+        const { header, message, variant } = err as HttpError;
+        enqueueSnackbar(message, {
+          variant: variant || 'error',
+          autoHideDuration: AUTO_HIDE_DURATION,
+          isSimple: !header,
+          header,
+        });
+      } finally {
+        setUpdateLoading(false);
+      }
+    }
+  }, [enqueueSnackbar, segmentsFilters, selectedSegmentId]);
+
+  const onClickToCancelChanges = useCallback(async () => {
+    if (!selectedSegmentId) {
+      clearSegmentsFiltersGroup();
+    } else {
+      setSegmentsFilters(await fetchSegmentDetails(selectedSegmentId));
+    }
+  }, [
+    clearSegmentsFiltersGroup,
+    fetchSegmentDetails,
+    selectedSegmentId,
+    setSegmentsFilters,
+  ]);
+
   useEffect(() => {
-    useGridQueryConditionStore.subscribe((state, prevState) => {
+    useDirectoryToolbarStore.subscribe((state, prevState) => {
       if (
         state.segmentsFilters !== prevState.segmentsFilters &&
         state.originalSegmentsFilters !== state.segmentsFilters
@@ -129,33 +170,6 @@ export const DirectoryHeader: FC = () => {
       }
     });
   }, []);
-
-  const onClickToSaveChanges = async () => {
-    if (selectSegmentId) {
-      const postData = {
-        segmentsId: selectSegmentId,
-        segmentsFilters: segmentsFilters!,
-      };
-      setUpdateLoading(true);
-      try {
-        await _updateExistSegment(postData);
-      } catch (err) {
-        const { header, message, variant } = err as HttpError;
-        enqueueSnackbar(message, {
-          variant: variant || 'error',
-          autoHideDuration: AUTO_HIDE_DURATION,
-          isSimple: !header,
-          header,
-        });
-      } finally {
-        setUpdateLoading(false);
-      }
-    }
-  };
-
-  const onClickToCancelChanges = async () => {
-    setSegmentsFilters(await fetchSegmentDetails(selectSegmentId));
-  };
 
   return (
     <>
@@ -210,7 +224,7 @@ export const DirectoryHeader: FC = () => {
                       e.target.value as unknown as string | number,
                     );
                   }}
-                  options={COLUMN_OPTIONS}
+                  options={columnOptions}
                   size={'small'}
                   value={filter.columnName}
                 />
@@ -314,19 +328,21 @@ export const DirectoryHeader: FC = () => {
             >
               Cancel
             </StyledButton>
-            <StyledButton
-              disabled={updateLoading}
-              loading={updateLoading}
-              onClick={onClickToSaveChanges}
-              size={'small'}
-              sx={{ width: 'fit-content' }}
-            >
-              <Icon
-                component={ICON_SAVE}
-                sx={{ width: 20, height: 20, mr: 0.75 }}
-              />
-              Save changes
-            </StyledButton>
+            {!!selectedSegmentId && (
+              <StyledButton
+                disabled={updateLoading}
+                loading={updateLoading}
+                onClick={onClickToSaveChanges}
+                size={'small'}
+                sx={{ width: 160 }}
+              >
+                <Icon
+                  component={ICON_SAVE}
+                  sx={{ width: 20, height: 20, mr: 0.75 }}
+                />
+                Save changes
+              </StyledButton>
+            )}
           </Stack>
         </Stack>
       </Fade>
@@ -355,7 +371,7 @@ export const DirectoryHeader: FC = () => {
             <StyledButton
               disabled={createLoading}
               loading={createLoading}
-              onClick={createSegment}
+              onClick={onClickToCreateSegment}
               size={'small'}
               sx={{
                 width: '60px',

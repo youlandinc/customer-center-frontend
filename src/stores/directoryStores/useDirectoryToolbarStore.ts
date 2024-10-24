@@ -1,19 +1,17 @@
 import { create } from 'zustand';
 import { FilterOperationEnum, FilterProps } from '@/types';
 
-type GridQueryConditionStoreStates = {
-  keyword?: string;
-  segmentId?: string | number;
+export type useDirectoryToolbarStoreStates = {
+  newGridData: Record<string, any>;
   segmentsFilters?: {
-    [key: string]: FilterProps[];
+    [key: string | number]: FilterProps[];
   };
   originalSegmentsFilters?: {
-    [key: string]: FilterProps[];
+    [key: string | number]: FilterProps[];
   };
 };
-type GridQueryConditionStoreActions = {
-  setKeyword: (keyword: string) => void;
-  setSegmentId: (segmentId: string | number) => void;
+export type useDirectoryToolbarStoreActions = {
+  setNewGridData: (newGridData: Record<string, any>) => void;
   addSegmentsFiltersGroup: () => void;
   createSegmentsFiltersGroup: () => void;
   clearSegmentsFiltersGroup: () => void;
@@ -33,15 +31,14 @@ type GridQueryConditionStoreActions = {
   }) => void;
 };
 
-export const useGridQueryConditionStore = create<
-  GridQueryConditionStoreStates & GridQueryConditionStoreActions
+export const useDirectoryToolbarStore = create<
+  useDirectoryToolbarStoreStates & useDirectoryToolbarStoreActions
 >((set, get) => ({
-  keyword: '',
-  segmentId: '',
+  newGridData: {},
+  setNewGridData: (newGridData) => set({ newGridData }),
+
   segmentsFilters: {},
   originalSegmentsFilters: {},
-  setKeyword: (keyword) => set({ keyword }),
-  setSegmentId: (segmentId) => set({ segmentId }),
   setSegmentsFilters: (value) => {
     set({ segmentsFilters: value });
   },
@@ -90,13 +87,27 @@ export const useGridQueryConditionStore = create<
     });
   },
   deleteSegmentsFilters: (index, filterIndex) => {
-    set({
-      segmentsFilters: {
-        ...get().segmentsFilters,
-        [index]: get().segmentsFilters![index].filter(
-          (_, i) => i !== filterIndex,
-        ),
+    const temp = {
+      ...get().segmentsFilters,
+      [index]: get().segmentsFilters![index].filter(
+        (_, i) => i !== filterIndex,
+      ),
+    };
+
+    if (temp[index].length === 0) {
+      delete temp[index];
+    }
+
+    const result = Object.keys(temp).reduce(
+      (acc, cur, i) => {
+        acc[i] = temp[parseInt(cur)];
+        return acc;
       },
+      {} as { [key: string | number]: FilterProps[] },
+    );
+
+    set({
+      segmentsFilters: result,
     });
   },
   onChangeSegmentsFilters: (index, filterIndex, key, value) => {

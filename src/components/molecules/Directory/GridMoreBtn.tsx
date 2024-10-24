@@ -4,9 +4,10 @@ import { useAsyncFn } from 'react-use';
 import { useSnackbar } from 'notistack';
 
 import { useSwitch } from '@/hooks';
+
 import { AUTO_HIDE_DURATION } from '@/constant';
 
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 
 import {
   StyledAnchorMenus,
@@ -24,7 +25,7 @@ import ICON_EDIT_COLUMN from './assets/icon_edit_column.svg';
 import ICON_MORE from './assets/icon_more.svg';
 
 export const GridMoreBtn: FC = () => {
-  const { tableId, metadataColumns, setColumn } = useGridColumnsStore(
+  const { tableId, metadataColumns, setColumn } = useGridStore(
     (state) => state,
   );
   const { enqueueSnackbar } = useSnackbar();

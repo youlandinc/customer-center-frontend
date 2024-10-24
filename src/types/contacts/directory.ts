@@ -5,7 +5,7 @@ import {
 } from '@/types/enums';
 
 export type ColumnItem = {
-  columnId: number;
+  columnId: number | string;
   tenantId: string;
   tableId: number;
   columnLabel: string;
@@ -45,10 +45,10 @@ export type DirectoryGridQueryCondition = {
 };
 
 export type RecordsItem = {
-  columnId: number;
-  columnLabel: string;
-  columnName: string;
-  columnType: string;
+  columnId: ColumnItem['columnId'];
+  columnLabel: ColumnItem['columnLabel'];
+  columnName: ColumnItem['columnName'];
+  columnType: ColumnItem['columnType'];
   columnValue: string;
 };
 
@@ -68,7 +68,7 @@ export type DirectoryGridResponse = {
 };
 
 export type GridColumnItem = {
-  id: number;
+  id: ColumnItem['columnId'];
   field: string;
   label: string;
   sort: number;
@@ -88,8 +88,8 @@ export type AddContactRequestParam = {
 };
 
 export type SortColumnItem = {
-  columnId: number;
-  columnName: string;
+  columnId: ColumnItem['columnId'];
+  columnName: ColumnItem['columnName'];
   active: boolean;
 };
 
@@ -99,8 +99,8 @@ export type SortColumnParam = {
 };
 
 export type ValidateColumnData = {
-  columnId: number;
-  columnName: string;
+  columnId: ColumnItem['columnId'];
+  columnName: ColumnItem['columnName'];
   columnValue: unknown;
   tableId: number;
 };

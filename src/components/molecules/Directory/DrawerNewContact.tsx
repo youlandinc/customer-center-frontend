@@ -1,28 +1,25 @@
 import { FC, useRef, useState } from 'react';
 import { Box, Drawer, DrawerProps, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useAsyncFn } from 'react-use';
 import { useSnackbar } from 'notistack';
+import { useAsyncFn } from 'react-use';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useDebounceFn, useSwitch } from '@/hooks';
 
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
-import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
+import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryToolbarStore';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 
-import { StyledButton } from '@/components/atoms';
-import { StyledInputByType } from './index';
-
-import {
-  _addNewContact,
-  _validateColumnData,
-} from '@/request/contacts/directory';
+import { _addNewContact, _validateColumnData } from '@/request';
 import {
   AddContactRequestParam,
   ColumnTypeEnum,
   HttpError,
   ValidateColumnData,
 } from '@/types';
+import { StyledButton } from '@/components/atoms';
+
+import { StyledInputByType } from './index';
 
 type DrawerNewContactProps = DrawerProps & { onClose?: () => void };
 
@@ -38,8 +35,8 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
     close: continueClose,
   } = useSwitch();
 
-  const { metadataColumns, tableId } = useGridColumnsStore((state) => state);
-  const { setNewContact } = useGridNewContactStore((state) => state);
+  const { metadataColumns, tableId } = useGridStore((state) => state);
+  const { setNewGridData } = useDirectoryToolbarStore((state) => state);
 
   const [formData, setFormData] = useState({} as Record<string, any>);
   const formRef = useRef<HTMLFormElement>(null);
@@ -55,7 +52,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
       try {
         await _addNewContact(param);
         handleClose();
-        setNewContact(formData);
+        setNewGridData(formData);
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {

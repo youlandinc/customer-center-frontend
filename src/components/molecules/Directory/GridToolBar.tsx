@@ -3,17 +3,16 @@ import { Stack, Typography } from '@mui/material';
 
 import { useDebounceFn } from '@/hooks';
 
-import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
-
 import { StyledTextFieldSearch } from '@/components/atoms';
 import { GridMoreBtn } from '@/components/molecules';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 
 type GridToolBarProps = {
   totalContacts: number;
 };
 
 export const GridToolBar: FC<GridToolBarProps> = ({ totalContacts }) => {
-  const { setKeyword, keyword } = useGridQueryConditionStore((state) => state);
+  const { setKeyword, keyword } = useGridStore((state) => state);
 
   const ref = useRef<HTMLInputElement | null>(null);
 
