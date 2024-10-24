@@ -4,10 +4,10 @@ import {
   Icon,
   Menu,
   MenuItem,
+  Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
-import { useSearchParams } from 'next/navigation';
 import { useAsync } from 'react-use';
 import { useSnackbar } from 'notistack';
 
@@ -19,7 +19,6 @@ import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryT
 
 import { StyledButton } from '@/components/atoms';
 
-import { _updateSelectedSegment } from '@/request';
 import { HttpError } from '@/types';
 
 import ICON_ARROW from './assets/icon_arrow.svg';
@@ -27,15 +26,14 @@ import ICON_FILTER_ADD from './assets/icon_filter_add.svg';
 import ICON_FILTER_CLEAR from './assets/icon_filter_clear.svg';
 
 export const HeaderFilter: FC = () => {
-  const searchParams = useSearchParams();
   const { enqueueSnackbar } = useSnackbar();
 
   const {
     segmentOptions,
     fetchSegmentDetails,
-    setSelectedSegmentId,
     selectedSegmentId,
     fetchSegmentsOptions,
+    updateSelectedSegment,
   } = useDirectoryStore((state) => state);
   const {
     createSegmentsFiltersGroup,
@@ -48,25 +46,23 @@ export const HeaderFilter: FC = () => {
   const [selectLoading, setSelectLoading] = useState(false);
 
   useAsync(async () => {
-    if (searchParams.get('segmentId')) {
-      await onClickToSelect(
-        selectedSegmentId ? selectedSegmentId : searchParams.get('segmentId')!,
-      );
+    if (selectedSegmentId && selectedSegmentId == -1) {
+      await onClickToSelect(selectedSegmentId);
       return;
     }
-    await fetchSegmentsOptions();
+    const options = await fetchSegmentsOptions();
+    const target = options.filter((item) => item.isSelect);
+    if (target.length > 0) {
+      setOriginalSegmentsFilters(await fetchSegmentDetails(target[0].value));
+    }
   }, []);
 
   const onClickToSelect = useCallback(
     async (id: string | number) => {
-      const postData = {
-        segmentId: id,
-      };
-      setSelectedSegmentId(id);
       setSelectLoading(true);
 
       try {
-        await _updateSelectedSegment(postData);
+        await updateSelectedSegment(id);
         await fetchSegmentsOptions();
         setOriginalSegmentsFilters(await fetchSegmentDetails(id));
       } catch (err) {
@@ -83,32 +79,18 @@ export const HeaderFilter: FC = () => {
       }
     },
     [
-      enqueueSnackbar,
+      updateSelectedSegment,
       fetchSegmentsOptions,
-      fetchSegmentDetails,
       setOriginalSegmentsFilters,
-      setSelectedSegmentId,
+      fetchSegmentDetails,
+      enqueueSnackbar,
     ],
   );
 
   const onClickToClearFilter = useCallback(async () => {
-    const postData = {
-      segmentId: -1,
-    };
-    try {
-      clearSegmentsFiltersGroup();
-      setSelectedSegmentId('');
-      await _updateSelectedSegment(postData);
-    } catch (err) {
-      const { header, message, variant } = err as HttpError;
-      enqueueSnackbar(message, {
-        variant: variant || 'error',
-        autoHideDuration: AUTO_HIDE_DURATION,
-        isSimple: !header,
-        header,
-      });
-    }
-  }, [clearSegmentsFiltersGroup, enqueueSnackbar, setSelectedSegmentId]);
+    clearSegmentsFiltersGroup();
+    await updateSelectedSegment(-1);
+  }, [clearSegmentsFiltersGroup, updateSelectedSegment]);
 
   return (
     <Stack flexDirection={'row'} gap={3}>
@@ -125,23 +107,28 @@ export const HeaderFilter: FC = () => {
         sx={{ pl: '0 !important' }}
         variant={'text'}
       >
-        <Typography
-          color={
-            segmentOptions.length === 0 || selectLoading
-              ? 'text.secondary'
-              : 'text.primary'
-          }
-          sx={{
-            maxWidth: 240,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-          variant={'body2'}
-        >
-          {segmentOptions?.find((item) => item.value == selectedSegmentId)
-            ?.label || 'Load segment'}
-        </Typography>
+        {segmentOptions.length === 0 || selectLoading ? (
+          <Skeleton height={28} width={100} />
+        ) : (
+          <Typography
+            color={
+              segmentOptions.length === 0 || selectLoading
+                ? 'text.secondary'
+                : 'text.primary'
+            }
+            sx={{
+              maxWidth: 240,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+            variant={'body2'}
+          >
+            {segmentOptions?.find((item) => item.isSelect)?.label ||
+              'Load segment'}
+          </Typography>
+        )}
+
         <Icon
           component={ICON_ARROW}
           sx={{
@@ -185,6 +172,7 @@ export const HeaderFilter: FC = () => {
             p: 0,
           },
         }}
+        transitionDuration={0}
       >
         {segmentOptions.map((item, index) => (
           <MenuItem

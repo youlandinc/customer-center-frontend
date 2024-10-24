@@ -8,6 +8,7 @@ import {
 import {
   _fetchSegmentDetailsBySegmentId,
   _fetchSegmentOptions,
+  _updateSelectedSegment,
 } from '@/request/contacts/segments';
 import { enqueueSnackbar } from 'notistack';
 import { AUTO_HIDE_DURATION } from '@/constant';
@@ -21,15 +22,16 @@ type DirectoryStoresStates = {
 type DirectoryStoresActions = {
   setPageMode: (mode: DirectoryPageMode) => void;
   setSelectedSegmentId: (value: number | string) => void;
-  fetchSegmentsOptions: () => Promise<void>;
+  fetchSegmentsOptions: () => Promise<SegmentOption[]>;
   fetchSegmentDetails: (id: string | number) => Promise<{
     [key: string]: Array<FilterProps & any>;
   }>;
+  updateSelectedSegment: (id: string | number) => Promise<void>;
 };
 
 export const useDirectoryStore = create<
   DirectoryStoresStates & DirectoryStoresActions
->()((set) => ({
+>()((set, get) => ({
   pageMode: DirectoryPageMode.default,
   setPageMode: (mode) => set({ pageMode: mode }),
 
@@ -61,6 +63,7 @@ export const useDirectoryStore = create<
         header,
       });
     }
+    return get().segmentOptions;
   },
   fetchSegmentDetails: async (id) => {
     const groupBy = (input: any[], key: string) => {
@@ -76,5 +79,24 @@ export const useDirectoryStore = create<
 
     const { data } = await _fetchSegmentDetailsBySegmentId(id);
     return groupBy(data, 'group');
+  },
+  updateSelectedSegment: async (id) => {
+    if (get().selectedSegmentId != id) {
+      set({ selectedSegmentId: id });
+    }
+    const postData = {
+      segmentId: id,
+    };
+    try {
+      await _updateSelectedSegment(postData);
+    } catch (err) {
+      const { header, message, variant } = err as HttpError;
+      enqueueSnackbar(message, {
+        variant: variant || 'error',
+        autoHideDuration: AUTO_HIDE_DURATION,
+        isSimple: !header,
+        header,
+      });
+    }
   },
 }));

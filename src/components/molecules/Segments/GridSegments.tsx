@@ -7,6 +7,11 @@ import { MRT_ColumnDef } from 'material-react-table';
 import { format } from 'date-fns';
 import useSWR from 'swr';
 
+import { useSwitch } from '@/hooks';
+import { AUTO_HIDE_DURATION } from '@/constant';
+
+import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
+
 import {
   StyledButton,
   StyledDialog,
@@ -20,13 +25,13 @@ import {
   _fetchSegmentsList,
   _renameExistSegment,
 } from '@/request';
-import { useSwitch } from '@/hooks';
 import { HttpError } from '@/types';
-import { AUTO_HIDE_DURATION } from '@/constant';
 
 export const GridSegments = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+
+  const { updateSelectedSegment } = useDirectoryStore((state) => state);
 
   const [pagination, setPagination] = useState({
     page: 0,
@@ -258,6 +263,14 @@ export const GridSegments = () => {
     }
   }, [deleteClose, enqueueSnackbar, mutate, segmentId]);
 
+  const onClickToRedirectToDirectory = useCallback(
+    async (id: string | number) => {
+      await updateSelectedSegment(id);
+      router.push('/contacts/directory');
+    },
+    [router, updateSelectedSegment],
+  );
+
   return (
     <Stack bgcolor={'#fff'} border={'1px solid #ccc'} borderRadius={2} gap={3}>
       <StyledGrid
@@ -278,11 +291,9 @@ export const GridSegments = () => {
               height: 20,
             },
         }}
-        onRowClick={({ row }) => {
+        onRowClick={async ({ row }) => {
           const { id } = row;
-          const params = new URLSearchParams();
-          params.set('segmentId', id);
-          router.push(`/contacts/directory?${params.toString()}`);
+          await onClickToRedirectToDirectory(id);
         }}
         style={{
           borderBottom: '1px solid #ccc',
