@@ -131,6 +131,12 @@ export const HeaderFilter: FC = () => {
               ? 'text.secondary'
               : 'text.primary'
           }
+          sx={{
+            maxWidth: 240,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
           variant={'body2'}
         >
           {segmentOptions?.find((item) => item.value == selectedSegmentId)
@@ -156,10 +162,7 @@ export const HeaderFilter: FC = () => {
         anchorEl={anchorEl}
         MenuListProps={{
           sx: {
-            width:
-              anchorEl && anchorEl.offsetWidth > 140
-                ? anchorEl.offsetWidth
-                : 140,
+            width: 280,
             borderRadius: 2,
           },
         }}
@@ -199,7 +202,16 @@ export const HeaderFilter: FC = () => {
             {selectedSegmentId === item.value && selectLoading ? (
               <CircularProgress size={20} />
             ) : (
-              <Typography component={'div'} variant={'body2'}>
+              <Typography
+                component={'div'}
+                sx={{
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+                variant={'body2'}
+              >
                 {item.label}
               </Typography>
             )}
