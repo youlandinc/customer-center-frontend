@@ -3,7 +3,7 @@ import { create } from 'zustand';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { _getAllColumns } from '@/request';
-import { ColumnItem, ColumnTypeEnum, HttpError } from '@/types';
+import { ColumnItem, HttpError } from '@/types';
 
 type DirectoryStoresStates = {
   keyword?: string;
@@ -13,11 +13,10 @@ type DirectoryStoresStates = {
   tableLabel: string;
   tableName: string;
   metadataColumns: ColumnItem[];
-  pureColumns: {
-    columnId: ColumnItem['columnId'];
-    columnName: ColumnItem['columnName'];
-    columnLabel: ColumnItem['columnLabel'];
-    columnType: ColumnTypeEnum;
+  matchColumnOptions: {
+    value: number | string;
+    label: string;
+    key: number | string;
   }[];
   columnOptions: {
     value: number | string;
@@ -44,7 +43,7 @@ export const useGridStore = create<
 
   loading: false,
   metadataColumns: [],
-  pureColumns: [],
+  matchColumnOptions: [],
   columnOptions: [],
 
   setColumn: (data) => {
@@ -54,11 +53,10 @@ export const useGridStore = create<
     try {
       set({ loading: true });
       const { data } = await _getAllColumns();
-      const pureColumns = data.metadataColumns.map((column) => ({
-        columnId: column.columnId,
-        columnName: column.columnName,
-        columnLabel: column.columnLabel,
-        columnType: column.columnType,
+      const matchColumnOptions = data.metadataColumns.map((column) => ({
+        value: column.columnId,
+        label: column.columnLabel,
+        key: column.columnId,
       }));
 
       const columnOptions = data.metadataColumns.map((column) => ({
@@ -69,7 +67,7 @@ export const useGridStore = create<
 
       set({
         metadataColumns: data.metadataColumns,
-        pureColumns,
+        matchColumnOptions,
         columnOptions,
         tableLabel: data.tableLabel,
         tableName: data.tableName,
