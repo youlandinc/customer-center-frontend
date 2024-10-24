@@ -90,7 +90,8 @@ export const HeaderFilter: FC = () => {
   const onClickToClearFilter = useCallback(async () => {
     clearSegmentsFiltersGroup();
     await updateSelectedSegment(-1);
-  }, [clearSegmentsFiltersGroup, updateSelectedSegment]);
+    await fetchSegmentsOptions();
+  }, [clearSegmentsFiltersGroup, fetchSegmentsOptions, updateSelectedSegment]);
 
   return (
     <Stack flexDirection={'row'} gap={3}>
