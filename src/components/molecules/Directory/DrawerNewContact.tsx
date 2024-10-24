@@ -35,7 +35,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
     close: continueClose,
   } = useSwitch();
 
-  const { metadataColumns, tableId } = useGridStore((state) => state);
+  const { columnsFilterByActive, tableId } = useGridStore((state) => state);
   const { setNewGridData } = useDirectoryToolbarStore((state) => state);
 
   const [formData, setFormData] = useState({} as Record<string, any>);
@@ -142,7 +142,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
             pt={1}
             ref={formRef}
           >
-            {metadataColumns.map((item) => {
+            {columnsFilterByActive.map((item) => {
               const key = `${item.columnName}|${item.columnId}`;
               return (
                 <StyledInputByType
