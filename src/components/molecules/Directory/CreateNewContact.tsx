@@ -1,19 +1,17 @@
-import { FC } from 'react';
-import { Icon, Typography } from '@mui/material';
-
-import { useSwitch } from '@/hooks';
-
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
-
 import { StyledButton } from '@/components/atoms';
 import { DrawerNewContact } from '@/components/molecules';
+
+import { useSwitch } from '@/hooks';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
+import { Icon, Typography } from '@mui/material';
+import { FC } from 'react';
 
 import ICON_USER from './assets/icon_user.svg';
 
 export const CreateNewContact: FC = () => {
   const { visible, open, close } = useSwitch();
 
-  const { metadataColumns } = useGridColumnsStore((state) => state);
+  const { metadataColumns } = useGridStore((state) => state);
 
   return (
     <>
