@@ -1,12 +1,12 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { Stack, Typography } from '@mui/material';
 
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 import { useTableImportStore } from '@/stores/directoryStores/useTableImportStore';
 
 import { StyledButton, StyledSelectPopup } from '@/components/atoms';
 
 import { ExcelColumnMappingProps } from '@/types';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 
 const hasDuplicateId = (arr: ExcelColumnMappingProps[]) => {
   const seenIds = new Set();
@@ -23,7 +23,7 @@ export const XLSXMatchColumn: FC<{
   backStep: () => void;
   nextStep: () => void;
 }> = ({ backStep, nextStep }) => {
-  const { getPureColumn } = useGridColumnsStore();
+  const { columnOptions } = useGridStore();
   const {
     fileColumns,
     fileContent,
@@ -31,16 +31,6 @@ export const XLSXMatchColumn: FC<{
     setColumnMappingList,
     reset,
   } = useTableImportStore();
-
-  const matchOption = useMemo(() => {
-    return getPureColumn().map((column) => {
-      return {
-        key: column.columnName,
-        value: column.columnId,
-        label: column.columnLabel,
-      };
-    });
-  }, [getPureColumn]);
 
   return (
     <>
@@ -114,7 +104,7 @@ export const XLSXMatchColumn: FC<{
                     list[index].executeColumnId = e.target.value;
                     setColumnMappingList(list);
                   }}
-                  options={matchOption}
+                  options={columnOptions}
                   sx={{ flex: 1, maxWidth: 300 }}
                   value={columnMappingList[index].executeColumnId}
                 />

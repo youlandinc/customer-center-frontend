@@ -5,8 +5,8 @@ import { useSnackbar } from 'notistack';
 import { AUTO_HIDE_DURATION, FILTER_OPERATIONS } from '@/constant';
 
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
-import { useGridColumnsStore } from '@/stores/directoryStores/useGridColumnsStore';
 
 import {
   DirectoryPageMode,
@@ -44,9 +44,9 @@ export const DirectoryHeader: FC = () => {
     fetchSegmentsOptions,
     setSelectSegmentId,
   } = useDirectoryStore((state) => state);
-  const { getColumnOptions, tableId, tableName } = useGridColumnsStore(
-    (state) => state,
-  );
+
+  const { columnOptions, tableId, tableName } = useGridStore((state) => state);
+
   const {
     segmentsFilters,
     addSegmentsFiltersGroup,
@@ -56,8 +56,6 @@ export const DirectoryHeader: FC = () => {
     setSegmentsFilters,
     clearSegmentsFiltersGroup,
   } = useGridQueryConditionStore((state) => state);
-
-  const COLUMN_OPTIONS = getColumnOptions();
 
   const [showFooter, setShowFooter] = useState(false);
   const [segmentName, setSegmentName] = useState('');
@@ -231,7 +229,7 @@ export const DirectoryHeader: FC = () => {
                       e.target.value as unknown as string | number,
                     );
                   }}
-                  options={COLUMN_OPTIONS}
+                  options={columnOptions}
                   size={'small'}
                   value={filter.columnName}
                 />
