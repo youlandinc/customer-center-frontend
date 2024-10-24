@@ -384,7 +384,7 @@ export const DirectoryHeader: FC = () => {
               Cancel
             </StyledButton>
             <StyledButton
-              disabled={createLoading}
+              disabled={createLoading || !segmentName}
               loading={createLoading}
               onClick={onClickToCreateSegment}
               size={'small'}
