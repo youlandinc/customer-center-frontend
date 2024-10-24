@@ -3,10 +3,10 @@ import { FilterOperationEnum, FilterProps } from '@/types';
 
 export type useDirectoryToolbarStoreStates = {
   newGridData: Record<string, any>;
-  segmentsFilters?: {
+  segmentsFilters: {
     [key: string | number]: FilterProps[];
   };
-  originalSegmentsFilters?: {
+  originalSegmentsFilters: {
     [key: string | number]: FilterProps[];
   };
 };
