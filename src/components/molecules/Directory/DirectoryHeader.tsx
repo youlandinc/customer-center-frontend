@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { Fade, Icon, Stack, Typography } from '@mui/material';
+import { Icon, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
 import { useSwitch } from '@/hooks';
