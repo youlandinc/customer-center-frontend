@@ -15,9 +15,8 @@ import {
   _getGridListById,
 } from '@/request';
 
-import { useGridToolbarStore } from '@/stores/directoryStores/useGridToolbarStore';
+import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryToolbarStore';
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
-import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
 
 import { HttpError } from '@/types';
 import { createFile } from '@/utils/UnknowHandler';
@@ -29,17 +28,23 @@ import {
   GridPagination,
   GridToolBar,
 } from '@/components/molecules';
+import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
 
 export const GridDirectory: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const { metadataColumns, fetchAllColumns, tableId, keyword } = useGridStore(
+
+  const { selectedSegmentId } = useDirectoryStore((state) => state);
+  const { newGridData, segmentsFilters } = useDirectoryToolbarStore(
     (state) => state,
   );
-  const { segmentsFilters, segmentId } = useGridQueryConditionStore(
-    (state) => state,
-  );
-  const { newGridData } = useGridToolbarStore((state) => state);
-  const { totalRecords, setTotalRecords } = useGridStore((state) => state);
+  const {
+    totalRecords,
+    setTotalRecords,
+    metadataColumns,
+    fetchAllColumns,
+    tableId,
+    keyword,
+  } = useGridStore((state) => state);
 
   const router = useRouter();
 
@@ -95,7 +100,7 @@ export const GridDirectory: FC = () => {
             searchFilter: {
               keyword,
               segmentsFilters: querySegmentsFilters,
-              segmentId,
+              segmentId: selectedSegmentId,
             },
           },
           metadataColumns,

@@ -15,7 +15,7 @@ import { NotUndefined } from '@/utils';
 import { AUTO_HIDE_DURATION } from '@/constant';
 
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
-import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
+import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryToolbarStore';
 
 import { StyledButton } from '@/components/atoms';
 
@@ -31,18 +31,18 @@ export const HeaderFilter: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const {
+    segmentOptions,
+    fetchSegmentDetails,
+    setSelectedSegmentId,
+    selectedSegmentId,
+    fetchSegmentsOptions,
+  } = useDirectoryStore((state) => state);
+  const {
     createSegmentsFiltersGroup,
     clearSegmentsFiltersGroup,
     segmentsFilters,
     setOriginalSegmentsFilters,
-  } = useGridQueryConditionStore((state) => state);
-  const {
-    segmentOptions,
-    fetchSegmentDetails,
-    setSelectSegmentId,
-    selectSegmentId,
-    fetchSegmentsOptions,
-  } = useDirectoryStore((state) => state);
+  } = useDirectoryToolbarStore((state) => state);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [selectLoading, setSelectLoading] = useState(false);
@@ -50,7 +50,7 @@ export const HeaderFilter: FC = () => {
   useAsync(async () => {
     if (searchParams.get('segmentId')) {
       await onClickToSelect(
-        selectSegmentId ? selectSegmentId : searchParams.get('segmentId')!,
+        selectedSegmentId ? selectedSegmentId : searchParams.get('segmentId')!,
       );
       return;
     }
@@ -62,7 +62,7 @@ export const HeaderFilter: FC = () => {
       const postData = {
         segmentId: id,
       };
-      setSelectSegmentId(id);
+      setSelectedSegmentId(id);
       setSelectLoading(true);
 
       try {
@@ -87,7 +87,7 @@ export const HeaderFilter: FC = () => {
       fetchSegmentsOptions,
       fetchSegmentDetails,
       setOriginalSegmentsFilters,
-      setSelectSegmentId,
+      setSelectedSegmentId,
     ],
   );
 
@@ -114,7 +114,7 @@ export const HeaderFilter: FC = () => {
           }
           variant={'body2'}
         >
-          {segmentOptions?.find((item) => item.value == selectSegmentId)
+          {segmentOptions?.find((item) => item.value == selectedSegmentId)
             ?.label || 'Load segment'}
         </Typography>
         <Icon
@@ -171,13 +171,13 @@ export const HeaderFilter: FC = () => {
               await onClickToSelect(item.value);
             }}
             selected={
-              parseInt(selectSegmentId + '') > -1
-                ? selectSegmentId === item.value
+              parseInt(selectedSegmentId + '') > -1
+                ? selectedSegmentId === item.value
                 : item.isSelect
             }
             sx={{ p: '14px 24px' }}
           >
-            {selectSegmentId === item.value && selectLoading ? (
+            {selectedSegmentId === item.value && selectLoading ? (
               <CircularProgress size={20} />
             ) : (
               <Typography component={'div'} variant={'body2'}>
@@ -194,7 +194,7 @@ export const HeaderFilter: FC = () => {
           color={'info'}
           onClick={() => {
             clearSegmentsFiltersGroup();
-            setSelectSegmentId('');
+            setSelectedSegmentId('');
           }}
           size={'small'}
           variant={'text'}

@@ -15,12 +15,12 @@ import { AUTO_HIDE_DURATION } from '@/constant';
 type DirectoryStoresStates = {
   pageMode: DirectoryPageMode;
   segmentOptions: SegmentOption[];
-  selectSegmentId: number | string;
+  selectedSegmentId: number | string;
 };
 
 type DirectoryStoresActions = {
   setPageMode: (mode: DirectoryPageMode) => void;
-  setSelectSegmentId: (value: number | string) => void;
+  setSelectedSegmentId: (value: number | string) => void;
   fetchSegmentsOptions: () => Promise<void>;
   fetchSegmentDetails: (id: string | number) => Promise<{
     [key: string]: Array<FilterProps & any>;
@@ -33,8 +33,8 @@ export const useDirectoryStore = create<
   pageMode: DirectoryPageMode.default,
   setPageMode: (mode) => set({ pageMode: mode }),
 
-  selectSegmentId: '',
-  setSelectSegmentId: (value) => set({ selectSegmentId: value }),
+  selectedSegmentId: '',
+  setSelectedSegmentId: (value) => set({ selectedSegmentId: value }),
 
   segmentOptions: [],
   fetchSegmentsOptions: async () => {

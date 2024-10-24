@@ -7,7 +7,7 @@ import { useAsyncFn } from 'react-use';
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useDebounceFn, useSwitch } from '@/hooks';
 
-import { useGridToolbarStore } from '@/stores/directoryStores/useGridToolbarStore';
+import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryToolbarStore';
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
 
 import { _addNewContact, _validateColumnData } from '@/request';
@@ -36,7 +36,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
   } = useSwitch();
 
   const { metadataColumns, tableId } = useGridStore((state) => state);
-  const { setNewGridData } = useGridToolbarStore((state) => state);
+  const { setNewGridData } = useDirectoryToolbarStore((state) => state);
 
   const [formData, setFormData] = useState({} as Record<string, any>);
   const formRef = useRef<HTMLFormElement>(null);

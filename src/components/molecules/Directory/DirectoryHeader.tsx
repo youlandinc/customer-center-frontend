@@ -8,7 +8,7 @@ import { AUTO_HIDE_DURATION, FILTER_OPERATIONS } from '@/constant';
 
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
-import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
+import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryToolbarStore';
 
 import {
   StyledButton,
@@ -37,13 +37,11 @@ export const DirectoryHeader: FC = () => {
   const {
     setPageMode,
     fetchSegmentDetails,
-    selectSegmentId,
+    selectedSegmentId,
     fetchSegmentsOptions,
-    setSelectSegmentId,
+    setSelectedSegmentId,
   } = useDirectoryStore((state) => state);
-
   const { columnOptions, tableId, tableName } = useGridStore((state) => state);
-
   const {
     segmentsFilters,
     addSegmentsFiltersGroup,
@@ -52,7 +50,7 @@ export const DirectoryHeader: FC = () => {
     onChangeSegmentsFilters,
     setSegmentsFilters,
     clearSegmentsFiltersGroup,
-  } = useGridQueryConditionStore((state) => state);
+  } = useDirectoryToolbarStore((state) => state);
 
   const [showFooter, setShowFooter] = useState(false);
   const [segmentName, setSegmentName] = useState('');
@@ -82,7 +80,7 @@ export const DirectoryHeader: FC = () => {
     try {
       const { data } = await _createNewSegment(postData);
       await fetchSegmentsOptions();
-      setSelectSegmentId(data);
+      setSelectedSegmentId(data);
     } catch (err) {
       const { header, message, variant } = err as HttpError;
       enqueueSnackbar(message, {
@@ -102,15 +100,15 @@ export const DirectoryHeader: FC = () => {
     segmentName,
     segmentsFilters,
     fetchSegmentsOptions,
-    setSelectSegmentId,
+    setSelectedSegmentId,
     enqueueSnackbar,
     close,
   ]);
 
   const onClickToSaveChanges = useCallback(async () => {
-    if (selectSegmentId) {
+    if (selectedSegmentId) {
       const postData = {
-        segmentsId: selectSegmentId,
+        segmentsId: selectedSegmentId,
         segmentsFilters: segmentsFilters!,
       };
       setUpdateLoading(true);
@@ -128,23 +126,23 @@ export const DirectoryHeader: FC = () => {
         setUpdateLoading(false);
       }
     }
-  }, [enqueueSnackbar, segmentsFilters, selectSegmentId]);
+  }, [enqueueSnackbar, segmentsFilters, selectedSegmentId]);
 
   const onClickToCancelChanges = useCallback(async () => {
-    if (!selectSegmentId) {
+    if (!selectedSegmentId) {
       clearSegmentsFiltersGroup();
     } else {
-      setSegmentsFilters(await fetchSegmentDetails(selectSegmentId));
+      setSegmentsFilters(await fetchSegmentDetails(selectedSegmentId));
     }
   }, [
     clearSegmentsFiltersGroup,
     fetchSegmentDetails,
-    selectSegmentId,
+    selectedSegmentId,
     setSegmentsFilters,
   ]);
 
   useEffect(() => {
-    useGridQueryConditionStore.subscribe((state, prevState) => {
+    useDirectoryToolbarStore.subscribe((state, prevState) => {
       if (
         state.segmentsFilters !== prevState.segmentsFilters &&
         state.originalSegmentsFilters !== state.segmentsFilters
@@ -330,7 +328,7 @@ export const DirectoryHeader: FC = () => {
             >
               Cancel
             </StyledButton>
-            {!!selectSegmentId && (
+            {!!selectedSegmentId && (
               <StyledButton
                 disabled={updateLoading}
                 loading={updateLoading}

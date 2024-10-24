@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { FilterOperationEnum, FilterProps } from '@/types';
 
-type GridQueryConditionStoreStates = {
-  segmentId?: string | number;
+export type useDirectoryToolbarStoreStates = {
+  newGridData: Record<string, any>;
   segmentsFilters?: {
     [key: string | number]: FilterProps[];
   };
@@ -10,8 +10,8 @@ type GridQueryConditionStoreStates = {
     [key: string | number]: FilterProps[];
   };
 };
-type GridQueryConditionStoreActions = {
-  setSegmentId: (segmentId: string | number) => void;
+export type useDirectoryToolbarStoreActions = {
+  setNewGridData: (newGridData: Record<string, any>) => void;
   addSegmentsFiltersGroup: () => void;
   createSegmentsFiltersGroup: () => void;
   clearSegmentsFiltersGroup: () => void;
@@ -31,13 +31,14 @@ type GridQueryConditionStoreActions = {
   }) => void;
 };
 
-export const useGridQueryConditionStore = create<
-  GridQueryConditionStoreStates & GridQueryConditionStoreActions
+export const useDirectoryToolbarStore = create<
+  useDirectoryToolbarStoreStates & useDirectoryToolbarStoreActions
 >((set, get) => ({
-  segmentId: '',
+  newGridData: {},
+  setNewGridData: (newGridData) => set({ newGridData }),
+
   segmentsFilters: {},
   originalSegmentsFilters: {},
-  setSegmentId: (segmentId) => set({ segmentId }),
   setSegmentsFilters: (value) => {
     set({ segmentsFilters: value });
   },
