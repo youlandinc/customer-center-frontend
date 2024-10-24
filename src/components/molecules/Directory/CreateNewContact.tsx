@@ -1,10 +1,12 @@
-import { StyledButton } from '@/components/atoms';
-import { DrawerNewContact } from '@/components/molecules';
+import { FC } from 'react';
+import { Icon, Typography } from '@mui/material';
 
 import { useSwitch } from '@/hooks';
+
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
-import { Icon, Typography } from '@mui/material';
-import { FC } from 'react';
+
+import { StyledButton } from '@/components/atoms';
+import { DrawerNewContact } from '@/components/molecules';
 
 import ICON_USER from './assets/icon_user.svg';
 

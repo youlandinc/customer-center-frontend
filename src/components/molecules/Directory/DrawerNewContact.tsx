@@ -1,25 +1,24 @@
-import { StyledButton } from '@/components/atoms';
+import { FC, useRef, useState } from 'react';
+import { Box, Drawer, DrawerProps, Stack, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useSnackbar } from 'notistack';
+import { useAsyncFn } from 'react-use';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useDebounceFn, useSwitch } from '@/hooks';
 
-import {
-  _addNewContact,
-  _validateColumnData,
-} from '@/request/contacts/directory';
 import { useGridToolbarStore } from '@/stores/directoryStores/useGridToolbarStore';
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
+
+import { _addNewContact, _validateColumnData } from '@/request';
 import {
   AddContactRequestParam,
   ColumnTypeEnum,
   HttpError,
   ValidateColumnData,
 } from '@/types';
-import { Box, Drawer, DrawerProps, Stack, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import { useSnackbar } from 'notistack';
-import { FC, useRef, useState } from 'react';
-import { useAsyncFn } from 'react-use';
+import { StyledButton } from '@/components/atoms';
+
 import { StyledInputByType } from './index';
 
 type DrawerNewContactProps = DrawerProps & { onClose?: () => void };
@@ -37,7 +36,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
   } = useSwitch();
 
   const { metadataColumns, tableId } = useGridStore((state) => state);
-  const { setNewContact } = useGridToolbarStore((state) => state);
+  const { setNewGridData } = useGridToolbarStore((state) => state);
 
   const [formData, setFormData] = useState({} as Record<string, any>);
   const formRef = useRef<HTMLFormElement>(null);
@@ -53,7 +52,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
       try {
         await _addNewContact(param);
         handleClose();
-        setNewContact(formData);
+        setNewGridData(formData);
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {

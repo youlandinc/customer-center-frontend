@@ -1,18 +1,10 @@
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Box, Fade, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
-import { FC, useEffect, useMemo, useState } from 'react';
 import { useAsync, useAsyncFn } from 'react-use';
 import useSWR from 'swr';
-
-import { StyledGrid } from '@/components/atoms';
-import {
-  GridActionsCard,
-  GridNoData,
-  GridPagination,
-  GridToolBar,
-} from '@/components/molecules';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 import { useDebounceFn } from '@/hooks';
@@ -24,21 +16,29 @@ import {
 } from '@/request';
 
 import { useGridToolbarStore } from '@/stores/directoryStores/useGridToolbarStore';
-import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
+import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
 
 import { HttpError } from '@/types';
 import { createFile } from '@/utils/UnknowHandler';
 
+import { StyledGrid } from '@/components/atoms';
+import {
+  GridActionsCard,
+  GridNoData,
+  GridPagination,
+  GridToolBar,
+} from '@/components/molecules';
+
 export const GridDirectory: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const { metadataColumns, fetchAllColumns, tableId } = useGridStore(
+  const { metadataColumns, fetchAllColumns, tableId, keyword } = useGridStore(
     (state) => state,
   );
-  const { keyword, segmentsFilters, segmentId } = useGridQueryConditionStore(
+  const { segmentsFilters, segmentId } = useGridQueryConditionStore(
     (state) => state,
   );
-  const newContact = useGridToolbarStore((state) => state.data);
+  const { newGridData } = useGridToolbarStore((state) => state);
   const { totalRecords, setTotalRecords } = useGridStore((state) => state);
 
   const router = useRouter();
@@ -99,7 +99,7 @@ export const GridDirectory: FC = () => {
             },
           },
           metadataColumns,
-          { ...newContact },
+          { ...newGridData },
         ]
       : null,
     async ([tableId, queryCondition]) => {

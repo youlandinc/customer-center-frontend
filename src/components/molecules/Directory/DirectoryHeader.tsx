@@ -2,24 +2,13 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Fade, Icon, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
+import { TypeOf } from '@/utils';
+import { useSwitch } from '@/hooks';
 import { AUTO_HIDE_DURATION, FILTER_OPERATIONS } from '@/constant';
 
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
 import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
-
-import {
-  DirectoryPageMode,
-  FilterOperationEnum,
-  FilterProps,
-  HttpError,
-} from '@/types';
-import { TypeOf } from '@/utils';
-import { useSwitch } from '@/hooks';
-import {
-  _createNewSegment,
-  _updateExistSegment,
-} from '@/request/contacts/segments';
 
 import {
   StyledButton,
@@ -28,6 +17,14 @@ import {
   StyledTextField,
 } from '@/components/atoms';
 import { CreateNewContact, HeaderFilter } from './index';
+
+import { _createNewSegment, _updateExistSegment } from '@/request';
+import {
+  DirectoryPageMode,
+  FilterOperationEnum,
+  FilterProps,
+  HttpError,
+} from '@/types';
 
 import ICON_UPLOAD from './assets/icon_upload.svg';
 import ICON_CLOSE from './assets/icon_close.svg';
