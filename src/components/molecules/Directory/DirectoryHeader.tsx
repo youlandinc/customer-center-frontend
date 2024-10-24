@@ -38,19 +38,31 @@ export const DirectoryHeader: FC = () => {
   const { visible, open, close } = useSwitch(false);
 
   const {
+    setPageMode,
+    fetchSegmentDetails,
+    selectSegmentId,
+    fetchSegmentsOptions,
+    setSelectSegmentId,
+  } = useDirectoryStore((state) => state);
+  const { getColumnOptions, tableId, tableName } = useGridColumnsStore(
+    (state) => state,
+  );
+  const {
     segmentsFilters,
     addSegmentsFiltersGroup,
     addSegmentsFilters,
     deleteSegmentsFilters,
     onChangeSegmentsFilters,
     setSegmentsFilters,
+    clearSegmentsFiltersGroup,
   } = useGridQueryConditionStore((state) => state);
-  const { setPageMode, fetchSegmentDetails, selectSegmentId } =
-    useDirectoryStore((state) => state);
-  const { getColumnOptions, tableId, tableName } = useGridColumnsStore(
-    (state) => state,
-  );
+
   const COLUMN_OPTIONS = getColumnOptions();
+
+  const [showFooter, setShowFooter] = useState(false);
+  const [segmentName, setSegmentName] = useState('');
+  const [createLoading, setCreateLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
 
   const filterGroup = useMemo(() => {
     const result: FilterProps[][] = [];
@@ -64,12 +76,7 @@ export const DirectoryHeader: FC = () => {
     return result;
   }, [segmentsFilters]);
 
-  const [showFooter, setShowFooter] = useState(false);
-  const [segmentName, setSegmentName] = useState('');
-  const [createLoading, setCreateLoading] = useState(false);
-  const [updateLoading, setUpdateLoading] = useState(false);
-
-  const createSegment = useCallback(async () => {
+  const onClickToCreateSegment = useCallback(async () => {
     const postData = {
       tableId,
       tableName,
@@ -78,7 +85,9 @@ export const DirectoryHeader: FC = () => {
     };
     setCreateLoading(true);
     try {
-      await _createNewSegment(postData);
+      const { data } = await _createNewSegment(postData);
+      await fetchSegmentsOptions();
+      setSelectSegmentId(data);
     } catch (err) {
       const { header, message, variant } = err as HttpError;
       enqueueSnackbar(message, {
@@ -90,14 +99,53 @@ export const DirectoryHeader: FC = () => {
     } finally {
       setCreateLoading(false);
       close();
+      setSegmentName('');
     }
   }, [
     tableId,
     tableName,
     segmentName,
     segmentsFilters,
+    fetchSegmentsOptions,
+    setSelectSegmentId,
     enqueueSnackbar,
     close,
+  ]);
+
+  const onClickToSaveChanges = useCallback(async () => {
+    if (selectSegmentId) {
+      const postData = {
+        segmentsId: selectSegmentId,
+        segmentsFilters: segmentsFilters!,
+      };
+      setUpdateLoading(true);
+      try {
+        await _updateExistSegment(postData);
+      } catch (err) {
+        const { header, message, variant } = err as HttpError;
+        enqueueSnackbar(message, {
+          variant: variant || 'error',
+          autoHideDuration: AUTO_HIDE_DURATION,
+          isSimple: !header,
+          header,
+        });
+      } finally {
+        setUpdateLoading(false);
+      }
+    }
+  }, [enqueueSnackbar, segmentsFilters, selectSegmentId]);
+
+  const onClickToCancelChanges = useCallback(async () => {
+    if (!selectSegmentId) {
+      clearSegmentsFiltersGroup();
+    } else {
+      setSegmentsFilters(await fetchSegmentDetails(selectSegmentId));
+    }
+  }, [
+    clearSegmentsFiltersGroup,
+    fetchSegmentDetails,
+    selectSegmentId,
+    setSegmentsFilters,
   ]);
 
   useEffect(() => {
@@ -129,33 +177,6 @@ export const DirectoryHeader: FC = () => {
       }
     });
   }, []);
-
-  const onClickToSaveChanges = async () => {
-    if (selectSegmentId) {
-      const postData = {
-        segmentsId: selectSegmentId,
-        segmentsFilters: segmentsFilters!,
-      };
-      setUpdateLoading(true);
-      try {
-        await _updateExistSegment(postData);
-      } catch (err) {
-        const { header, message, variant } = err as HttpError;
-        enqueueSnackbar(message, {
-          variant: variant || 'error',
-          autoHideDuration: AUTO_HIDE_DURATION,
-          isSimple: !header,
-          header,
-        });
-      } finally {
-        setUpdateLoading(false);
-      }
-    }
-  };
-
-  const onClickToCancelChanges = async () => {
-    setSegmentsFilters(await fetchSegmentDetails(selectSegmentId));
-  };
 
   return (
     <>
@@ -314,19 +335,21 @@ export const DirectoryHeader: FC = () => {
             >
               Cancel
             </StyledButton>
-            <StyledButton
-              disabled={updateLoading}
-              loading={updateLoading}
-              onClick={onClickToSaveChanges}
-              size={'small'}
-              sx={{ width: 'fit-content' }}
-            >
-              <Icon
-                component={ICON_SAVE}
-                sx={{ width: 20, height: 20, mr: 0.75 }}
-              />
-              Save changes
-            </StyledButton>
+            {!!selectSegmentId && (
+              <StyledButton
+                disabled={updateLoading}
+                loading={updateLoading}
+                onClick={onClickToSaveChanges}
+                size={'small'}
+                sx={{ width: 160 }}
+              >
+                <Icon
+                  component={ICON_SAVE}
+                  sx={{ width: 20, height: 20, mr: 0.75 }}
+                />
+                Save changes
+              </StyledButton>
+            )}
           </Stack>
         </Stack>
       </Fade>
@@ -355,7 +378,7 @@ export const DirectoryHeader: FC = () => {
             <StyledButton
               disabled={createLoading}
               loading={createLoading}
-              onClick={createSegment}
+              onClick={onClickToCreateSegment}
               size={'small'}
               sx={{
                 width: '60px',

@@ -19,8 +19,8 @@ import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQuer
 
 import { StyledButton } from '@/components/atoms';
 
-import { _fetchSegmentOptions, _updateUserConfig } from '@/request';
-import { HttpError, SegmentOption } from '@/types';
+import { _updateUserConfig } from '@/request';
+import { HttpError } from '@/types';
 
 import ICON_ARROW from './assets/icon_arrow.svg';
 import ICON_FILTER_ADD from './assets/icon_filter_add.svg';
@@ -37,52 +37,25 @@ export const HeaderFilter: FC = () => {
     setOriginalSegmentsFilters,
   } = useGridQueryConditionStore((state) => state);
   const {
-    setSegmentOptions,
     segmentOptions,
     fetchSegmentDetails,
     setSelectSegmentId,
     selectSegmentId,
+    fetchSegmentsOptions,
   } = useDirectoryStore((state) => state);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [selectLoading, setSelectLoading] = useState(false);
 
   useAsync(async () => {
-    if (
-      searchParams.get('segmentId') &&
-      searchParams.get('segmentId') !== selectSegmentId
-    ) {
-      await onClickToSelect(searchParams.get('segmentId')!);
+    if (searchParams.get('segmentId')) {
+      await onClickToSelect(
+        selectSegmentId ? selectSegmentId : searchParams.get('segmentId')!,
+      );
       return;
     }
-    await fetchOptions();
+    await fetchSegmentsOptions();
   }, []);
-
-  const fetchOptions = useCallback(async () => {
-    try {
-      const { data } = await _fetchSegmentOptions();
-      const options = data.reduce((acc, cur) => {
-        if (cur) {
-          acc.push({
-            label: cur.segmentsName,
-            key: cur.segmentsId,
-            value: cur.segmentsId,
-            isSelect: cur.isSelect,
-          });
-        }
-        return acc;
-      }, [] as SegmentOption[]);
-      setSegmentOptions(options);
-    } catch (err) {
-      const { header, message, variant } = err as HttpError;
-      enqueueSnackbar(message, {
-        variant: variant || 'error',
-        autoHideDuration: AUTO_HIDE_DURATION,
-        isSimple: !header,
-        header,
-      });
-    }
-  }, [enqueueSnackbar, setSegmentOptions]);
 
   const onClickToSelect = useCallback(
     async (id: string | number) => {
@@ -94,7 +67,7 @@ export const HeaderFilter: FC = () => {
 
       try {
         await _updateUserConfig(postData);
-        await fetchOptions();
+        await fetchSegmentsOptions();
         setOriginalSegmentsFilters(await fetchSegmentDetails(id));
       } catch (err) {
         const { header, message, variant } = err as HttpError;
@@ -111,7 +84,7 @@ export const HeaderFilter: FC = () => {
     },
     [
       enqueueSnackbar,
-      fetchOptions,
+      fetchSegmentsOptions,
       fetchSegmentDetails,
       setOriginalSegmentsFilters,
       setSelectSegmentId,
@@ -133,11 +106,31 @@ export const HeaderFilter: FC = () => {
         sx={{ pl: '0 !important' }}
         variant={'text'}
       >
-        <Typography color={'text.primary'} variant={'body2'}>
+        <Typography
+          color={
+            segmentOptions.length === 0 || selectLoading
+              ? 'text.secondary'
+              : 'text.primary'
+          }
+          variant={'body2'}
+        >
           {segmentOptions?.find((item) => item.value == selectSegmentId)
             ?.label || 'Load segment'}
         </Typography>
-        <Icon component={ICON_ARROW} sx={{ width: 24, height: 24, ml: 0.75 }} />
+        <Icon
+          component={ICON_ARROW}
+          sx={{
+            width: 24,
+            height: 24,
+            ml: 0.75,
+            '& path': {
+              fill:
+                segmentOptions.length === 0 || selectLoading
+                  ? '#9095A3'
+                  : '#202939',
+            },
+          }}
+        />
       </StyledButton>
 
       <Menu

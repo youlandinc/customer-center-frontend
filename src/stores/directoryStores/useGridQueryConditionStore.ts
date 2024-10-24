@@ -5,10 +5,10 @@ type GridQueryConditionStoreStates = {
   keyword?: string;
   segmentId?: string | number;
   segmentsFilters?: {
-    [key: string]: FilterProps[];
+    [key: string | number]: FilterProps[];
   };
   originalSegmentsFilters?: {
-    [key: string]: FilterProps[];
+    [key: string | number]: FilterProps[];
   };
 };
 type GridQueryConditionStoreActions = {
@@ -90,13 +90,27 @@ export const useGridQueryConditionStore = create<
     });
   },
   deleteSegmentsFilters: (index, filterIndex) => {
-    set({
-      segmentsFilters: {
-        ...get().segmentsFilters,
-        [index]: get().segmentsFilters![index].filter(
-          (_, i) => i !== filterIndex,
-        ),
+    const temp = {
+      ...get().segmentsFilters,
+      [index]: get().segmentsFilters![index].filter(
+        (_, i) => i !== filterIndex,
+      ),
+    };
+
+    if (temp[index].length === 0) {
+      delete temp[index];
+    }
+
+    const result = Object.keys(temp).reduce(
+      (acc, cur, i) => {
+        acc[i] = temp[parseInt(cur)];
+        return acc;
       },
+      {} as { [key: string | number]: FilterProps[] },
+    );
+
+    set({
+      segmentsFilters: result,
     });
   },
   onChangeSegmentsFilters: (index, filterIndex, key, value) => {

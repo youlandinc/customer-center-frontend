@@ -1,6 +1,16 @@
 import { create } from 'zustand';
-import { DirectoryPageMode, FilterProps, SegmentOption } from '@/types';
-import { _fetchSegmentDetailsBySegmentId } from '@/request/contacts/segments';
+import {
+  DirectoryPageMode,
+  FilterProps,
+  HttpError,
+  SegmentOption,
+} from '@/types';
+import {
+  _fetchSegmentDetailsBySegmentId,
+  _fetchSegmentOptions,
+} from '@/request/contacts/segments';
+import { enqueueSnackbar } from 'notistack';
+import { AUTO_HIDE_DURATION } from '@/constant';
 
 type DirectoryStoresStates = {
   pageMode: DirectoryPageMode;
@@ -10,22 +20,48 @@ type DirectoryStoresStates = {
 
 type DirectoryStoresActions = {
   setPageMode: (mode: DirectoryPageMode) => void;
-  setSegmentOptions: (options: SegmentOption[]) => void;
+  setSelectSegmentId: (value: number | string) => void;
+  fetchSegmentsOptions: () => Promise<void>;
   fetchSegmentDetails: (id: string | number) => Promise<{
     [key: string]: Array<FilterProps & any>;
   }>;
-  setSelectSegmentId: (value: number | string) => void;
 };
 
 export const useDirectoryStore = create<
   DirectoryStoresStates & DirectoryStoresActions
 >()((set) => ({
   pageMode: DirectoryPageMode.default,
-  segmentOptions: [],
+  setPageMode: (mode) => set({ pageMode: mode }),
+
   selectSegmentId: '',
   setSelectSegmentId: (value) => set({ selectSegmentId: value }),
-  setPageMode: (mode) => set({ pageMode: mode }),
-  setSegmentOptions: (options) => set({ segmentOptions: options }),
+
+  segmentOptions: [],
+  fetchSegmentsOptions: async () => {
+    try {
+      const { data } = await _fetchSegmentOptions();
+      const options = data.reduce((acc, cur) => {
+        if (cur) {
+          acc.push({
+            label: cur.segmentsName,
+            key: cur.segmentsId,
+            value: cur.segmentsId,
+            isSelect: cur.isSelect,
+          });
+        }
+        return acc;
+      }, [] as SegmentOption[]);
+      set({ segmentOptions: options });
+    } catch (err) {
+      const { header, message, variant } = err as HttpError;
+      enqueueSnackbar(message, {
+        variant: variant || 'error',
+        autoHideDuration: AUTO_HIDE_DURATION,
+        isSimple: !header,
+        header,
+      });
+    }
+  },
   fetchSegmentDetails: async (id) => {
     const groupBy = (input: any[], key: string) => {
       return input.reduce((acc, currentValue) => {

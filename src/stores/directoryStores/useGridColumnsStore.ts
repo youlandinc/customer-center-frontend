@@ -61,15 +61,14 @@ export const useGridColumnsStore = create<
   fetchAllColumns: async () => {
     try {
       set({ loading: true });
-      const response = await _getAllColumns();
-      const data = response.data;
+      const { data } = await _getAllColumns();
       set({
         metadataColumns: data.metadataColumns,
         tableLabel: data.tableLabel,
         tableName: data.tableName,
         tableId: data.tableId,
+        loading: false,
       });
-      set({ loading: false });
     } catch (err) {
       const { header, message, variant } = err as HttpError;
       enqueueSnackbar(message, {

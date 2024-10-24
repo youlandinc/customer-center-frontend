@@ -57,9 +57,6 @@ export const GridDirectory: FC = () => {
 
   useEffect(
     () => {
-      if (Object.keys(segmentsFilters!).length === 0) {
-        return;
-      }
       for (const [, v] of Object.entries(segmentsFilters!)) {
         if (v.length === 0) {
           return;
