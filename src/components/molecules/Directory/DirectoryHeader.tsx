@@ -130,12 +130,27 @@ export const DirectoryHeader: FC = () => {
 
   const onClickToCancelChanges = useCallback(async () => {
     if (!selectedSegmentId) {
+      const postData = {
+        segmentId: -1,
+      };
+      try {
+        await _updateExistSegment(postData);
+      } catch (err) {
+        const { header, message, variant } = err as HttpError;
+        enqueueSnackbar(message, {
+          variant: variant || 'error',
+          autoHideDuration: AUTO_HIDE_DURATION,
+          isSimple: !header,
+          header,
+        });
+      }
       clearSegmentsFiltersGroup();
     } else {
       setSegmentsFilters(await fetchSegmentDetails(selectedSegmentId));
     }
   }, [
     clearSegmentsFiltersGroup,
+    enqueueSnackbar,
     fetchSegmentDetails,
     selectedSegmentId,
     setSegmentsFilters,
