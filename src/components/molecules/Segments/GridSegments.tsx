@@ -26,12 +26,14 @@ import {
   _renameExistSegment,
 } from '@/request';
 import { HttpError } from '@/types';
+import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryToolbarStore';
 
 export const GridSegments = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const { updateSelectedSegment } = useDirectoryStore((state) => state);
+  const { resetToolbarData } = useDirectoryToolbarStore((state) => state);
 
   const [pagination, setPagination] = useState({
     page: 0,
@@ -236,8 +238,16 @@ export const GridSegments = () => {
       renameClose();
       setSegmentId('');
       setSegmentName('');
+      resetToolbarData();
     }
-  }, [enqueueSnackbar, mutate, renameClose, segmentId, segmentName]);
+  }, [
+    enqueueSnackbar,
+    mutate,
+    renameClose,
+    resetToolbarData,
+    segmentId,
+    segmentName,
+  ]);
 
   const onClickToDelete = useCallback(async () => {
     if (!segmentId) {
@@ -260,8 +270,9 @@ export const GridSegments = () => {
       deleteClose();
       setSegmentId('');
       setSegmentName('');
+      resetToolbarData();
     }
-  }, [deleteClose, enqueueSnackbar, mutate, segmentId]);
+  }, [deleteClose, enqueueSnackbar, mutate, resetToolbarData, segmentId]);
 
   const onClickToRedirectToDirectory = useCallback(
     async (id: string | number) => {

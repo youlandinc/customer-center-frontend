@@ -29,6 +29,7 @@ export type useDirectoryToolbarStoreActions = {
   setOriginalSegmentsFilters: (value: {
     [key: string]: Array<FilterProps & any>;
   }) => void;
+  resetToolbarData: () => void;
 };
 
 export const useDirectoryToolbarStore = create<
@@ -118,6 +119,14 @@ export const useDirectoryToolbarStore = create<
           i === filterIndex ? { ...item, [key]: value } : item,
         ),
       },
+    });
+  },
+
+  resetToolbarData: () => {
+    set({
+      newGridData: {},
+      segmentsFilters: {},
+      originalSegmentsFilters: {},
     });
   },
 }));
