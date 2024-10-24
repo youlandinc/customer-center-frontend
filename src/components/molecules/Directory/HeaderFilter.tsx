@@ -33,6 +33,7 @@ export const HeaderFilter: FC = () => {
     selectedSegmentId,
     fetchSegmentsOptions,
     updateSelectedSegment,
+    clearSegmentSelectState,
   } = useDirectoryStore((state) => state);
   const {
     createSegmentsFiltersGroup,
@@ -89,8 +90,12 @@ export const HeaderFilter: FC = () => {
   const onClickToClearFilter = useCallback(async () => {
     clearSegmentsFiltersGroup();
     await updateSelectedSegment(-1);
-    await fetchSegmentsOptions();
-  }, [clearSegmentsFiltersGroup, fetchSegmentsOptions, updateSelectedSegment]);
+    clearSegmentSelectState();
+  }, [
+    clearSegmentsFiltersGroup,
+    updateSelectedSegment,
+    clearSegmentSelectState,
+  ]);
 
   return (
     <Stack flexDirection={'row'} gap={3}>
