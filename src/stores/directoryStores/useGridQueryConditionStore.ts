@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { FilterOperationEnum, FilterProps } from '@/types';
 
 type GridQueryConditionStoreStates = {
-  keyword?: string;
   segmentId?: string | number;
   segmentsFilters?: {
     [key: string | number]: FilterProps[];
@@ -12,7 +11,6 @@ type GridQueryConditionStoreStates = {
   };
 };
 type GridQueryConditionStoreActions = {
-  setKeyword: (keyword: string) => void;
   setSegmentId: (segmentId: string | number) => void;
   addSegmentsFiltersGroup: () => void;
   createSegmentsFiltersGroup: () => void;
@@ -36,11 +34,9 @@ type GridQueryConditionStoreActions = {
 export const useGridQueryConditionStore = create<
   GridQueryConditionStoreStates & GridQueryConditionStoreActions
 >((set, get) => ({
-  keyword: '',
   segmentId: '',
   segmentsFilters: {},
   originalSegmentsFilters: {},
-  setKeyword: (keyword) => set({ keyword }),
   setSegmentId: (segmentId) => set({ segmentId }),
   setSegmentsFilters: (value) => {
     set({ segmentsFilters: value });

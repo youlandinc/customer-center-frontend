@@ -7,7 +7,7 @@ export type useGridNewContactStoreActions = {
   setNewContact: (data: Record<string, any>) => void;
 };
 
-export const useGridNewContactStore = create<
+export const useGridToolbarStore = create<
   useGridNewContactStoreStates & useGridNewContactStoreActions
 >((set) => ({
   data: {},

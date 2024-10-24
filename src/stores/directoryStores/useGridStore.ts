@@ -6,6 +6,7 @@ import { _getAllColumns } from '@/request';
 import { ColumnItem, ColumnTypeEnum, HttpError } from '@/types';
 
 type DirectoryStoresStates = {
+  keyword?: string;
   totalRecords: number;
   tableId?: number;
   loading?: boolean;
@@ -29,6 +30,7 @@ type DirectoryStoresActions = {
   setTotalRecords: (total: number) => void;
   fetchAllColumns: () => Promise<void>;
   setColumn: (data: ColumnItem[]) => void;
+  setKeyword: (keyword: string) => void;
 };
 
 export const useGridStore = create<
@@ -38,6 +40,7 @@ export const useGridStore = create<
   tableId: undefined,
   tableLabel: '',
   tableName: '',
+  keyword: '',
 
   loading: false,
   metadataColumns: [],
@@ -86,4 +89,5 @@ export const useGridStore = create<
   setTotalRecords: (total) => {
     set({ totalRecords: total });
   },
+  setKeyword: (keyword) => set({ keyword }),
 }));

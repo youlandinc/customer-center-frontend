@@ -23,7 +23,7 @@ import {
   _getGridListById,
 } from '@/request';
 
-import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
+import { useGridToolbarStore } from '@/stores/directoryStores/useGridToolbarStore';
 import { useGridQueryConditionStore } from '@/stores/directoryStores/useGridQueryConditionStore';
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
 
@@ -38,7 +38,7 @@ export const GridDirectory: FC = () => {
   const { keyword, segmentsFilters, segmentId } = useGridQueryConditionStore(
     (state) => state,
   );
-  const newContact = useGridNewContactStore((state) => state.data);
+  const newContact = useGridToolbarStore((state) => state.data);
   const { totalRecords, setTotalRecords } = useGridStore((state) => state);
 
   const router = useRouter();

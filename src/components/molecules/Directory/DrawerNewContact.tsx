@@ -7,7 +7,7 @@ import {
   _addNewContact,
   _validateColumnData,
 } from '@/request/contacts/directory';
-import { useGridNewContactStore } from '@/stores/directoryStores/useGridNewContactStore';
+import { useGridToolbarStore } from '@/stores/directoryStores/useGridToolbarStore';
 import { useGridStore } from '@/stores/directoryStores/useGridStore';
 import {
   AddContactRequestParam,
@@ -37,7 +37,7 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
   } = useSwitch();
 
   const { metadataColumns, tableId } = useGridStore((state) => state);
-  const { setNewContact } = useGridNewContactStore((state) => state);
+  const { setNewContact } = useGridToolbarStore((state) => state);
 
   const [formData, setFormData] = useState({} as Record<string, any>);
   const formRef = useRef<HTMLFormElement>(null);
