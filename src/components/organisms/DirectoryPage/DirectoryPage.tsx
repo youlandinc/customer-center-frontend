@@ -1,3 +1,4 @@
+'use client';
 import { FC, useEffect } from 'react';
 import { Stack, Typography } from '@mui/material';
 
