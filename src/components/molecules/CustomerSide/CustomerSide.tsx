@@ -1,9 +1,9 @@
-'use client';
 import { FC } from 'react';
 import { Box, Icon, Stack, Typography } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { MENU_CONFIG } from './data';
+import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
 
 export const CustomerSide: FC = () => {
   const router = useRouter();
@@ -52,7 +52,10 @@ export const CustomerSide: FC = () => {
                   gap={1}
                   height={40}
                   key={`${item.label}_${index}_${child.label}_${childIndex}`}
-                  onClick={() => router.push(child.url)}
+                  onClick={() => {
+                    router.prefetch(child.url, { kind: PrefetchKind.FULL });
+                    router.push(child.url);
+                  }}
                   pl={4}
                   py={1.5}
                   sx={{
