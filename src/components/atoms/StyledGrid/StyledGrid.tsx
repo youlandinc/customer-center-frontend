@@ -147,7 +147,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
           },
           '& .MuiTableCell-root:first-of-type': {
             justifyContent: 'center',
-            px: props.table.getSelectedRowModel() ? 0 : 1.5,
+            px: rest?.enableSelectAll ? 0 : 1.5,
           },
           '&:last-of-type .MuiTableCell-root': {
             borderBottom: 'none',
@@ -248,8 +248,8 @@ export const StyledGrid: FC<StyledGridProps> = ({
             bgcolor: '#F8F9FC',
           },
           '& .MuiTableCell-root:first-of-type': {
-            px: props.table.getSelectedRowModel() ? 0 : 1.5,
-            py: 0,
+            px: rest?.enableSelectAll ? 0 : 1.5,
+            py: rest?.enableSelectAll ? 0 : 1.25,
           },
           '& .MuiTableCell-root:first-of-type::after': {
             content: "''",
