@@ -11,7 +11,6 @@ import {
 import { useAsync } from 'react-use';
 import { useSnackbar } from 'notistack';
 
-import { NotUndefined } from '@/utils';
 import { AUTO_HIDE_DURATION } from '@/constant';
 
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
@@ -34,6 +33,7 @@ export const HeaderFilter: FC = () => {
     selectedSegmentId,
     fetchSegmentsOptions,
     updateSelectedSegment,
+    clearSegmentSelectState,
   } = useDirectoryStore((state) => state);
   const {
     createSegmentsFiltersGroup,
@@ -90,7 +90,12 @@ export const HeaderFilter: FC = () => {
   const onClickToClearFilter = useCallback(async () => {
     clearSegmentsFiltersGroup();
     await updateSelectedSegment(-1);
-  }, [clearSegmentsFiltersGroup, updateSelectedSegment]);
+    clearSegmentSelectState();
+  }, [
+    clearSegmentsFiltersGroup,
+    updateSelectedSegment,
+    clearSegmentSelectState,
+  ]);
 
   return (
     <Stack flexDirection={'row'} gap={3}>
@@ -108,41 +113,39 @@ export const HeaderFilter: FC = () => {
         variant={'text'}
       >
         {selectLoading ? (
-          <Skeleton height={28} width={100} />
+          <Skeleton height={40} width={100} />
         ) : (
-          <Typography
-            color={
-              segmentOptions.length === 0 || selectLoading
-                ? 'text.secondary'
-                : 'text.primary'
-            }
-            sx={{
-              maxWidth: 240,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-            variant={'body2'}
-          >
-            {segmentOptions?.find((item) => item.isSelect)?.label ||
-              'Load segment'}
-          </Typography>
+          <>
+            <Typography
+              color={
+                segmentOptions.length === 0 ? 'text.secondary' : 'text.primary'
+              }
+              sx={{
+                maxWidth: 240,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+              variant={'body2'}
+            >
+              {!!selectedSegmentId && selectedSegmentId != -1
+                ? (segmentOptions?.find((item) => item.isSelect)?.label ??
+                  'Load segment')
+                : 'Load segment'}
+            </Typography>
+            <Icon
+              component={ICON_ARROW}
+              sx={{
+                width: 24,
+                height: 24,
+                ml: 0.75,
+                '& path': {
+                  fill: selectLoading ? '#9095A3' : '#202939',
+                },
+              }}
+            />
+          </>
         )}
-
-        <Icon
-          component={ICON_ARROW}
-          sx={{
-            width: 24,
-            height: 24,
-            ml: 0.75,
-            '& path': {
-              fill:
-                segmentOptions.length === 0 || selectLoading
-                  ? '#9095A3'
-                  : '#202939',
-            },
-          }}
-        />
       </StyledButton>
 
       <Menu
@@ -207,8 +210,7 @@ export const HeaderFilter: FC = () => {
         ))}
       </Menu>
 
-      {NotUndefined(segmentsFilters) &&
-      Object.keys(segmentsFilters!).length > 0 ? (
+      {Object.keys(segmentsFilters!).length > 0 ? (
         <StyledButton
           color={'info'}
           onClick={onClickToClearFilter}

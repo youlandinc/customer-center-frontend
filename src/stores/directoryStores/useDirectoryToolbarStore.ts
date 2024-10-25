@@ -3,10 +3,10 @@ import { FilterOperationEnum, FilterProps } from '@/types';
 
 export type useDirectoryToolbarStoreStates = {
   newGridData: Record<string, any>;
-  segmentsFilters?: {
+  segmentsFilters: {
     [key: string | number]: FilterProps[];
   };
-  originalSegmentsFilters?: {
+  originalSegmentsFilters: {
     [key: string | number]: FilterProps[];
   };
 };
@@ -16,7 +16,12 @@ export type useDirectoryToolbarStoreActions = {
   createSegmentsFiltersGroup: () => void;
   clearSegmentsFiltersGroup: () => void;
   addSegmentsFilters: (index: number, data: FilterProps) => void;
-  deleteSegmentsFilters: (index: number, filterIndex: number) => void;
+  deleteSegmentsFilters: (
+    index: number,
+    filterIndex: number,
+  ) => {
+    [key: string | number]: FilterProps[];
+  };
   onChangeSegmentsFilters: (
     index: number,
     filterIndex: number,
@@ -29,6 +34,7 @@ export type useDirectoryToolbarStoreActions = {
   setOriginalSegmentsFilters: (value: {
     [key: string]: Array<FilterProps & any>;
   }) => void;
+  resetToolbarData: () => void;
 };
 
 export const useDirectoryToolbarStore = create<
@@ -76,7 +82,7 @@ export const useDirectoryToolbarStore = create<
     });
   },
   clearSegmentsFiltersGroup: () => {
-    set({ segmentsFilters: {} });
+    set({ segmentsFilters: {}, originalSegmentsFilters: {} });
   },
   addSegmentsFilters: (index, data) => {
     set({
@@ -109,6 +115,8 @@ export const useDirectoryToolbarStore = create<
     set({
       segmentsFilters: result,
     });
+
+    return result;
   },
   onChangeSegmentsFilters: (index, filterIndex, key, value) => {
     set({
@@ -118,6 +126,14 @@ export const useDirectoryToolbarStore = create<
           i === filterIndex ? { ...item, [key]: value } : item,
         ),
       },
+    });
+  },
+
+  resetToolbarData: () => {
+    set({
+      newGridData: {},
+      segmentsFilters: {},
+      originalSegmentsFilters: {},
     });
   },
 }));

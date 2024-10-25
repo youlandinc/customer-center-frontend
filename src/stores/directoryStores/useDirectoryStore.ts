@@ -22,6 +22,7 @@ type DirectoryStoresStates = {
 type DirectoryStoresActions = {
   setPageMode: (mode: DirectoryPageMode) => void;
   setSelectedSegmentId: (value: number | string) => void;
+  clearSegmentSelectState: () => void;
   fetchSegmentsOptions: () => Promise<SegmentOption[]>;
   fetchSegmentDetails: (id: string | number) => Promise<{
     [key: string]: Array<FilterProps & any>;
@@ -39,6 +40,13 @@ export const useDirectoryStore = create<
   setSelectedSegmentId: (value) => set({ selectedSegmentId: value }),
 
   segmentOptions: [],
+  clearSegmentSelectState: () => {
+    const target = get().segmentOptions;
+    target.forEach((item) => {
+      item.isSelect = false;
+    });
+    set({ segmentOptions: target });
+  },
   fetchSegmentsOptions: async () => {
     try {
       const { data } = await _fetchSegmentOptions();
@@ -78,6 +86,7 @@ export const useDirectoryStore = create<
     };
 
     const { data } = await _fetchSegmentDetailsBySegmentId(id);
+    set({ selectedSegmentId: id });
     return groupBy(data, 'group');
   },
   updateSelectedSegment: async (id) => {

@@ -1,8 +1,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { Fade, Icon, Stack, Typography } from '@mui/material';
+import { Icon, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
-import { TypeOf } from '@/utils';
 import { useSwitch } from '@/hooks';
 import { AUTO_HIDE_DURATION, FILTER_OPERATIONS } from '@/constant';
 
@@ -36,20 +35,22 @@ export const DirectoryHeader: FC = () => {
 
   const {
     setPageMode,
-    fetchSegmentDetails,
     selectedSegmentId,
     fetchSegmentsOptions,
     setSelectedSegmentId,
+    updateSelectedSegment,
   } = useDirectoryStore((state) => state);
   const { columnOptions, tableId, tableName } = useGridStore((state) => state);
   const {
     segmentsFilters,
+    originalSegmentsFilters,
     addSegmentsFiltersGroup,
     addSegmentsFilters,
     deleteSegmentsFilters,
     onChangeSegmentsFilters,
     setSegmentsFilters,
     clearSegmentsFiltersGroup,
+    setOriginalSegmentsFilters,
   } = useDirectoryToolbarStore((state) => state);
 
   const [showFooter, setShowFooter] = useState(false);
@@ -106,14 +107,18 @@ export const DirectoryHeader: FC = () => {
   ]);
 
   const onClickToSaveChanges = useCallback(async () => {
+    if (!selectedSegmentId && selectedSegmentId != -1) {
+      return;
+    }
     if (selectedSegmentId) {
       const postData = {
         segmentsId: selectedSegmentId,
-        segmentsFilters: segmentsFilters!,
+        segmentsFilters: segmentsFilters,
       };
       setUpdateLoading(true);
       try {
         await _updateExistSegment(postData);
+        setOriginalSegmentsFilters(segmentsFilters);
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {
@@ -126,9 +131,18 @@ export const DirectoryHeader: FC = () => {
         setUpdateLoading(false);
       }
     }
-  }, [enqueueSnackbar, segmentsFilters, selectedSegmentId]);
+  }, [
+    enqueueSnackbar,
+    segmentsFilters,
+    selectedSegmentId,
+    setOriginalSegmentsFilters,
+  ]);
 
   const onClickToCancelChanges = useCallback(async () => {
+    if (selectedSegmentId == -1) {
+      clearSegmentsFiltersGroup();
+      return;
+    }
     if (!selectedSegmentId) {
       const postData = {
         segmentId: -1,
@@ -146,43 +160,43 @@ export const DirectoryHeader: FC = () => {
       }
       clearSegmentsFiltersGroup();
     } else {
-      setSegmentsFilters(await fetchSegmentDetails(selectedSegmentId));
+      setSegmentsFilters(originalSegmentsFilters);
     }
   }, [
     clearSegmentsFiltersGroup,
     enqueueSnackbar,
-    fetchSegmentDetails,
+    originalSegmentsFilters,
     selectedSegmentId,
     setSegmentsFilters,
   ]);
 
   useEffect(() => {
-    useDirectoryToolbarStore.subscribe((state, prevState) => {
-      if (
-        state.segmentsFilters !== prevState.segmentsFilters &&
-        state.originalSegmentsFilters !== state.segmentsFilters
-      ) {
-        setShowFooter(true);
+    return useDirectoryToolbarStore.subscribe((state, prevState) => {
+      if (state.segmentsFilters === prevState.segmentsFilters) {
+        return;
       }
-      if (
-        Object.keys(state.segmentsFilters!).length === 0 ||
-        TypeOf(state.segmentsFilters) === 'Undefined'
-      ) {
-        setShowFooter(false);
-      }
-      for (const [, v] of Object.entries(state.segmentsFilters!)) {
-        if (v.length === 0) {
-          setShowFooter(false);
+
+      const shouldShowFooter = () => {
+        if (Object.keys(state.segmentsFilters).length === 0) {
+          return false;
         }
-        if (
-          v.some(
-            (item) =>
-              !item.columnName || !item.operation || !item.operationText,
-          )
-        ) {
-          setShowFooter(false);
+
+        const hasValidSegments = Object.values(state.segmentsFilters).every(
+          (segment) =>
+            segment.length > 0 &&
+            segment.every(
+              (item) => item.columnName && item.operation && item.operationText,
+            ),
+        );
+
+        if (!hasValidSegments) {
+          return false;
         }
-      }
+
+        return state.originalSegmentsFilters !== state.segmentsFilters;
+      };
+
+      setShowFooter(shouldShowFooter());
     });
   }, []);
 
@@ -272,7 +286,13 @@ export const DirectoryHeader: FC = () => {
                 />
                 <Icon
                   component={ICON_CLOSE}
-                  onClick={() => deleteSegmentsFilters(index, filterIndex)}
+                  onClick={async () => {
+                    const result = deleteSegmentsFilters(index, filterIndex);
+                    if (Object.keys(result).length === 0) {
+                      clearSegmentsFiltersGroup();
+                      await updateSelectedSegment(-1);
+                    }
+                  }}
                   sx={{
                     width: 24,
                     height: 24,
@@ -323,7 +343,7 @@ export const DirectoryHeader: FC = () => {
         </StyledButton>
       )}
 
-      <Fade in={showFooter} mountOnEnter timeout={100} unmountOnExit>
+      {showFooter && (
         <Stack flexDirection={'row'}>
           <StyledButton
             onClick={open}
@@ -343,7 +363,7 @@ export const DirectoryHeader: FC = () => {
             >
               Cancel
             </StyledButton>
-            {!!selectedSegmentId && (
+            {!!selectedSegmentId && selectedSegmentId != -1 && (
               <StyledButton
                 disabled={updateLoading}
                 loading={updateLoading}
@@ -360,7 +380,7 @@ export const DirectoryHeader: FC = () => {
             )}
           </Stack>
         </Stack>
-      </Fade>
+      )}
 
       <StyledDialog
         content={
@@ -384,7 +404,7 @@ export const DirectoryHeader: FC = () => {
               Cancel
             </StyledButton>
             <StyledButton
-              disabled={createLoading}
+              disabled={createLoading || !segmentName}
               loading={createLoading}
               onClick={onClickToCreateSegment}
               size={'small'}
