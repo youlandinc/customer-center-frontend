@@ -20,6 +20,12 @@ const nextConfig = {
       static: 0,
     },
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+      hmrRefresh: true,
+    },
+  },
   async redirects() {
     return [
       {

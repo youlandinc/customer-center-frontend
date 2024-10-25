@@ -49,6 +49,7 @@ const RootLayout = ({
 
   return (
     <html lang="en">
+      <title>Customer Center</title>
       <body className={YOULAND_FONTS.variable}>
         <AppRouterCacheProvider options={{ key: 'css', enableCssLayer: true }}>
           <ThemeProvider theme={lightTheme}>
