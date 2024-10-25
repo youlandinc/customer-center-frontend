@@ -63,48 +63,57 @@ export const StyledGrid: FC<StyledGridProps> = ({
     getRowId: getRowId || ((row) => row.id), //default
     rowVirtualizerOptions: { overscan: 5 }, //optionally customize the row virtualizer
     columnVirtualizerOptions: { overscan: 5 }, //optionally customize the column virtualizer
-    muiSelectCheckboxProps: {
-      icon: (
-        <Icon component={ICON_CHECKBOX_STATIC} sx={{ width: 20, height: 20 }} />
-      ),
-      checkedIcon: (
-        <Icon
-          component={ICON_CHECKBOX_CHECKED}
-          sx={{ width: 20, height: 20 }}
-        />
-      ),
-      sx: {
-        padding: 0,
-        height: 20,
-        m: 0,
-        width: 'fit-content',
-      },
-      title: '',
+    muiSelectCheckboxProps: (props) => {
+      return {
+        icon: (
+          <Icon
+            component={ICON_CHECKBOX_STATIC}
+            sx={{ width: 20, height: 20 }}
+          />
+        ),
+        checkedIcon: (
+          <Icon
+            component={ICON_CHECKBOX_CHECKED}
+            sx={{ width: 20, height: 20 }}
+          />
+        ),
+        sx: {
+          padding: 0,
+          height: '100%',
+          m: 0,
+          width: '100%',
+        },
+        title: '',
+      };
     },
-    muiSelectAllCheckboxProps: {
-      icon: (
-        <Icon component={ICON_CHECKBOX_STATIC} sx={{ width: 20, height: 20 }} />
-      ),
-      checkedIcon: (
-        <Icon
-          component={ICON_CHECKBOX_CHECKED}
-          sx={{ width: 20, height: 20 }}
-        />
-      ),
-      indeterminateIcon: (
-        <Icon
-          component={ICON_CHECKBOX_INDETERMINATE}
-          sx={{ width: 20, height: 20 }}
-        />
-      ),
-      sx: {
-        padding: 0,
-        pr: '6px',
-        height: 20,
-        m: 0,
-        width: 'fit-content',
-      },
-      title: '',
+    muiSelectAllCheckboxProps: (props) => {
+      return {
+        icon: (
+          <Icon
+            component={ICON_CHECKBOX_STATIC}
+            sx={{ width: 20, height: 20 }}
+          />
+        ),
+        checkedIcon: (
+          <Icon
+            component={ICON_CHECKBOX_CHECKED}
+            sx={{ width: 20, height: 20 }}
+          />
+        ),
+        indeterminateIcon: (
+          <Icon
+            component={ICON_CHECKBOX_INDETERMINATE}
+            sx={{ width: 20, height: 20 }}
+          />
+        ),
+        sx: {
+          padding: 0,
+          height: '100%',
+          m: 0,
+          width: '100%',
+        },
+        title: '',
+      };
     },
     muiTableBodyRowProps: (props) => {
       return {
@@ -138,6 +147,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
           },
           '& .MuiTableCell-root:first-of-type': {
             justifyContent: 'center',
+            px: props.table.getSelectedRowModel() ? 0 : 1.5,
           },
           '&:last-of-type .MuiTableCell-root': {
             borderBottom: 'none',
@@ -207,44 +217,57 @@ export const StyledGrid: FC<StyledGridProps> = ({
         },
       }),
     },
-    muiTableHeadProps: {
-      sx: {
-        opacity: 1,
-        '& .MuiTableRow-head': {
-          boxShadow: 'none',
+    muiTableHeadProps: (props) => {
+      return {
+        sx: {
+          opacity: 1,
+          '& .MuiTableRow-head': {
+            boxShadow: 'none',
+          },
+          '& .Mui-TableHeadCell-Content-Wrapper': {
+            fontWeight: 400,
+            fontSize: 14,
+            lineHeight: '20px',
+            whiteSpace: 'nowrap',
+            height: '100%',
+            width: '100%',
+          },
+          '& .MuiTableCell-root': {
+            '& .Mui-TableHeadCell-Content': {
+              height: '100%',
+              '& .Mui-TableHeadCell-Content-Labels': {
+                height: '100%',
+              },
+            },
+            border: 'none',
+            bgcolor: '#F8F9FC',
+            pl: 1.5,
+            py: 1.25,
+          },
+          '& .MuiTableCell-root:last-child': {
+            bgcolor: '#F8F9FC',
+          },
+          '& .MuiTableCell-root:first-of-type': {
+            px: props.table.getSelectedRowModel() ? 0 : 1.5,
+            py: 0,
+          },
+          '& .MuiTableCell-root:first-of-type::after': {
+            content: "''",
+            position: 'absolute',
+            right: 0,
+            top: 10,
+            width: 2,
+            bgcolor: '#D2D6E1',
+            height: 20,
+          },
+          '& .MuiDivider-root': {
+            borderWidth: '1px',
+            height: 16,
+            borderColor: '#D2D6E1',
+          },
+          ...muiTableHeadSx,
         },
-        '& .Mui-TableHeadCell-Content-Wrapper': {
-          fontWeight: 400,
-          fontSize: 14,
-          lineHeight: '20px',
-          whiteSpace: 'nowrap',
-        },
-        '& .MuiTableCell-root': {
-          border: 'none',
-          bgcolor: '#F8F9FC',
-          pl: 1.5,
-          py: 1.25,
-        },
-        '& .MuiTableCell-root:last-child': {
-          bgcolor: '#F8F9FC',
-        },
-
-        '& .MuiTableCell-root:first-of-type::after': {
-          content: "''",
-          position: 'absolute',
-          right: 0,
-          top: 10,
-          width: 2,
-          bgcolor: '#D2D6E1',
-          height: 20,
-        },
-        '& .MuiDivider-root': {
-          borderWidth: '1px',
-          height: 16,
-          borderColor: '#D2D6E1',
-        },
-        ...muiTableHeadSx,
-      },
+      };
     },
     muiTableContainerProps: {
       style: {
