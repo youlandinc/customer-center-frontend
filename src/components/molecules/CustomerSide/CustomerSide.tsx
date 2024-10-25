@@ -3,7 +3,6 @@ import { Box, Icon, Stack, Typography } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { MENU_CONFIG } from './data';
-import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
 
 export const CustomerSide: FC = () => {
   const router = useRouter();
@@ -53,8 +52,8 @@ export const CustomerSide: FC = () => {
                   height={40}
                   key={`${item.label}_${index}_${child.label}_${childIndex}`}
                   onClick={() => {
-                    router.prefetch(child.url, { kind: PrefetchKind.FULL });
                     router.push(child.url);
+                    router.refresh();
                   }}
                   pl={4}
                   py={1.5}
