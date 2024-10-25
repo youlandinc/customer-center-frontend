@@ -1,4 +1,5 @@
 'use client';
+import dynamic from 'next/dynamic';
 
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide } from '@/components/molecules';
@@ -12,4 +13,4 @@ const Directory = () => {
   );
 };
 
-export default Directory;
+export default dynamic(() => Promise.resolve(Directory), { ssr: false });
