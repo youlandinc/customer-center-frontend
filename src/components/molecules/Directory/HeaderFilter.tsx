@@ -40,12 +40,17 @@ export const HeaderFilter: FC = () => {
     clearSegmentsFiltersGroup,
     segmentsFilters,
     setOriginalSegmentsFilters,
+    fromOther,
+    setFromOther,
   } = useDirectoryToolbarStore((state) => state);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [selectLoading, setSelectLoading] = useState(false);
 
   useAsync(async () => {
+    if (fromOther) {
+      return setFromOther(false);
+    }
     if (selectedSegmentId && selectedSegmentId == -1) {
       await onClickToSelect(selectedSegmentId);
       return;

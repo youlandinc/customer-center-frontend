@@ -9,8 +9,10 @@ export type useDirectoryToolbarStoreStates = {
   originalSegmentsFilters: {
     [key: string | number]: FilterProps[];
   };
+  fromOther: boolean;
 };
 export type useDirectoryToolbarStoreActions = {
+  setFromOther: (value: boolean) => void;
   setNewGridData: (newGridData: Record<string, any>) => void;
   addSegmentsFiltersGroup: () => void;
   createSegmentsFiltersGroup: () => void;
@@ -40,6 +42,9 @@ export type useDirectoryToolbarStoreActions = {
 export const useDirectoryToolbarStore = create<
   useDirectoryToolbarStoreStates & useDirectoryToolbarStoreActions
 >((set, get) => ({
+  fromOther: false,
+  setFromOther: (value) => set({ fromOther: value }),
+
   newGridData: {},
   setNewGridData: (newGridData) => set({ newGridData }),
 
