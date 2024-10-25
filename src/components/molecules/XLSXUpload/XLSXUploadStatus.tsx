@@ -1,4 +1,3 @@
-'use client';
 import { FC } from 'react';
 import { Icon, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';

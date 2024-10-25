@@ -1,6 +1,4 @@
 'use client';
-import dynamic from 'next/dynamic';
-
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide } from '@/components/molecules';
 
@@ -12,4 +10,4 @@ const Email = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Email), { ssr: false });
+export default Email;

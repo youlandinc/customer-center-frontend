@@ -1,4 +1,3 @@
-'use client';
 import { FC, useMemo, useState } from 'react';
 import { Stack, Step, StepLabel, Stepper } from '@mui/material';
 

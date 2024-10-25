@@ -1,4 +1,3 @@
-'use client';
 import { useCallback, useState } from 'react';
 
 export const useSwitch = (initialState = false) => {

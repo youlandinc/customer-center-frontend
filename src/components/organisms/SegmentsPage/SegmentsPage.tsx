@@ -1,4 +1,3 @@
-'use client';
 import { Stack, Typography } from '@mui/material';
 
 import { GridSegments } from '@/components/molecules/Segments';

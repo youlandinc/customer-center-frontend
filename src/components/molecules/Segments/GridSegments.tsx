@@ -1,4 +1,3 @@
-'use client';
 import { useCallback, useMemo, useState } from 'react';
 import { Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { MoreHoriz } from '@mui/icons-material';

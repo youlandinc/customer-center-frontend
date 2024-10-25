@@ -149,7 +149,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
         },
       };
     },
-    muiTableBodyProps: (props) => {
+    muiTableBodyProps: () => {
       return {
         sx: {
           '& .Mui-selected td::after': {

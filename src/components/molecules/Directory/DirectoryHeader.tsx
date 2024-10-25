@@ -1,4 +1,3 @@
-'use client';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Icon, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';

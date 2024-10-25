@@ -1,4 +1,3 @@
-'use client';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Box, Fade, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
