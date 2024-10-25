@@ -1,4 +1,3 @@
-'use client';
 import { FC, useMemo } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { usePathname } from 'next/navigation';

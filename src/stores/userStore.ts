@@ -1,4 +1,3 @@
-'use client';
 import { createStore } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { enqueueSnackbar } from 'notistack';

@@ -1,4 +1,3 @@
-'use client';
 import { FC, ReactNode, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 

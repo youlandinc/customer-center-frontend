@@ -234,7 +234,7 @@ export const GridDirectory: FC = () => {
   }
 
   return (
-    <>
+    <Box height={'100%'} position={'relative'}>
       <Stack gap={1.5}>
         <GridToolBar totalContacts={totalContacts} />
         <Stack
@@ -291,6 +291,6 @@ export const GridDirectory: FC = () => {
         }}
         open={actionsCardShow}
       />
-    </>
+    </Box>
   );
 };

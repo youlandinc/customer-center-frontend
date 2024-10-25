@@ -1,5 +1,4 @@
 'use client';
-
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide } from '@/components/molecules';
 import { DirectoryPage } from '@/components/organisms';
