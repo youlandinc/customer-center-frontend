@@ -123,14 +123,12 @@ export const DrawerNewContact: FC<DrawerNewContactProps> = ({
     >
       <Stack gap={3} height={'100%'} padding={3}>
         <Typography variant={'subtitle1'}>
-          {continueShow
-            ? 'You are going to end the process'
-            : 'Create a contact'}
+          {continueShow ? 'Are you sure?' : 'Create a contact'}
         </Typography>
         {continueShow ? (
           <Typography flex={1} variant={'body2'}>
-            By closing this modal, you will lose all the information you
-            previously filled.
+            By clicking &#34;Close&#34; below, all the information entered on
+            the previous page will be removed.
           </Typography>
         ) : (
           <Stack
