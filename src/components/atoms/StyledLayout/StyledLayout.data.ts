@@ -73,5 +73,7 @@ export const URL_POS = `https://${process.env.PREFIX_URL}dashboard.youland.com/`
 export const URL_LOS = `https://${process.env.PREFIX_URL}los.youland.com/auth/sign_in`;
 export const URL_DOC = `https://${process.env.PREFIX_URL}doc.youland.com/auth/sign_in`;
 export const URL_PRICING = `https://${process.env.PREFIX_URL}pricing.youland.com`;
+export const URL_SERVICING = `https://${process.env.PREFIX_URL}servicing.youland.com`;
+export const URL_CUSTOMER = `https://${process.env.PREFIX_URL}customer.youland.com`;
 
 export const URL_LOGOUT_REDIRECTION = `https://${process.env.PREFIX_URL}software.youland.com/auth/login/?reload=true&&origin=customer`;
