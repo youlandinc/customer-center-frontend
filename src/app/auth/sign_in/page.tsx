@@ -1,10 +1,10 @@
 'use client';
 export const fetchCache = 'force-no-store';
-export const revalidate = 0;
-export const dynamic = 'force-dynamic';
+//export const dynamic = 'force-dynamic';
 
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { CircularProgress, Stack } from '@mui/material';
 
 import { useUserStore } from '@/providers';
@@ -65,4 +65,5 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+//export default SignIn;
+export default dynamic(() => Promise.resolve(SignIn), { ssr: false });
