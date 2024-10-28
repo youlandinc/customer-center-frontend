@@ -10,7 +10,14 @@ import {
   Typography,
 } from '@mui/material';
 
-import { URL_DOC, URL_HOME, URL_LOS, URL_POS, URL_PRICING } from './index';
+import {
+  URL_DOC,
+  URL_HOME,
+  URL_LOS,
+  URL_POS,
+  URL_PRICING,
+  URL_SERVICING,
+} from './index';
 import { useSwitch } from '@/hooks';
 
 import { StyledButton, StyledDialog } from '@/components/atoms';
@@ -104,7 +111,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
       },
       'Loan Servicing': {
         label: 'Servicing Center',
-        url: `${URL_DOC}/?token=${
+        url: `${URL_SERVICING}/?token=${
           accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
         }`,
         icon: (
