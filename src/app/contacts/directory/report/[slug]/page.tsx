@@ -1,5 +1,6 @@
 'use client';
-import dynamic from 'next/dynamic';
+export const fetchCache = 'force-no-store';
+export const dynamic = 'force-dynamic';
 
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide, XLSXUploadReportDetail } from '@/components/molecules';
@@ -12,4 +13,4 @@ const ReportDetail = ({ params }: { params: { slug: string } }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(ReportDetail), { ssr: false });
+export default ReportDetail;

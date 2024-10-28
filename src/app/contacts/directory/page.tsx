@@ -1,4 +1,7 @@
 'use client';
+export const fetchCache = 'force-no-store';
+export const dynamic = 'force-dynamic';
+
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide } from '@/components/molecules';
 import { DirectoryPage } from '@/components/organisms';
