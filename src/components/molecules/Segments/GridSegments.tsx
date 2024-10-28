@@ -43,7 +43,9 @@ export const GridSegments = () => {
   const { data, isLoading, mutate } = useSWR(
     'GridSegments',
     _fetchSegmentsList,
+    { revalidateOnFocus: false },
   );
+
   const pageCount = data?.data?.pages || 0;
   const total = data?.data?.total || 0;
 
