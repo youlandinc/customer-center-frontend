@@ -1,4 +1,7 @@
 'use client';
+export const fetchCache = 'force-no-store';
+export const dynamic = 'force-dynamic';
+
 import { Typography } from '@mui/material';
 
 import { StyledLayout } from '@/components/atoms';
