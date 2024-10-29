@@ -170,6 +170,21 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
         },
       ]);
     }
+    //alameda account
+    if (['100005106551464224755712'].includes(setting?.tenantId)) {
+      result = [
+        {
+          label: 'Customer Center',
+          url: '/contacts/directory',
+          icon: (
+            <Icon
+              component={LOGO_PRODUCT_CUSTOMER}
+              sx={{ width: 32, height: 32 }}
+            />
+          ),
+        },
+      ];
+    }
     return result;
   }, [initialized, licensedProduct, accessToken, setting]);
 
