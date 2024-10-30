@@ -69,7 +69,7 @@ export const LAYOUT_SIDE_MENU: { [key in ServiceType]: LayoutSideMenuItem[] } =
 
 export const URL_HOME = `https://${process.env.PREFIX_URL}dashboard.youland.com/`;
 
-export const URL_POS = `https://${process.env.PREFIX_URL}dashboard.youland.com/`;
+export const URL_POS = `https://${process.env.PREFIX_URL}dashboard.youland.com/pos/customers`;
 export const URL_LOS = `https://${process.env.PREFIX_URL}los.youland.com/auth/sign_in`;
 export const URL_DOC = `https://${process.env.PREFIX_URL}doc.youland.com/auth/sign_in`;
 export const URL_PRICING = `https://${process.env.PREFIX_URL}pricing.youland.com`;
