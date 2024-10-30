@@ -14,7 +14,6 @@
     "@emotion/cache": "11.13.1",
     "@emotion/react": "11.13.3",
     "@emotion/styled": "11.13.0",
-    "@hello-pangea/dnd": "17.0.0",
     "@mui/icons-material": "6.1.2",
     "@mui/material": "6.1.2",
     "@mui/material-nextjs": "6.1.2",
@@ -35,6 +34,7 @@
     "react-number-format": "5.4.2",
     "react-use": "17.5.1",
     "swr": "2.2.5",
+    "@hello-pangea/dnd": "17.0.0",
     "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
