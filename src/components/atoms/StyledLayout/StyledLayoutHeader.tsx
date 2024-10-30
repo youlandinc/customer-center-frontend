@@ -455,7 +455,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
             component={LOGO_PRODUCT_HOME}
             onClick={() =>
               router.push(
-                `${URL_HOME}/${
+                `${URL_HOME}/auth/sign_in/${
                   accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
                 }`,
               )
