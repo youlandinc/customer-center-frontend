@@ -47,11 +47,21 @@ export const CustomerSide: FC = () => {
                 <Typography
                   border={'1px solid transparent'}
                   borderRadius={3}
-                  className={pathname === child.url ? 'active' : ''}
+                  className={
+                    pathname === child.url || pathname.startsWith(child.url)
+                      ? 'active'
+                      : ''
+                  }
                   gap={1}
                   height={40}
                   key={`${item.label}_${index}_${child.label}_${childIndex}`}
                   onClick={() => {
+                    if (
+                      pathname === child.url ||
+                      pathname.startsWith(child.url)
+                    ) {
+                      return;
+                    }
                     router.push(child.url);
                     router.refresh();
                   }}

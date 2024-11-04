@@ -27,13 +27,16 @@ import { StyledButton } from '@/components/atoms';
 import ICON_UPLOAD from '@/components/molecules/XLSXUpload/assets/icon_upload.svg';
 
 interface StyledUploadBoxProps {
+  accept?: string;
   loading?: boolean;
   uploadText?: string | ReactNode;
+  buttonText?: string;
   onUpload: (file: File) => Promise<void>;
   sx?: SxProps;
 }
 
 export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
+  accept = '.csv,.xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,',
   sx,
   onUpload,
   loading,
@@ -47,6 +50,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
       </Typography>
     </>
   ),
+  buttonText,
 }) => {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -158,9 +162,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
       ) : (
         <>
           <input
-            accept={
-              '.csv,.xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,'
-            }
+            accept={accept}
             hidden
             onChange={onChangeEvent}
             ref={fileInputRef}
@@ -183,7 +185,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
                 mr: 1,
               }}
             />
-            Select file
+            {buttonText || 'Select file'}
           </StyledButton>
           <Stack alignItems={'center'}>{uploadText}</Stack>
         </>

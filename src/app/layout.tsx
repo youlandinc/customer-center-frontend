@@ -2,6 +2,9 @@
 import { ReactNode } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+
 import localFont from 'next/font/local';
 import Script from 'next/script';
 
@@ -52,27 +55,29 @@ const RootLayout = ({
       <title>Customer Center</title>
       <body className={YOULAND_FONTS.variable}>
         <AppRouterCacheProvider options={{ key: 'css', enableCssLayer: true }}>
-          <ThemeProvider theme={lightTheme}>
-            <CssBaseline />
-            <SnackbarProvider
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: ['sm', 'xs'].includes(breakpoints)
-                  ? 'center'
-                  : 'right',
-              }}
-              Components={{
-                success: StyledNotification,
-                error: StyledNotification,
-                default: StyledNotification,
-                info: StyledNotification,
-                warning: StyledNotification,
-              }}
-              maxSnack={3}
-            >
-              <UserStoreProvider>{children}</UserStoreProvider>
-            </SnackbarProvider>
-          </ThemeProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <ThemeProvider theme={lightTheme}>
+              <CssBaseline />
+              <SnackbarProvider
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: ['sm', 'xs'].includes(breakpoints)
+                    ? 'center'
+                    : 'right',
+                }}
+                Components={{
+                  success: StyledNotification,
+                  error: StyledNotification,
+                  default: StyledNotification,
+                  info: StyledNotification,
+                  warning: StyledNotification,
+                }}
+                maxSnack={3}
+              >
+                <UserStoreProvider>{children}</UserStoreProvider>
+              </SnackbarProvider>
+            </ThemeProvider>
+          </LocalizationProvider>
         </AppRouterCacheProvider>
       </body>
       <Script
