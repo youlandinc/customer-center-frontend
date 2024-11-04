@@ -7,6 +7,8 @@ import { ColumnItem, HttpError } from '@/types';
 
 type DirectoryStoresStates = {
   keyword?: string;
+  page: number;
+  size: number;
   totalRecords: number;
   tableId?: number;
   loading?: boolean;
@@ -31,6 +33,8 @@ type DirectoryStoresActions = {
   fetchAllColumns: () => Promise<void>;
   setColumn: (data: ColumnItem[]) => void;
   setKeyword: (keyword: string) => void;
+  setPage: (page: number) => void;
+  setSize: (size: number) => void;
 };
 
 export const useGridStore = create<
@@ -41,6 +45,8 @@ export const useGridStore = create<
   tableLabel: '',
   tableName: '',
   keyword: '',
+  page: 0,
+  size: 50,
 
   loading: false,
   metadataColumns: [],
@@ -104,5 +110,7 @@ export const useGridStore = create<
   setTotalRecords: (total) => {
     set({ totalRecords: total });
   },
-  setKeyword: (keyword) => set({ keyword }),
+  setKeyword: (keyword) => set({ keyword, page: 0 }),
+  setPage: (page) => set({ page }),
+  setSize: (size) => set({ size }),
 }));
