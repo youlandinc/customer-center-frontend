@@ -3,15 +3,14 @@ export const fetchCache = 'force-no-store';
 export const dynamic = 'force-dynamic';
 
 import { StyledLayout } from '@/components/atoms';
-import { CustomerSide } from '@/components/molecules';
-import { EmailPage } from '@/components/organisms';
+import { CampaignEdit, CustomerSide } from '@/components/molecules';
 
-const Email = () => {
+const EmailCampaignsEdit = ({ params }: { params: { slug: string } }) => {
   return (
     <StyledLayout isHomepage={false} sideMenu={<CustomerSide />}>
-      <EmailPage />
+      <CampaignEdit campaignId={params.slug} />
     </StyledLayout>
   );
 };
 
-export default Email;
+export default EmailCampaignsEdit;
