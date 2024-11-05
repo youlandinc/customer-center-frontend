@@ -81,11 +81,17 @@ export const EmailPage: FC = () => {
             loading={isLoading}
             onRowClick={({ row }) => {
               if (
-                [CampaignStatusEnum.sending, CampaignStatusEnum.sent].includes(
-                  row.original.campaignStatus,
-                )
+                [
+                  CampaignStatusEnum.sending,
+                  CampaignStatusEnum.sent,
+                  CampaignStatusEnum.suspended,
+                ].includes(row.original.campaignStatus)
               ) {
-                console.log(123);
+                router.push(
+                  `/campaigns/email/report/${row.original.campaignId}`,
+                );
+                router.refresh();
+                return;
               }
               router.push(`/campaigns/email/edit/${row.original.campaignId}`);
               router.refresh();

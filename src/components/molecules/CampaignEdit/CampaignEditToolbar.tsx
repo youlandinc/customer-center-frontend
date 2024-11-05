@@ -42,6 +42,7 @@ export const CampaignEditToolbar = () => {
 
   const onClickToBack = useCallback(() => {
     router.push('/campaigns/email');
+    router.refresh();
   }, [router]);
 
   return isFetching ? (
