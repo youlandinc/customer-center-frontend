@@ -43,6 +43,25 @@ export const CampaignEditStepSchedule: FC<{
     [campaignStatus],
   );
 
+  const dayDone = useMemo(() => {
+    const dividend = campaignData.recipientCount;
+    const divisor = campaignData.quantity;
+    const quotient = dividend / divisor;
+    return !isNaN(quotient) && isFinite(quotient) ? Math.ceil(quotient) : 0;
+  }, [campaignData.quantity, campaignData.recipientCount]);
+
+  const TomorrowTenAM = useMemo(() => {
+    const tomorrow = addDays(new Date(), 1);
+    return set(tomorrow, { hours: 10, minutes: 0, seconds: 0 });
+  }, []);
+
+  const isFormValid = useMemo(() => {
+    if (campaignData.sendNow) {
+      return !!campaignData.quantity;
+    }
+    return !!campaignData.quantity && isValid(campaignData.scheduleTime);
+  }, [campaignData.quantity, campaignData.scheduleTime, campaignData.sendNow]);
+
   const onClickToSave = useCallback(async () => {
     const postData = {
       campaignId: _campaignId,
@@ -52,6 +71,7 @@ export const CampaignEditStepSchedule: FC<{
         sendNow: campaignData.sendNow,
         scheduleTime: campaignData.sendNow ? null : campaignData.scheduleTime,
         quantity: campaignData.quantity,
+        dayDone,
       },
     };
     await updateToServer(postData, failedCb);
@@ -62,6 +82,7 @@ export const CampaignEditStepSchedule: FC<{
     campaignData.quantity,
     campaignData.scheduleTime,
     campaignData.sendNow,
+    dayDone,
     failedCb,
     router,
     updateToServer,
@@ -84,25 +105,6 @@ export const CampaignEditStepSchedule: FC<{
       setCancelling(false);
     }
   }, [_campaignId, enqueueSnackbar, updateCampaignStatus]);
-
-  const dayDone = useMemo(() => {
-    const dividend = campaignData.recipientCount;
-    const divisor = campaignData.quantity;
-    const quotient = dividend / divisor;
-    return !isNaN(quotient) && isFinite(quotient) ? Math.ceil(quotient) : 0;
-  }, [campaignData.quantity, campaignData.recipientCount]);
-
-  const TomorrowTenAM = useMemo(() => {
-    const tomorrow = addDays(new Date(), 1);
-    return set(tomorrow, { hours: 10, minutes: 0, seconds: 0 });
-  }, []);
-
-  const isFormValid = useMemo(() => {
-    if (campaignData.sendNow) {
-      return !!campaignData.quantity;
-    }
-    return !!campaignData.quantity && isValid(campaignData.scheduleTime);
-  }, [campaignData.quantity, campaignData.scheduleTime, campaignData.sendNow]);
 
   const renderColor = useMemo(() => {
     if (isScheduled) {

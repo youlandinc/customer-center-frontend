@@ -7,3 +7,4 @@ export * from './XLSXUpload';
 
 export * from './CampaignCreate';
 export * from './CampaignEdit';
+export * from './CampaignMarketing';

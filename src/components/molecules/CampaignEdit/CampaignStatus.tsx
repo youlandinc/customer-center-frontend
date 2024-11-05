@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 
 import { CampaignStatusEnum } from '@/types';
 
@@ -50,16 +50,19 @@ export const CampaignStatus: FC<CampaignStatusProps> = ({ campaignStatus }) => {
   }, [campaignStatus]);
 
   return (
-    <Typography
+    <Stack
+      alignItems={'center'}
       bgcolor={renderContent.bgcolor}
       borderRadius={1}
       color={renderContent.color}
       fontSize={12}
+      height={26}
+      justifyContent={'center'}
       px={1.25}
-      py={0.5}
+      sx={{ flexShrink: 0 }}
       width={'fit-content'}
     >
       {renderContent.content}
-    </Typography>
+    </Stack>
   );
 };

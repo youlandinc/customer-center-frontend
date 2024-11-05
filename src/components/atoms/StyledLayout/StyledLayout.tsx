@@ -56,7 +56,7 @@ export const StyledLayout: FC<LayoutProps> = ({
       />
     </Stack>
   ) : (
-    <Stack height={'100vh'} minHeight={'100vh'} minWidth={1367} width={'100%'}>
+    <Stack height={'100vh'} minHeight={'100vh'} width={'100%'}>
       <StyledLayoutHeader actions={actions} isHomepage={isHomepage} />
       <Stack
         flex={1}
@@ -68,9 +68,10 @@ export const StyledLayout: FC<LayoutProps> = ({
         {isHomepage ? <StyledLayoutSide /> : sideMenu}
         <Stack
           bgcolor={'#FBFCFD'}
+          flexShrink={0}
           height={'100%'}
           overflow={'hidden'}
-          width={'100%'}
+          width={'calc(100% - 245px)'}
         >
           {children}
         </Stack>
