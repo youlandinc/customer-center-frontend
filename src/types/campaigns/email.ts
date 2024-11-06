@@ -37,8 +37,10 @@ export interface CampaignGridItemData {
   clickCount: number | null;
 }
 
-export interface CampaignGridResponse extends CommonGridPagination {
+export interface CampaignGridResponse {
   current: number;
   total: number;
+  pages: number;
+  size: number;
   records: CampaignGridItemData[];
 }

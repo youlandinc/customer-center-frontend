@@ -1,8 +1,12 @@
-import { FC, useMemo, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { Icon, Stack, Typography } from '@mui/material';
+import { MRT_ColumnDef } from 'material-react-table';
+import { format, parseISO } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
-import { MRT_ColumnDef } from 'material-react-table';
+
+import { POSThousandSeparator } from '@/utils/Format';
+import { POSTypeOf } from '@/utils/TypeOf';
 
 import {
   StyledButton,
@@ -12,17 +16,10 @@ import {
 } from '@/components/atoms';
 import { CampaignStatus, GridPagination } from '@/components/molecules';
 
-import {
-  CampaignData,
-  CampaignGridItemData,
-  CampaignStatusEnum,
-} from '@/types';
+import { CampaignGridItemData, CampaignStatusEnum } from '@/types';
 import { _fetchCampaignsGirdData } from '@/request';
 
 import ICON_CREATE from './assets/icon_create.svg';
-import { POSThousandSeparator } from '@/utils/Format';
-import { POSTypeOf } from '@/utils/TypeOf';
-import { format, parseISO } from 'date-fns';
 
 export const EmailPage: FC = () => {
   const router = useRouter();
@@ -32,11 +29,13 @@ export const EmailPage: FC = () => {
     page: 0,
     size: 50,
   });
+  const [searchWord, setSearchWord] = useState('');
 
   const { data, isLoading, mutate } = useSWR(
     {
       page: pagination.page,
       size: pagination.size,
+      searchWord,
     },
     _fetchCampaignsGirdData,
     {
@@ -53,7 +52,9 @@ export const EmailPage: FC = () => {
               ref.current!.value = '';
             }}
             inputRef={ref}
-            onChange={(e) => {}}
+            onChange={(e) => {
+              setSearchWord(e.target.value);
+            }}
             variant={'outlined'}
           />
           <StyledButton
@@ -130,8 +131,8 @@ export const EmailPage: FC = () => {
             onRowsPerPageChange={(e) => {
               setPagination({ ...pagination, size: parseInt(e.target.value) });
             }}
-            pageCount={0}
-            rowCount={0}
+            pageCount={data?.data?.pages || 0}
+            rowCount={data?.data?.total || 0}
             rowsPerPage={pagination.size}
           />
         </Stack>

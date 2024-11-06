@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useMemo } from 'react';
-import { Fade, Stack } from '@mui/material';
+import { CircularProgress, Fade, Stack } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
 import { useCampaignEditStore } from '@/stores/campaignEditStores/useCampaignEditStore';
@@ -29,7 +29,7 @@ interface CampaignEditProps {
 export const CampaignEdit: FC<CampaignEditProps> = ({ campaignId }) => {
   const router = useRouter();
 
-  const { setupPhase, fetchCampaignDetails, fetchSegmentList, isFetching } =
+  const { isFetching, setupPhase, fetchCampaignDetails, fetchSegmentList } =
     useCampaignEditStore((state) => state);
 
   useEffect(
@@ -61,10 +61,25 @@ export const CampaignEdit: FC<CampaignEditProps> = ({ campaignId }) => {
     }
   }, [failedCb, setupPhase]);
 
-  return (
+  return isFetching ? (
+    <Stack
+      alignItems={'center'}
+      height={'calc(100% - 60px)'}
+      justifyContent={'center'}
+      width={'calc(100% - 245px)'}
+    >
+      <CircularProgress
+        sx={{
+          background: 'background.white',
+          color: 'action.loading',
+        }}
+      />
+    </Stack>
+  ) : (
     <Stack
       gap={3}
       height={'100%'}
+      minHeight={'100%'}
       overflow={'auto'}
       px={8}
       py={6}

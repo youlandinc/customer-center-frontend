@@ -1,5 +1,5 @@
 import { CSSProperties, FC } from 'react';
-import { Box, CircularProgress, SxProps } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 export interface StyledProgressCircleProps {
   undertone?: CSSProperties['color'];
