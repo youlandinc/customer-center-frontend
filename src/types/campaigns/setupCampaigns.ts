@@ -31,7 +31,7 @@ export interface CampaignData {
   testEmail: string;
   // schedule
   sendNow: boolean;
-  scheduleTime: Date | null;
+  scheduleTime: string | null | Date;
   recipientCount: number;
   quantity: number;
 }

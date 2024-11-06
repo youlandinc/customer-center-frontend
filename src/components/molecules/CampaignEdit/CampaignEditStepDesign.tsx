@@ -169,7 +169,12 @@ export const CampaignEditStepDesign: FC<{
         <Stack height={300}>
           <StyledUploadBox
             accept={'text/html'}
-            buttonText={'Browse'}
+            buttonSx={{
+              width: 120,
+              px: '0px !important',
+              borderRadius: '4px !important',
+              bgcolor: '#5B76BC !important',
+            }}
             loading={uploadLoading}
             onUpload={onUploadFile}
             sx={{
@@ -181,14 +186,9 @@ export const CampaignEditStepDesign: FC<{
               bgcolor: '#F4F6FA',
             }}
             uploadText={
-              <>
-                <Typography color={'text.secondary'} variant={'body2'}>
-                  Drag & Drop or Choose file to upload
-                </Typography>
-                <Typography color={'text.secondary'} variant={'body2'}>
-                  HTML
-                </Typography>
-              </>
+              <Typography color={'text.secondary'} variant={'body2'}>
+                Drag & drop or select a HTML file to upload
+              </Typography>
             }
           />
         </Stack>

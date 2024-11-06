@@ -46,8 +46,7 @@ export const CampaignEditStepSender: FC<{ failedCb: () => void }> = ({
       <Stack gap={1.5}>
         <Typography variant={'h7'}>Email address</Typography>
         <Typography variant={'body2'}>
-          Choose the email address that appears in the recipient&#39;s inbox
-          when they receive your campaign.
+          Enter the email address you want your emails to send from.
         </Typography>
         <StyledTextField
           onChange={(e) => updateFieldValue('email', e.target.value)}
@@ -59,8 +58,8 @@ export const CampaignEditStepSender: FC<{ failedCb: () => void }> = ({
       <Stack gap={1.5}>
         <Typography variant={'h7'}>Name</Typography>
         <Typography variant={'body2'}>
-          Enter a name (e.g. your company name) to help campaign recipients
-          recognize you in their inbox.
+          Enter a name (e.g. your company name) to help recipients recognize you
+          in their inbox.
         </Typography>
         <StyledTextField
           onChange={(e) => updateFieldValue('name', e.target.value)}

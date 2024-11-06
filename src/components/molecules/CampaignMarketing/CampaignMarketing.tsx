@@ -1,5 +1,9 @@
 import { FC, useState } from 'react';
 import { CircularProgress, Stack } from '@mui/material';
+import { useSnackbar } from 'notistack';
+import useSWR from 'swr';
+
+import { AUTO_HIDE_DURATION } from '@/constant';
 
 import {
   CampaignMarketingBaseInfo,
@@ -8,6 +12,7 @@ import {
   CampaignMarketingToolbar,
 } from './index';
 
+import { _fetchMarketingReportData } from '@/request/campaigns/marketingReport';
 import {
   CampaignStatusEnum,
   HttpError,
@@ -18,11 +23,6 @@ import {
   MarketingReportTimeline,
   MarketingReportUnsubscribeStatistics,
 } from '@/types';
-import { useAsync } from 'react-use';
-import { _fetchMarketingReportData } from '@/request/campaigns/marketingReport';
-import { AUTO_HIDE_DURATION } from '@/constant';
-import { useRouter } from 'next/navigation';
-import { useSnackbar } from 'notistack';
 
 interface CampaignMarketingProps {
   campaignId: string | number;
@@ -31,7 +31,6 @@ interface CampaignMarketingProps {
 export const CampaignMarketing: FC<CampaignMarketingProps> = ({
   campaignId,
 }) => {
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const [campaignData, setCampaignData] = useState<any>({
@@ -82,48 +81,70 @@ export const CampaignMarketing: FC<CampaignMarketingProps> = ({
       spamComplaintRate: 0,
     });
 
-  const { loading } = useAsync(async () => {
-    try {
-      const {
-        data: {
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  const { isLoading, mutate } = useSWR(
+    { campaignId },
+    async ({ campaignId }) => {
+      try {
+        const {
+          data: {
+            campaignName,
+            campaignStatus,
+            info,
+            timeline,
+            performance: {
+              deliveryStatistics,
+              openStatistics,
+              clickStatistics,
+              unsubscribesStatistics,
+            },
+          },
+        } = await _fetchMarketingReportData(campaignId);
+        setCampaignData({
+          campaignId,
           campaignName,
           campaignStatus,
-          info,
-          timeline,
-          performance: {
-            deliveryStatistics,
-            openStatistics,
-            clickStatistics,
-            unsubscribesStatistics,
-          },
-        },
-      } = await _fetchMarketingReportData(campaignId);
-      setCampaignData({
-        campaignId,
-        campaignName,
-        campaignStatus,
-      });
+        });
 
-      setBaseInfo(info);
+        setBaseInfo(info);
 
-      setTimeline(timeline);
+        setTimeline(timeline);
 
-      setDeliveryStatistics(deliveryStatistics);
-      setOpenStatistics(openStatistics);
-      setClickStatistics(clickStatistics);
-      setUnsubscribesStatistics(unsubscribesStatistics);
-    } catch (err) {
-      const { header, message, variant } = err as HttpError;
-      enqueueSnackbar(message, {
-        variant: variant || 'error',
-        autoHideDuration: AUTO_HIDE_DURATION,
-        isSimple: !header,
-        header,
-      });
-    }
-  }, []);
+        setDeliveryStatistics(deliveryStatistics);
+        setOpenStatistics(openStatistics);
+        setClickStatistics(clickStatistics);
+        setUnsubscribesStatistics(unsubscribesStatistics);
+      } catch (err) {
+        const { header, message, variant } = err as HttpError;
+        enqueueSnackbar(message, {
+          variant: variant || 'error',
+          autoHideDuration: AUTO_HIDE_DURATION,
+          isSimple: !header,
+          header,
+        });
+      } finally {
+        setFirstLoad(false);
+      }
+    },
+    { revalidateOnFocus: false },
+  );
 
-  return (
+  return isLoading && firstLoad ? (
+    <Stack
+      alignItems={'center'}
+      height={'calc(100% - 60px)'}
+      justifyContent={'center'}
+      width={'calc(100% - 245px)'}
+    >
+      <CircularProgress
+        sx={{
+          background: 'background.white',
+          color: 'action.loading',
+        }}
+      />
+    </Stack>
+  ) : (
     <Stack
       gap={3}
       height={'100%'}
@@ -132,35 +153,24 @@ export const CampaignMarketing: FC<CampaignMarketingProps> = ({
       py={6}
       width={'100%'}
     >
-      {loading ? (
-        <CircularProgress
-          sx={{
-            background: 'background.white',
-            color: 'action.loading',
-          }}
+      <CampaignMarketingToolbar cb={mutate} {...campaignData} />
+
+      <Stack flexDirection={'row'} gap={3} minWidth={1025} width={'100%'}>
+        <Stack flexShrink={0} gap={3} height={'fit-content'} width={400}>
+          <CampaignMarketingBaseInfo {...baseInfo} />
+          <CampaignMarketingTimeline
+            campaignName={campaignData.campaignName}
+            timeline={timeline}
+          />
+        </Stack>
+
+        <CampaignMarketingPerformance
+          clickStatistics={clickStatistics}
+          deliveryStatistics={deliveryStatistics}
+          openStatistics={openStatistics}
+          unsubscribesStatistics={unsubscribesStatistics}
         />
-      ) : (
-        <>
-          <CampaignMarketingToolbar {...campaignData} />
-
-          <Stack flexDirection={'row'} gap={3} minWidth={1025} width={'100%'}>
-            <Stack flexShrink={0} gap={3} height={'fit-content'} width={400}>
-              <CampaignMarketingBaseInfo {...baseInfo} />
-              <CampaignMarketingTimeline
-                campaignName={campaignData.campaignName}
-                timeline={timeline}
-              />
-            </Stack>
-
-            <CampaignMarketingPerformance
-              clickStatistics={clickStatistics}
-              deliveryStatistics={deliveryStatistics}
-              openStatistics={openStatistics}
-              unsubscribesStatistics={unsubscribesStatistics}
-            />
-          </Stack>
-        </>
-      )}
+      </Stack>
     </Stack>
   );
 };

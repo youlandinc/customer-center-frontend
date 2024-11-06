@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  CircularProgress,
   Icon,
   Stack,
   Step,
@@ -31,8 +30,9 @@ const SETUP_PHASE_HASH = {
 export const CampaignEditToolbar = () => {
   const router = useRouter();
 
-  const { setupPhase, isFetching, campaignName, campaignStatus } =
-    useCampaignEditStore((state) => state);
+  const { setupPhase, campaignName, campaignStatus } = useCampaignEditStore(
+    (state) => state,
+  );
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -45,14 +45,7 @@ export const CampaignEditToolbar = () => {
     router.refresh();
   }, [router]);
 
-  return isFetching ? (
-    <CircularProgress
-      sx={{
-        background: 'background.white',
-        color: 'action.loading',
-      }}
-    />
-  ) : (
+  return (
     <Stack gap={3} maxWidth={1000}>
       <Stack alignItems={'center'} flexDirection={'row'} gap={1}>
         <Icon

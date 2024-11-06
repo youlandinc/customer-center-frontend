@@ -216,6 +216,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
           },
         },
       }),
+      ...rest.defaultColumn,
     },
     muiTableHeadProps: (props) => {
       return {
