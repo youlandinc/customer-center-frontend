@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  CircularProgress,
   Icon,
   Stack,
   Step,
