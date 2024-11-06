@@ -26,3 +26,5 @@ export * from './StyledGoogleAutoComplete';
 export * from './StyledCheckbox';
 
 export * from './StyledDatePicker';
+
+export * from './StyledProgressCircle';

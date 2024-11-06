@@ -1,8 +1,8 @@
 import { get, post } from '@/request';
-import { CampaignGridParams } from '@/types';
+import { CampaignGridParams, CampaignGridResponse } from '@/types';
 
 export const _fetchCampaignsGirdData = (params: CampaignGridParams) => {
-  return post('/customer/marketing/campaigns', params);
+  return post<CampaignGridResponse>('/customer/marketing/campaigns', params);
 };
 
 export const _fetchSegmentList = () => {

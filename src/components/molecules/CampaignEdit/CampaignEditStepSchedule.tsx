@@ -3,7 +3,7 @@ import { Stack, Typography } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/navigation';
-import { addDays, isValid, set } from 'date-fns';
+import { addDays, isDate, isValid, parseISO, set } from 'date-fns';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
 
@@ -59,24 +59,36 @@ export const CampaignEditStepSchedule: FC<{
     if (campaignData.sendNow) {
       return !!campaignData.quantity;
     }
-    return !!campaignData.quantity && isValid(campaignData.scheduleTime);
+    return (
+      !!campaignData.quantity &&
+      isValid(
+        isDate(campaignData.scheduleTime)
+          ? campaignData.scheduleTime
+          : parseISO(campaignData.scheduleTime ?? ''),
+      )
+    );
   }, [campaignData.quantity, campaignData.scheduleTime, campaignData.sendNow]);
 
   const onClickToSave = useCallback(async () => {
+    const scheduleTime = isDate(campaignData.scheduleTime)
+      ? campaignData.scheduleTime
+      : parseISO(campaignData.scheduleTime ?? '');
+
     const postData = {
       campaignId: _campaignId,
       setupPhase: SetupPhaseEnum.schedule,
       nextSetupPhase: SetupPhaseEnum.schedule,
       data: {
         sendNow: campaignData.sendNow,
-        scheduleTime: campaignData.sendNow ? null : campaignData.scheduleTime,
+        scheduleTime:
+          campaignData.sendNow || !isValid(scheduleTime) ? null : scheduleTime,
         quantity: campaignData.quantity,
         dayDone,
       },
     };
     await updateToServer(postData, failedCb);
     router.push('/campaigns/email');
-    router.refresh();
+    return router.refresh();
   }, [
     _campaignId,
     campaignData.quantity,
@@ -189,8 +201,9 @@ export const CampaignEditStepSchedule: FC<{
         </Stack>
 
         <Typography color={'text.secondary'} variant={'body2'}>
-          Send your campaign now to reach your audience instantly and capture
-          their attention right away.
+          {campaignData?.sendNow
+            ? 'Send your campaign now.'
+            : 'Schedule your campaign to send at a time of your choosing. The date and time below are in Pacific Standard Time (PST).'}
         </Typography>
       </Stack>
 
@@ -214,18 +227,19 @@ export const CampaignEditStepSchedule: FC<{
         />
       )}
 
-      <Stack gap={1.5}>
+      <Stack gap={1} mt={3}>
         <Typography variant={'h7'}>
           Please select the number of emails to send per day.
         </Typography>
-        <Typography variant={'body2'}>
-          When the daily limit is reached, the remaining emails will be sent the
-          following day.
+        <Typography color={'text.secondary'} variant={'body2'}>
+          When the daily limit is reached, the remaining emails will be sent
+          each following day until the total is completed.
         </Typography>
         <Stack
           alignItems={isScheduled ? 'center' : 'unset'}
           flexDirection={isScheduled ? 'row' : 'column'}
           gap={0.5}
+          mt={2}
         >
           <StyledTextFieldNumber
             disabled={isScheduled}
@@ -238,7 +252,7 @@ export const CampaignEditStepSchedule: FC<{
           />
           {dayDone >= 1 && (
             <Typography
-              color={isScheduled ? '#4A6BB7' : 'text.secondary'}
+              color={'#4A6BB7'}
               sx={{
                 width: 'fit-content',
                 flexShrink: 0,
@@ -246,7 +260,8 @@ export const CampaignEditStepSchedule: FC<{
               }}
               variant={'body3'}
             >
-              Completed in <b style={{ color: 'inherit' }}>{dayDone}</b> days.
+              Estimated completion in{' '}
+              <b style={{ color: 'inherit' }}>{dayDone}</b> days.
             </Typography>
           )}
         </Stack>

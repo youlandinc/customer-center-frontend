@@ -71,11 +71,10 @@ export const CampaignCreate: FC = () => {
       <Stack gap={1.5}>
         <Typography>Campaign name</Typography>
         <StyledTextField
-          label={'Campaign name'}
           onChange={(e) => {
             setCampaignName(e.target.value);
           }}
-          placeholder={'Campaign name'}
+          placeholder={'Name'}
           value={campaignName}
         />
       </Stack>

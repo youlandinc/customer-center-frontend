@@ -22,3 +22,23 @@ export interface CommonGridSort {
   ignoreCase: boolean;
   label: string;
 }
+
+export interface CampaignGridItemData {
+  campaignId: 1;
+  campaignName: 'test01';
+  campaignStatus: CampaignStatusEnum;
+  sender: string | null;
+  recipients: number | null;
+  sentDate: string | null;
+  sentRate: number | null;
+  openRate: number | null;
+  openCount: number | null;
+  clickRate: number | null;
+  clickCount: number | null;
+}
+
+export interface CampaignGridResponse extends CommonGridPagination {
+  current: number;
+  total: number;
+  records: CampaignGridItemData[];
+}

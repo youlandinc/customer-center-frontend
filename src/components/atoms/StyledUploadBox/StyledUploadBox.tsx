@@ -31,6 +31,7 @@ interface StyledUploadBoxProps {
   loading?: boolean;
   uploadText?: string | ReactNode;
   buttonText?: string;
+  buttonSx?: SxProps;
   onUpload: (file: File) => Promise<void>;
   sx?: SxProps;
 }
@@ -40,6 +41,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
   sx,
   onUpload,
   loading,
+  buttonSx,
   uploadText = (
     <>
       <Typography color={'text.secondary'} variant={'body2'}>
@@ -175,6 +177,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
             size={'small'}
             sx={{
               width: 144,
+              ...buttonSx,
             }}
           >
             <Icon
