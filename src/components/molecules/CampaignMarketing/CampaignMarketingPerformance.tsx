@@ -14,6 +14,7 @@ import ICON_PERFORMANCE from './assets/icon_performance.svg';
 import ICON_ARROW from './assets/icon_arrow.svg';
 import ICON_INFO from './assets/icon_info.svg';
 import { format, parseISO } from 'date-fns';
+import { POSTypeOf } from '@/utils/TypeOf';
 
 export interface CampaignMarketingPerformance {
   deliveryStatistics: MarketingReportDeliveryStatistics;
@@ -542,10 +543,12 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {format(
-                  parseISO(clickStatistics.lastClick as string),
-                  'MM/dd/yyyy',
-                )}
+                {POSTypeOf(clickStatistics.lastClick) === 'Null'
+                  ? '-'
+                  : format(
+                      parseISO(clickStatistics.lastClick as string),
+                      'MM/dd/yyyy',
+                    )}
               </Typography>
             </Stack>
           </Stack>
