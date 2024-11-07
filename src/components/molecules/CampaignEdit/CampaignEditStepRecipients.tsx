@@ -19,6 +19,7 @@ export const CampaignEditStepRecipients: FC<{
     segmentList,
     redirectCampaignStepPhase,
     updateFieldValue,
+    fetchCampaignDetails,
   } = useCampaignEditStore((state) => state);
 
   const onClickToSave = useCallback(async () => {
@@ -35,11 +36,13 @@ export const CampaignEditStepRecipients: FC<{
       },
     };
     await updateToServer(postData, failedCb);
+    await fetchCampaignDetails(_campaignId!, failedCb, false);
   }, [
     _campaignId,
     campaignData.markSpam,
     campaignData.segmentId,
     failedCb,
+    fetchCampaignDetails,
     segmentList,
     updateToServer,
   ]);
