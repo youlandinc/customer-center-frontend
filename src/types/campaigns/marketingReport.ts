@@ -33,7 +33,8 @@ export interface MarketingReportDeliveryStatistics {
 export interface MarketingReportOpenStatistics {
   estimatedOpens: number;
   trackableOpens: number;
-  trackableOpenRate: number;
+  uniqueOpens: number;
+  uniqueOpenRate: number;
   totalOpens: number;
   averageTimeToOpen: number;
   unTrackableContacts: number;

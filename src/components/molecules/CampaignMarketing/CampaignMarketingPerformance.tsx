@@ -243,11 +243,11 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
               justifyContent={'flex-end'}
               minWidth={{ xs: 'auto', xxl: 320 }}
             >
-              Trackable open rate
+              Unique open rate
               <Typography variant={'h6'}>
-                {openStatistics.trackableOpenRate + '%'}
+                {openStatistics.uniqueOpenRate + '%'}
                 <Typography component={'span'} variant={'body2'}>
-                  ({POSThousandSeparator(openStatistics.trackableOpens)})
+                  ({POSThousandSeparator(openStatistics.uniqueOpens)})
                 </Typography>
               </Typography>
             </Stack>
@@ -268,11 +268,11 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
           >
             <Stack flex={1} gap={1} minWidth={200} p={1}>
               <Typography color={'text.secondary'} variant={'body2'}>
-                Trackable open rate
+                Unique open rate
                 <Tooltip
                   arrow
                   title={
-                    'The percentage of emails that can be tracked as opened out of the total emails sent. It helps measure the actual open rate of the emails, typically tracked using an invisible pixel image in the email.'
+                    'Unique Open Rate refers to the percentage of emails opened by unique recipients out of the total sent.'
                   }
                 >
                   <Box component={'span'} height={20} ml={0.5} width={20}>
@@ -284,16 +284,16 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {openStatistics.trackableOpenRate + '%'}
+                {openStatistics.uniqueOpenRate + '%'}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
               <Typography color={'text.secondary'} variant={'body2'}>
-                Trackable opens
+                Unique opens
                 <Tooltip
                   arrow
                   title={
-                    'The total number of times an email has been opened and successfully tracked. This counts each time the email is opened and recorded by the system.'
+                    'Unique Opens refers to the number of times an email is opened by different recipients. Even if a recipient opens the same email multiple times, it is counted as a single open. '
                   }
                 >
                   <Box component={'span'} height={20} ml={0.5} width={20}>
@@ -305,7 +305,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(openStatistics.trackableOpens)}
+                {POSThousandSeparator(openStatistics.uniqueOpens)}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
