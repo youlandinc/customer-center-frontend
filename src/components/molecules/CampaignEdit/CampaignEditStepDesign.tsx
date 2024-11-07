@@ -253,7 +253,12 @@ export const CampaignEditStepDesign: FC<{
           Back
         </StyledButton>
         <StyledButton
-          disabled={isUpdating || isRedirecting || !campaignData?.testEmail}
+          disabled={
+            isUpdating ||
+            isRedirecting ||
+            !campaignData?.testEmail ||
+            !campaignData?.emailTemplate
+          }
           loading={isUpdating}
           onClick={onClickToSave}
           size={'small'}

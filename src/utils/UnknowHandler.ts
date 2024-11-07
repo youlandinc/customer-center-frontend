@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import { HttpVariant } from '@/types';
+
 export const renameFile = (originalFile: File, newName: string) => {
   return new File([originalFile], newName, {
     type: originalFile.type,
@@ -7,7 +9,7 @@ export const renameFile = (originalFile: File, newName: string) => {
   });
 };
 
-export const getFilesWebkitDataTransferItems = (dataTransferItems) => {
+export const getFilesWebkitDataTransferItems = (dataTransferItems, accept) => {
   function traverseFileTreePromise(item, path = '') {
     return new Promise((resolve, reject) => {
       if (!item) {
@@ -39,7 +41,19 @@ export const getFilesWebkitDataTransferItems = (dataTransferItems) => {
     const entriesPromises = [];
     for (const it of dataTransferItems) {
       if (it.kind === 'string') {
-        reject('No file');
+        reject({
+          message: 'No files found',
+          header: '',
+          variant: HttpVariant.error,
+        });
+        break;
+      }
+      if (!accept.includes(it.type)) {
+        reject({
+          message: 'File type not allowed',
+          header: '',
+          variant: HttpVariant.error,
+        });
         break;
       }
       entriesPromises.push(traverseFileTreePromise(it.webkitGetAsEntry()));
