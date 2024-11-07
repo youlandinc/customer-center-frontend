@@ -230,7 +230,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
               justifyContent={'flex-end'}
               minWidth={{ xs: 'auto', xxl: 320 }}
             >
-              Estimated opens
+              Total opens
               <Typography variant={'h6'}>
                 {POSThousandSeparator(openStatistics.estimatedOpens)}
               </Typography>
