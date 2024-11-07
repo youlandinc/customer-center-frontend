@@ -59,7 +59,8 @@ export const CampaignMarketing: FC<CampaignMarketingProps> = ({
     useState<MarketingReportOpenStatistics>({
       estimatedOpens: 0,
       trackableOpens: 0,
-      trackableOpenRate: 0,
+      uniqueOpens: 0,
+      uniqueOpenRate: 0,
       totalOpens: 0,
       averageTimeToOpen: 0,
       unTrackableContacts: 0,
