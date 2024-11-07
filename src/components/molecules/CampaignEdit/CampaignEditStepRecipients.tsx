@@ -51,6 +51,7 @@ export const CampaignEditStepRecipients: FC<{
         <StyledSelect
           defaultValue={''}
           label={'Segments'}
+          noResultContent={'No segments found'}
           onChange={(e) => {
             updateFieldValue('segmentId', e.target.value as string | number);
           }}
