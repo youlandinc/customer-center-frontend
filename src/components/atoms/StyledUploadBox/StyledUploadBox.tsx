@@ -24,6 +24,8 @@ import {
 
 import { StyledButton } from '@/components/atoms';
 
+import { HttpError } from '@/types';
+
 import ICON_UPLOAD from '@/components/molecules/XLSXUpload/assets/icon_upload.svg';
 
 interface StyledUploadBoxProps {
@@ -123,6 +125,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
         try {
           const fileList = await getFilesWebkitDataTransferItems(
             e.dataTransfer.items,
+            accept,
           );
 
           //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -144,8 +147,13 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
 
           await onUpload(reducedFileList[0]);
         } catch (err) {
-          //eslint-disable-next-line no-console
-          console.log(err);
+          const { header, message, variant } = err as HttpError;
+          enqueueSnackbar(message, {
+            variant: variant || 'error',
+            autoHideDuration: AUTO_HIDE_DURATION,
+            isSimple: !header,
+            header,
+          });
         } finally {
           setIsDragging(false);
         }

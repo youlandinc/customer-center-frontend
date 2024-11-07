@@ -1,6 +1,8 @@
 import { FC, useCallback, useState } from 'react';
 import { Box, Collapse, Icon, Stack, Tooltip, Typography } from '@mui/material';
+import { format, parseISO } from 'date-fns';
 
+import { POSTypeOf } from '@/utils/TypeOf';
 import { POSThousandSeparator } from '@/utils/Format';
 
 import {
@@ -13,8 +15,6 @@ import {
 import ICON_PERFORMANCE from './assets/icon_performance.svg';
 import ICON_ARROW from './assets/icon_arrow.svg';
 import ICON_INFO from './assets/icon_info.svg';
-import { format, parseISO } from 'date-fns';
-import { POSTypeOf } from '@/utils/TypeOf';
 
 export interface CampaignMarketingPerformance {
   deliveryStatistics: MarketingReportDeliveryStatistics;
