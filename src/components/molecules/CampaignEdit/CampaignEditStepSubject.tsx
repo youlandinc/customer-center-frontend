@@ -7,7 +7,7 @@ import { StyledButton, StyledTextField } from '@/components/atoms';
 import { SetupPhaseEnum } from '@/types';
 
 export const CampaignEditStepSubject: FC<{
-  failedCb: () => void;
+  failedCb?: () => void;
 }> = ({ failedCb }) => {
   const {
     updateToServer,
@@ -29,12 +29,11 @@ export const CampaignEditStepSubject: FC<{
         previewText: campaignData.previewText,
       },
     };
-    await updateToServer(postData, failedCb);
+    await updateToServer(postData);
   }, [
     _campaignId,
     campaignData.previewText,
     campaignData.subjectLine,
-    failedCb,
     updateToServer,
   ]);
 

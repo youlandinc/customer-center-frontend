@@ -35,13 +35,12 @@ export const CampaignEditStepRecipients: FC<{
         markSpam: campaignData.markSpam,
       },
     };
-    await updateToServer(postData, failedCb);
+    await updateToServer(postData);
     await fetchCampaignDetails(_campaignId!, failedCb, false);
   }, [
     _campaignId,
     campaignData.markSpam,
     campaignData.segmentId,
-    failedCb,
     fetchCampaignDetails,
     segmentList,
     updateToServer,

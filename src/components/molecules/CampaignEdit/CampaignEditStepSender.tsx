@@ -28,14 +28,8 @@ export const CampaignEditStepSender: FC<{ failedCb: () => void }> = ({
         email: campaignData.email,
       },
     };
-    await updateToServer(postData, failedCb);
-  }, [
-    _campaignId,
-    campaignData.email,
-    campaignData.name,
-    failedCb,
-    updateToServer,
-  ]);
+    await updateToServer(postData);
+  }, [_campaignId, campaignData.email, campaignData.name, updateToServer]);
 
   return (
     <Stack gap={3} maxWidth={600} width={'100%'}>
