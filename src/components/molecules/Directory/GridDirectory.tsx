@@ -191,8 +191,6 @@ export const GridDirectory: FC = () => {
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     width: '100%',
-                    textDecoration:
-                      item.columnName === 'name' ? 'underline' : 'none',
                   }}
                 >
                   {renderedCellValue}

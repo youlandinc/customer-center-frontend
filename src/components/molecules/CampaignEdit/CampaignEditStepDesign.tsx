@@ -26,8 +26,8 @@ import ICON_CLOSE from './assets/icon_close.svg';
 import { useSwitch } from '@/hooks';
 
 export const CampaignEditStepDesign: FC<{
-  failedCb: () => void;
-}> = ({ failedCb }) => {
+  failedCb?: () => void;
+}> = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const {
@@ -55,8 +55,8 @@ export const CampaignEditStepDesign: FC<{
         testEmail: campaignData.testEmail,
       },
     };
-    await updateToServer(postData, failedCb);
-  }, [_campaignId, campaignData.testEmail, failedCb, updateToServer]);
+    await updateToServer(postData);
+  }, [_campaignId, campaignData.testEmail, updateToServer]);
 
   const onUploadFile = useCallback(
     async (file: File) => {

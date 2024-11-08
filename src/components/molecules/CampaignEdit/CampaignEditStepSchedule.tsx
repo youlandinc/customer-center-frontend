@@ -19,8 +19,8 @@ import { CampaignStatusEnum, HttpError, SetupPhaseEnum } from '@/types';
 import { _cancelScheduleCampaign } from '@/request';
 
 export const CampaignEditStepSchedule: FC<{
-  failedCb: () => void;
-}> = ({ failedCb }) => {
+  failedCb?: () => void;
+}> = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -86,16 +86,17 @@ export const CampaignEditStepSchedule: FC<{
         dayDone,
       },
     };
-    await updateToServer(postData, failedCb);
-    router.push('/campaigns/email');
-    return router.refresh();
+    const { success } = await updateToServer(postData);
+    if (success) {
+      router.push('/campaigns/email');
+      return router.refresh();
+    }
   }, [
     _campaignId,
     campaignData.quantity,
     campaignData.scheduleTime,
     campaignData.sendNow,
     dayDone,
-    failedCb,
     router,
     updateToServer,
   ]);
