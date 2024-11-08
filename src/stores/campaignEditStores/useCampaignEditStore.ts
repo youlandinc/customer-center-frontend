@@ -43,7 +43,7 @@ export type CampaignEditStoreActions = {
     value: CampaignData[keyof CampaignData],
   ) => void;
   resetCampaignEditStore: () => void;
-  updateToServer: (postData: any, failedCb: () => void) => Promise<void>;
+  updateToServer: (postData: any) => Promise<{ success: boolean }>;
   redirectCampaignStepPhase: ({
     campaignId,
     nextSetupPhase,
@@ -174,6 +174,7 @@ export const useCampaignEditStore = create<
     try {
       await _updateCampaign(postData);
       get().updateSetupPhase(postData.nextSetupPhase);
+      return { success: true };
     } catch (err) {
       const { header, message, variant } = err as HttpError;
       enqueueSnackbar(message, {
@@ -182,6 +183,7 @@ export const useCampaignEditStore = create<
         isSimple: !header,
         header,
       });
+      return { success: false };
     } finally {
       set({ isUpdating: false, isRedirecting: false, isFetching: false });
     }
