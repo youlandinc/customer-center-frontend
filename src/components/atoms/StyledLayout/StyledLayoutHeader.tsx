@@ -148,7 +148,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
       result = fromServer.concat([
         {
           label: 'Servicing Center',
-          url: `${URL_DOC}/?token=${
+          url: `${URL_SERVICING}/?token=${
             accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
           }`,
           icon: (
