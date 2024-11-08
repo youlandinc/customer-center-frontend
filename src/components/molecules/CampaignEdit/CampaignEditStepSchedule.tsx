@@ -19,8 +19,8 @@ import { CampaignStatusEnum, HttpError, SetupPhaseEnum } from '@/types';
 import { _cancelScheduleCampaign } from '@/request';
 
 export const CampaignEditStepSchedule: FC<{
-  failedCb: () => void;
-}> = ({ failedCb }) => {
+  failedCb?: () => void;
+}> = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 

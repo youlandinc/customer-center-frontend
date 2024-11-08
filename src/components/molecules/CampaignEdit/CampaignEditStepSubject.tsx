@@ -8,7 +8,7 @@ import { SetupPhaseEnum } from '@/types';
 
 export const CampaignEditStepSubject: FC<{
   failedCb?: () => void;
-}> = ({ failedCb }) => {
+}> = () => {
   const {
     updateToServer,
     updateFieldValue,

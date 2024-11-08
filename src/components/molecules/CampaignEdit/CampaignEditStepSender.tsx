@@ -7,9 +7,7 @@ import { SetupPhaseEnum } from '@/types';
 
 import { StyledButton, StyledTextField } from '@/components/atoms';
 
-export const CampaignEditStepSender: FC<{ failedCb: () => void }> = ({
-  failedCb,
-}) => {
+export const CampaignEditStepSender: FC<{ failedCb?: () => void }> = () => {
   const {
     updateToServer,
     updateFieldValue,

@@ -8,7 +8,7 @@ import { StyledButton, StyledCheckbox, StyledSelect } from '@/components/atoms';
 import { SetupPhaseEnum } from '@/types';
 
 export const CampaignEditStepRecipients: FC<{
-  failedCb: () => void;
+  failedCb?: () => void;
 }> = ({ failedCb }) => {
   const {
     isRedirecting,
@@ -36,11 +36,12 @@ export const CampaignEditStepRecipients: FC<{
       },
     };
     await updateToServer(postData);
-    await fetchCampaignDetails(_campaignId!, failedCb, false);
+    await fetchCampaignDetails(_campaignId!, failedCb!, false);
   }, [
     _campaignId,
     campaignData.markSpam,
     campaignData.segmentId,
+    failedCb,
     fetchCampaignDetails,
     segmentList,
     updateToServer,

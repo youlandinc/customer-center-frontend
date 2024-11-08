@@ -26,8 +26,8 @@ import ICON_CLOSE from './assets/icon_close.svg';
 import { useSwitch } from '@/hooks';
 
 export const CampaignEditStepDesign: FC<{
-  failedCb: () => void;
-}> = ({ failedCb }) => {
+  failedCb?: () => void;
+}> = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const {
