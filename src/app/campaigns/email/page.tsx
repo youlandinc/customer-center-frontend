@@ -4,11 +4,12 @@ export const dynamic = 'force-dynamic';
 
 import { StyledLayout } from '@/components/atoms';
 import { CustomerSide } from '@/components/molecules';
+import { EmailPage } from '@/components/organisms';
 
 const Email = () => {
   return (
     <StyledLayout isHomepage={false} sideMenu={<CustomerSide />}>
-      <h1>Email</h1>
+      <EmailPage />
     </StyledLayout>
   );
 };

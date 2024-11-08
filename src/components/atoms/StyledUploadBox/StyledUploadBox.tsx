@@ -24,19 +24,26 @@ import {
 
 import { StyledButton } from '@/components/atoms';
 
+import { HttpError } from '@/types';
+
 import ICON_UPLOAD from '@/components/molecules/XLSXUpload/assets/icon_upload.svg';
 
 interface StyledUploadBoxProps {
+  accept?: string;
   loading?: boolean;
   uploadText?: string | ReactNode;
+  buttonText?: string;
+  buttonSx?: SxProps;
   onUpload: (file: File) => Promise<void>;
   sx?: SxProps;
 }
 
 export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
+  accept = '.csv,.xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,',
   sx,
   onUpload,
   loading,
+  buttonSx,
   uploadText = (
     <>
       <Typography color={'text.secondary'} variant={'body2'}>
@@ -47,6 +54,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
       </Typography>
     </>
   ),
+  buttonText,
 }) => {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -117,6 +125,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
         try {
           const fileList = await getFilesWebkitDataTransferItems(
             e.dataTransfer.items,
+            accept,
           );
 
           //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -138,8 +147,13 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
 
           await onUpload(reducedFileList[0]);
         } catch (err) {
-          //eslint-disable-next-line no-console
-          console.log(err);
+          const { header, message, variant } = err as HttpError;
+          enqueueSnackbar(message, {
+            variant: variant || 'error',
+            autoHideDuration: AUTO_HIDE_DURATION,
+            isSimple: !header,
+            header,
+          });
         } finally {
           setIsDragging(false);
         }
@@ -158,9 +172,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
       ) : (
         <>
           <input
-            accept={
-              '.csv,.xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,'
-            }
+            accept={accept}
             hidden
             onChange={onChangeEvent}
             ref={fileInputRef}
@@ -173,6 +185,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
             size={'small'}
             sx={{
               width: 144,
+              ...buttonSx,
             }}
           >
             <Icon
@@ -183,7 +196,7 @@ export const StyledUploadBox: FC<StyledUploadBoxProps> = ({
                 mr: 1,
               }}
             />
-            Select file
+            {buttonText || 'Select file'}
           </StyledButton>
           <Stack alignItems={'center'}>{uploadText}</Stack>
         </>

@@ -11,6 +11,7 @@ import {
 export interface StyledSelectProps extends BaseSelectProps {
   options: Option[];
   sxList?: SxProps;
+  noResultContent?: string;
 }
 
 export const StyledSelect: FC<StyledSelectProps> = ({
@@ -22,6 +23,7 @@ export const StyledSelect: FC<StyledSelectProps> = ({
   sxList,
   required = false,
   size = 'medium',
+  noResultContent,
   ...rest
 }) => {
   return (
@@ -87,15 +89,21 @@ export const StyledSelect: FC<StyledSelectProps> = ({
         variant={'outlined'}
         {...rest}
       >
-        {options.map((item) => (
-          <MenuItem
-            key={item.key}
-            sx={{ p: 1.5, fontSize: 14 }}
-            value={item.value}
-          >
-            {item.label}
+        {options.length > 0 ? (
+          options.map((item) => (
+            <MenuItem
+              key={item.key}
+              sx={{ p: 1.5, fontSize: 14 }}
+              value={item.value}
+            >
+              {item.label}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem disabled sx={{ p: 1.5, fontSize: 14 }}>
+            {noResultContent}
           </MenuItem>
-        ))}
+        )}
       </Select>
     </FormControl>
   );

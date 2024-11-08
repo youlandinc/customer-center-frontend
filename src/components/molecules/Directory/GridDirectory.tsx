@@ -44,15 +44,15 @@ export const GridDirectory: FC = () => {
     fetchAllColumns,
     tableId,
     keyword,
+    page,
+    size,
+    setSize,
+    setPage,
   } = useGridStore((state) => state);
 
   const router = useRouter();
 
   const [rowSelection, setRowSelection] = useState({});
-  const [pagination, setPagination] = useState({
-    page: 0,
-    size: 50,
-  });
 
   const [querySegmentsFilters, setQuerySegmentsFilters] = useState({});
 
@@ -95,8 +95,8 @@ export const GridDirectory: FC = () => {
       ? [
           tableId,
           {
-            page: pagination.page + 1,
-            size: pagination.size,
+            page: page + 1,
+            size: size,
             searchFilter: {
               keyword,
               segmentsFilters: querySegmentsFilters,
@@ -267,16 +267,16 @@ export const GridDirectory: FC = () => {
             }}
           />
           <GridPagination
-            currentPage={pagination.page}
+            currentPage={page}
             onPageChange={(page) => {
-              setPagination({ ...pagination, page });
+              setPage(page);
             }}
             onRowsPerPageChange={(e) => {
-              setPagination({ ...pagination, size: parseInt(e.target.value) });
+              setSize(parseInt(e.target.value));
             }}
             pageCount={pageCount}
             rowCount={totalContacts}
-            rowsPerPage={pagination.size}
+            rowsPerPage={size}
           />
         </Stack>
       </Stack>

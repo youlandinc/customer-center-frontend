@@ -1,5 +1,18 @@
 import { POSTypeOf } from './TypeOf';
 
+export const POSThousandSeparator = (
+  amount: number | undefined | string | null,
+): string => {
+  if (!amount) {
+    return '0';
+  }
+  let target = amount;
+  if (POSTypeOf(target) === 'String') {
+    target = parseFloat(target as string);
+  }
+  return target.toLocaleString('en-US', {});
+};
+
 export const POSFormatDollar = (
   amount: number | undefined | string | null,
   radix = 0,
