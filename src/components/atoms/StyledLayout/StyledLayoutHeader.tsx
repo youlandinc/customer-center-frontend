@@ -330,7 +330,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
               PopperProps={{
                 sx: { zIndex: '99999 !important', maxWidth: 144 },
               }}
-              title={'Organization settings'}
+              title={'Settings'}
             >
               <Stack
                 height={24}
@@ -482,7 +482,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
               gap={1.5}
               key={`${item.label}_${index}`}
               onClick={async () => {
-                router.push(item.url);
+                window.open(item.url, '_blank');
                 setAnchorElProduct(null);
               }}
               p={1.5}
