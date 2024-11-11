@@ -143,9 +143,14 @@ export const HeaderFilter: FC = () => {
               sx={{
                 width: 24,
                 height: 24,
-                ml: 0.75,
-                '& path': {
-                  fill: selectLoading ? '#9095A3' : '#202939',
+                '& > path': {
+                  fill:
+                    selectLoading ||
+                    !selectedSegmentId ||
+                    segmentOptions.length === 0 ||
+                    !segmentOptions
+                      ? '#9095A3'
+                      : '#202939',
                 },
               }}
             />
