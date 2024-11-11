@@ -57,7 +57,7 @@ export const StyledCheckbox: FC<StyledCheckboxProps> = ({
           // width: '100%',
           '& .MuiFormControlLabel-label': {
             width: '100%',
-            ml: 1.5,
+            ml: 0.75,
             wordBreak: 'break-word',
             whiteSpace: 'normal',
             fontSize: 14,
