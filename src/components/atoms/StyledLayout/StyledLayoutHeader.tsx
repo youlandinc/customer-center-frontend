@@ -330,7 +330,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
               PopperProps={{
                 sx: { zIndex: '99999 !important', maxWidth: 144 },
               }}
-              title={'Organization settings'}
+              title={'Settings'}
             >
               <Stack
                 height={24}
