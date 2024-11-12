@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { Icon, Stack, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { useSnackbar } from 'notistack';
 
 import { AUTO_HIDE_DURATION } from '@/constant';

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { MoreHoriz } from '@mui/icons-material';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { useSnackbar } from 'notistack';
 import { MRT_ColumnDef } from 'material-react-table';
 import { format } from 'date-fns';

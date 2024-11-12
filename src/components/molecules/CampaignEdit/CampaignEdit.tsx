@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { CircularProgress, Fade, Stack } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 
 import { useCampaignEditStore } from '@/stores/campaignEditStores/useCampaignEditStore';
 

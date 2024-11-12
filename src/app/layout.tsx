@@ -2,6 +2,8 @@
 import { ReactNode } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 
+import NextTopLoader from 'nextjs-toploader';
+
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 
@@ -54,6 +56,12 @@ const RootLayout = ({
     <html lang="en">
       <title>Customer Center</title>
       <body className={YOULAND_FONTS.variable}>
+        <NextTopLoader
+          color="#D2D6E1"
+          crawl={true}
+          height={2}
+          shadow={'none'}
+        />
         <AppRouterCacheProvider options={{ key: 'css', enableCssLayer: true }}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <ThemeProvider theme={lightTheme}>

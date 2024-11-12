@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Box, Icon, Stack, Typography } from '@mui/material';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 
 import { MENU_CONFIG } from './data';
 
