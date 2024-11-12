@@ -117,3 +117,7 @@ export const _fetchImportHistoryInvalidExcel = (id: string | number) => {
     },
   );
 };
+
+export const _setPageSize = (params: { pageSize: number }) => {
+  return post('/customer/user/config', params);
+};

@@ -25,7 +25,7 @@ export interface CommonGridSort {
 
 export interface CampaignGridItemData {
   campaignId: 1;
-  campaignName: 'test01';
+  campaignName: string;
   campaignStatus: CampaignStatusEnum;
   sender: string | null;
   recipients: number | null;
