@@ -46,7 +46,7 @@ export const useGridStore = create<
   tableName: '',
   keyword: '',
   page: 0,
-  size: 50,
+  size: 100,
 
   loading: false,
   metadataColumns: [],
@@ -96,6 +96,7 @@ export const useGridStore = create<
         tableName: data.tableName,
         tableId: data.tableId,
         loading: false,
+        size: data.pageSize || 100,
       });
     } catch (err) {
       const { header, message, variant } = err as HttpError;

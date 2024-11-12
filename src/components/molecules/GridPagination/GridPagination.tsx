@@ -40,7 +40,7 @@ export const GridPagination: FC<GridPaginationProps> = ({
         onRowsPerPageChange={onRowsPerPageChange}
         page={currentPage}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[50, 100]}
+        rowsPerPageOptions={[100, 200]}
         slotProps={{
           actions: {
             previousButton: {

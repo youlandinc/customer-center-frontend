@@ -24,6 +24,7 @@ export type GetColumnsResponse = {
   tableLabel: string;
   tableName: string;
   metadataColumns: ColumnItem[];
+  pageSize: number | null;
 };
 
 export type DirectoryGridQueryCondition = {
