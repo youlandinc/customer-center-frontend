@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import { Fade, Icon, Skeleton, Stack, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { useAsync } from 'react-use';
 import { useSnackbar } from 'notistack';
 import {

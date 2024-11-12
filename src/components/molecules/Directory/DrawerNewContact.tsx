@@ -1,6 +1,6 @@
 import { FC, useRef, useState } from 'react';
 import { Box, Drawer, DrawerProps, Stack, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { useSnackbar } from 'notistack';
 import { useAsyncFn } from 'react-use';
 

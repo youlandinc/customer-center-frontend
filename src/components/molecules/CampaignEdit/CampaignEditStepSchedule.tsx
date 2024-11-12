@@ -2,7 +2,7 @@ import { FC, useCallback, useMemo, useState } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { useSnackbar } from 'notistack';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { addDays, isDate, isValid, parseISO, set } from 'date-fns';
 
 import { AUTO_HIDE_DURATION } from '@/constant';

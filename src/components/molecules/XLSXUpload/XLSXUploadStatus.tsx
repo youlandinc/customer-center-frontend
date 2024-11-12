@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Icon, Stack, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 
 import { useUserStore } from '@/providers';
 import { ExcelUploadStatus } from '@/types';

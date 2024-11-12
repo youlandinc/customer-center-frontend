@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Box, Fade, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import { useSnackbar } from 'notistack';
 import { useAsync, useAsyncFn } from 'react-use';
 import useSWR from 'swr';
