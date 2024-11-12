@@ -2,7 +2,7 @@ import { FC, useRef, useState } from 'react';
 import { Icon, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { format, parseISO } from 'date-fns';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import useSWR from 'swr';
 
 import { POSThousandSeparator } from '@/utils/Format';

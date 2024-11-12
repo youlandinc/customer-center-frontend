@@ -3,7 +3,8 @@ export const fetchCache = 'force-no-store';
 //export const dynamic = 'force-dynamic';
 
 import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import dynamic from 'next/dynamic';
 import { CircularProgress, Stack } from '@mui/material';
 
