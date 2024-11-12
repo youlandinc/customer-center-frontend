@@ -1,25 +1,36 @@
-import { FC, useRef, useState } from 'react';
-import { Icon, Stack, Typography } from '@mui/material';
+import { FC, useCallback, useRef, useState } from 'react';
+import { Icon, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { format, parseISO } from 'date-fns';
 import { useRouter } from 'nextjs-toploader/app';
 import useSWR from 'swr';
+import { useSnackbar } from 'notistack';
 
 import { POSThousandSeparator } from '@/utils/Format';
 import { POSTypeOf } from '@/utils/TypeOf';
 
+import { useSwitch } from '@/hooks';
+
 import {
   StyledButton,
+  StyledDialog,
   StyledGrid,
   StyledProgressCircle,
+  StyledTextField,
   StyledTextFieldSearch,
 } from '@/components/atoms';
 import { CampaignStatus, GridPagination } from '@/components/molecules';
 
-import { CampaignGridItemData, CampaignStatusEnum } from '@/types';
-import { _fetchCampaignsGirdData } from '@/request';
+import { CampaignGridItemData, CampaignStatusEnum, HttpError } from '@/types';
+import {
+  _deleteCampaign,
+  _fetchCampaignsGirdData,
+  _renameCampaign,
+} from '@/request';
 
 import ICON_CREATE from './assets/icon_create.svg';
+import { AUTO_HIDE_DURATION } from '@/constant';
+import { MoreHoriz } from '@mui/icons-material';
 
 export const EmailPage: FC = () => {
   const router = useRouter();
@@ -85,7 +96,7 @@ export const EmailPage: FC = () => {
           overflow={'hidden'}
         >
           <StyledGrid
-            columns={genColumns()}
+            columns={genColumns(mutate)}
             data={data?.data?.records || []}
             loading={isLoading}
             muiTableHeadSx={{
@@ -141,7 +152,7 @@ export const EmailPage: FC = () => {
   );
 };
 
-const genColumns = (): MRT_ColumnDef<CampaignGridItemData>[] => {
+const genColumns = (mutate: any): MRT_ColumnDef<CampaignGridItemData>[] => {
   return [
     {
       header: 'Campaign name',
@@ -370,6 +381,239 @@ const genColumns = (): MRT_ColumnDef<CampaignGridItemData>[] => {
         };
 
         return <>{renderNode()}</>;
+      },
+    },
+    {
+      header: '',
+      accessorKey: 'action',
+      grow: false,
+      size: 60,
+      muiTableBodyCellProps: {
+        align: 'center',
+      },
+      muiTableHeadCellProps: {
+        align: 'center',
+      },
+      enableHiding: true,
+      Cell: ({ row }) => {
+        const {
+          original: { campaignId },
+        } = row;
+        const { enqueueSnackbar } = useSnackbar();
+
+        const [campaignName, setCampaignName] = useState(
+          row.original.campaignName || '',
+        );
+        const [deleteLoading, setDeleteLoading] = useState(false);
+        const [renameLoading, setRenameLoading] = useState(false);
+        const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null);
+
+        const {
+          open: deleteOpen,
+          close: deleteClose,
+          visible: deleteVisible,
+        } = useSwitch(false);
+        const {
+          open: renameOpen,
+          close: renameClose,
+          visible: renameVisible,
+        } = useSwitch(false);
+
+        const onClickToRename = useCallback(async () => {
+          const postData = {
+            campaignId,
+            campaignName,
+          };
+          setRenameLoading(true);
+          try {
+            await _renameCampaign(postData);
+            await mutate();
+          } catch (err) {
+            const { header, message, variant } = err as HttpError;
+            enqueueSnackbar(message, {
+              variant: variant || 'error',
+              autoHideDuration: AUTO_HIDE_DURATION,
+              isSimple: !header,
+              header,
+            });
+          } finally {
+            setRenameLoading(false);
+            renameClose();
+          }
+        }, [campaignId, campaignName, enqueueSnackbar, renameClose]);
+
+        const onClickToDelete = useCallback(async () => {
+          if (!campaignId) {
+            return;
+          }
+          setDeleteLoading(true);
+          try {
+            await _deleteCampaign(campaignId);
+            await mutate();
+          } catch (err) {
+            const { header, message, variant } = err as HttpError;
+            enqueueSnackbar(message, {
+              variant: variant || 'error',
+              autoHideDuration: AUTO_HIDE_DURATION,
+              isSimple: !header,
+              header,
+            });
+          } finally {
+            setDeleteLoading(false);
+            deleteClose();
+          }
+        }, [campaignId, deleteClose, enqueueSnackbar]);
+
+        return (
+          <Stack
+            alignItems={'center'}
+            flex={1}
+            height={60}
+            justifyContent={'center'}
+            mx={-2}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <MoreHoriz
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setAnchorEl(e.currentTarget);
+              }}
+              sx={{ cursor: 'pointer' }}
+            />
+            <Menu
+              anchorEl={anchorEl}
+              MenuListProps={{
+                sx: {
+                  width: 180,
+                  borderRadius: 2,
+                },
+              }}
+              onClose={() => setAnchorEl(null)}
+              open={Boolean(anchorEl)}
+              slotProps={{
+                paper: {
+                  sx: {
+                    boxShadow:
+                      '0px 10px 10px 0px rgba(17, 52, 227, 0.10), 0px 0px 2px 0px rgba(17, 52, 227, 0.10)',
+                    borderRadius: 2,
+                    '& .MuiList-root': {
+                      padding: 0,
+                    },
+                  },
+                },
+              }}
+              sx={{
+                '& .MuiMenu-list': {
+                  p: 0,
+                },
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  renameOpen();
+                  setAnchorEl(null);
+                }}
+                sx={{ p: '14px 24px', fontSize: 14 }}
+              >
+                Rename campaign
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  deleteOpen();
+                  setAnchorEl(null);
+                }}
+                sx={{ p: '14px 24px', fontSize: 14 }}
+              >
+                Delete campaign
+              </MenuItem>
+            </Menu>
+
+            <StyledDialog
+              content={
+                <Typography color={'text.secondary'} my={1.5} variant={'body2'}>
+                  This action cannot be undone, and all data will be permanently
+                  deleted.
+                </Typography>
+              }
+              footer={
+                <Stack
+                  flexDirection={'row'}
+                  gap={1.5}
+                  justifyContent={'center'}
+                >
+                  <StyledButton
+                    color={'info'}
+                    onClick={() => {
+                      deleteClose();
+                    }}
+                    size={'small'}
+                    variant={'outlined'}
+                  >
+                    Cancel
+                  </StyledButton>
+                  <StyledButton
+                    color={'error'}
+                    disabled={deleteLoading}
+                    loading={deleteLoading}
+                    onClick={onClickToDelete}
+                    size={'small'}
+                    sx={{
+                      width: 72,
+                    }}
+                  >
+                    Delete
+                  </StyledButton>
+                </Stack>
+              }
+              header={'Do you want to delete this campaign?'}
+              open={deleteVisible}
+            />
+            <StyledDialog
+              content={
+                <Stack my={1.5}>
+                  <StyledTextField
+                    label={'Campaign name'}
+                    onChange={(e) => setCampaignName(e.target.value)}
+                    value={campaignName}
+                  />
+                </Stack>
+              }
+              footer={
+                <Stack
+                  flexDirection={'row'}
+                  gap={1.5}
+                  justifyContent={'center'}
+                >
+                  <StyledButton
+                    color={'info'}
+                    onClick={() => {
+                      renameClose();
+                    }}
+                    size={'small'}
+                    variant={'outlined'}
+                  >
+                    Cancel
+                  </StyledButton>
+                  <StyledButton
+                    disabled={renameLoading}
+                    loading={renameLoading}
+                    onClick={onClickToRename}
+                    size={'small'}
+                    sx={{ width: 60 }}
+                  >
+                    Save
+                  </StyledButton>
+                </Stack>
+              }
+              header={'Rename campaign'}
+              open={renameVisible}
+            />
+          </Stack>
+        );
       },
     },
   ];
