@@ -1,25 +1,12 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { HttpError } from '@/types';
+import { createFile } from '@/utils/UnknowHandler';
 import { Box, Fade, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useRouter } from 'nextjs-toploader/app';
 import { useSnackbar } from 'notistack';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useAsync, useAsyncFn } from 'react-use';
 import useSWR from 'swr';
-
-import { AUTO_HIDE_DURATION } from '@/constant';
-import { useDebounceFn } from '@/hooks';
-
-import {
-  _deleteGridRecords,
-  _exportGridRecords,
-  _getGridListById,
-} from '@/request';
-
-import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryToolbarStore';
-import { useGridStore } from '@/stores/directoryStores/useGridStore';
-
-import { HttpError } from '@/types';
-import { createFile } from '@/utils/UnknowHandler';
 
 import { StyledGrid } from '@/components/atoms';
 import {
@@ -28,7 +15,20 @@ import {
   GridPagination,
   GridToolBar,
 } from '@/components/molecules';
+
+import { AUTO_HIDE_DURATION } from '@/constant';
+import { useDebounceFn } from '@/hooks';
+
+import {
+  _deleteGridRecords,
+  _exportGridRecords,
+  _getGridListById,
+  _setPageSize,
+} from '@/request';
 import { useDirectoryStore } from '@/stores/directoryStores/useDirectoryStore';
+
+import { useDirectoryToolbarStore } from '@/stores/directoryStores/useDirectoryToolbarStore';
+import { useGridStore } from '@/stores/directoryStores/useGridStore';
 
 export const GridDirectory: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -165,6 +165,20 @@ export const GridDirectory: FC = () => {
     [],
   );
 
+  const [, setPageSize] = useAsyncFn(async (param: { pageSize: number }) => {
+    try {
+      await _setPageSize(param);
+    } catch (err) {
+      const { header, message, variant } = err as HttpError;
+      enqueueSnackbar(message, {
+        variant: variant || 'error',
+        autoHideDuration: AUTO_HIDE_DURATION,
+        isSimple: !header,
+        header,
+      });
+    }
+  });
+
   const columns = useMemo(() => {
     return metadataColumns.length
       ? (metadataColumns
@@ -269,8 +283,11 @@ export const GridDirectory: FC = () => {
             onPageChange={(page) => {
               setPage(page);
             }}
-            onRowsPerPageChange={(e) => {
+            onRowsPerPageChange={async (e) => {
               setSize(parseInt(e.target.value));
+              await setPageSize({
+                pageSize: parseInt(e.target.value),
+              });
             }}
             pageCount={pageCount}
             rowCount={totalContacts}
