@@ -38,7 +38,7 @@ export const EmailPage: FC = () => {
 
   const [pagination, setPagination] = useState({
     page: 0,
-    size: 50,
+    size: 100,
   });
   const [searchWord, setSearchWord] = useState('');
 
