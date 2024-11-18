@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 
 import {
+  LayoutProductTypeEnums,
   URL_DOC,
   URL_HOME,
   URL_LOS,
@@ -42,6 +43,7 @@ import LOGO_HEADER_SETTING from './assets/logo_header_setting.svg';
 
 import LOGO_SETTING from './assets/logo_auth_setting.svg';
 import LOGO_SIGN_OUT from './assets/logo_auth_out.svg';
+
 import { useUserStore } from '@/providers';
 import { SystemLogout } from '@/utils';
 
@@ -54,9 +56,8 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
   isHomepage = false,
   //actions,
 }) => {
-  const { setting, accessToken, licensedProduct, initialized } = useUserStore(
-    (state) => state,
-  );
+  const { setting, accessToken, licensedProduct, initialized, domain } =
+    useUserStore((state) => state);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -74,45 +75,45 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
     }
 
     const productsData: Record<string, any> = {
-      'Point of Sale': {
+      [LayoutProductTypeEnums.pos]: {
         label: 'Point of Sale',
-        url: `${URL_POS}/?token=${
+        url: `${URL_POS(domain)}/?token=${
           accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
         }`,
         icon: (
           <Icon component={LOGO_PRODUCT_POS} sx={{ width: 32, height: 32 }} />
         ),
       },
-      'Loan Origination System': {
+      [LayoutProductTypeEnums.los]: {
         label: 'Loan Origination System',
-        url: `${URL_LOS}/?token=${
+        url: `${URL_LOS(domain)}/?token=${
           accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
         }`,
         icon: (
           <Icon component={LOGO_PRODUCT_LOS} sx={{ width: 32, height: 32 }} />
         ),
       },
-      'Pricing Engine': {
+      [LayoutProductTypeEnums.pricing]: {
         label: 'Pricing Engine',
-        url: `${URL_PRICING}/?token=${
+        url: `${URL_PRICING(domain)}/?token=${
           accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
         }`,
         icon: (
           <Icon component={LOGO_PRODUCT_PRICE} sx={{ width: 32, height: 32 }} />
         ),
       },
-      'Document Engine': {
+      [LayoutProductTypeEnums.doc]: {
         label: 'Document Engine',
-        url: `${URL_DOC}/?token=${
+        url: `${URL_DOC(domain)}/?token=${
           accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
         }`,
         icon: (
           <Icon component={LOGO_PRODUCT_DOC} sx={{ width: 32, height: 32 }} />
         ),
       },
-      'Loan Servicing': {
+      [LayoutProductTypeEnums.servicing]: {
         label: 'Servicing Center',
-        url: `${URL_SERVICING}/?token=${
+        url: `${URL_SERVICING(domain)}/?token=${
           accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
         }`,
         icon: (
@@ -122,7 +123,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
           />
         ),
       },
-      'Customer Center': {
+      [LayoutProductTypeEnums.customer]: {
         label: 'Customer Center',
         url: '/contacts/directory',
         icon: (
@@ -135,59 +136,12 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
     };
 
     const productsKeys = Object.keys(productsData);
-    const fromServer = licensedProduct.map(
-      (item) => productsKeys.includes(item.name) && productsData[item.name],
+    return licensedProduct.map(
+      (item) =>
+        productsKeys.includes(item.productType) &&
+        productsData[item.productType],
     );
-    //only youland and test user can see loan servicing
-    let result;
-
-    if (
-      ['1000052022092800000102', '1000052023032900000107'].includes(
-        setting?.tenantId,
-      )
-    ) {
-      result = fromServer.concat([
-        {
-          label: 'Servicing Center',
-          url: `${URL_SERVICING}/?token=${
-            accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
-          }`,
-          icon: (
-            <Icon
-              component={LOGO_PRODUCT_SERVING}
-              sx={{ width: 32, height: 32 }}
-            />
-          ),
-        },
-        {
-          label: 'Customer Center',
-          url: '/contacts/directory',
-          icon: (
-            <Icon
-              component={LOGO_PRODUCT_CUSTOMER}
-              sx={{ width: 32, height: 32 }}
-            />
-          ),
-        },
-      ]);
-    }
-    //alameda account
-    if (['100005106551464224755712'].includes(setting?.tenantId)) {
-      result = [
-        {
-          label: 'Customer Center',
-          url: '/contacts/directory',
-          icon: (
-            <Icon
-              component={LOGO_PRODUCT_CUSTOMER}
-              sx={{ width: 32, height: 32 }}
-            />
-          ),
-        },
-      ];
-    }
-    return result;
-  }, [initialized, licensedProduct, accessToken, setting]);
+  }, [initialized, domain, accessToken, licensedProduct]);
 
   const avatarName = useMemo(() => {
     if (!initialized) {

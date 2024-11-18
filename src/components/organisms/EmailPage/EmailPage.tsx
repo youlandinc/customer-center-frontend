@@ -3,8 +3,8 @@ import { Icon, Menu, MenuItem, Stack, Typography } from '@mui/material';
 import { MRT_ColumnDef } from 'material-react-table';
 import { format, parseISO } from 'date-fns';
 import { useRouter } from 'nextjs-toploader/app';
-import useSWR from 'swr';
 import { useSnackbar } from 'notistack';
+import useSWR from 'swr';
 
 import { POSThousandSeparator } from '@/utils/Format';
 import { POSTypeOf } from '@/utils/TypeOf';
