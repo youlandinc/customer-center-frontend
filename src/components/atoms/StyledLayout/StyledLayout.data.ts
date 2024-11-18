@@ -86,4 +86,4 @@ export const URL_CUSTOMER = (domain: string) =>
 export const URL_LOGOUT_REDIRECTION = (domain: string) =>
   domain === 'alamedacapital'
     ? `https://${process.env.PREFIX_ALAMEDA_URL}.alamedacapital.com/`
-    : `https://${process.env.PREFIX_URL}software.${domain || 'youland'}.com/auth/login/?reload=true&origin=pricing`;
+    : `https://${process.env.PREFIX_URL}software.${domain || 'youland'}.com/auth/login/?reload=true&origin=customer`;
