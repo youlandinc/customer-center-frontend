@@ -19,6 +19,7 @@ export type UserState = {
   isHydration: boolean;
   initialized: boolean;
   setting: any;
+  domain: string;
   licensedProduct: any[];
   sse: EventSource | undefined;
   notificationList: any[];
@@ -41,6 +42,7 @@ export const defaultInitState: UserState = {
   isHydration: false,
   accessToken: '',
   accountId: '',
+  domain: '',
   initialized: false,
   setting: {},
   licensedProduct: [],
@@ -90,6 +92,7 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
                 setting: user,
                 licensedProduct: product.functions,
                 initialized: true,
+                domain: user?.tenantConfig?.domain,
               }));
             } catch (err) {
               const { header, message, variant } = err as HttpError;
