@@ -291,7 +291,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
                 height={24}
                 onClick={() =>
                   router.push(
-                    `${URL_HOME}/settings/organization/general/${
+                    `${URL_HOME(domain)}/settings/organization/general/${
                       accessToken ||
                       localStorage?.getItem('USER_LOGIN_INFORMATION')
                     }`,
@@ -410,7 +410,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
             component={LOGO_PRODUCT_HOME}
             onClick={() =>
               router.push(
-                `${URL_HOME}/auth/sign_in/${
+                `${URL_HOME(domain)}/auth/sign_in/${
                   accessToken || localStorage?.getItem('USER_LOGIN_INFORMATION')
                 }`,
               )
