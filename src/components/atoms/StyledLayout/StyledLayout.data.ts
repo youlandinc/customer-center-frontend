@@ -1,4 +1,5 @@
 import { LayoutSideMenuItem, ServiceType } from './index';
+import { RoleTypeEnum } from '@/types';
 
 export const LAYOUT_SIDE_MENU: { [key in ServiceType]: LayoutSideMenuItem[] } =
   {
@@ -70,6 +71,15 @@ export const LAYOUT_SIDE_MENU: { [key in ServiceType]: LayoutSideMenuItem[] } =
 export const URL_HOME = (domain: string) =>
   `https://${process.env.PREFIX_URL}dashboard.${domain || 'youland'}.com/`;
 
+export const URL_SETTINGS = (
+  domain: string,
+  role: RoleTypeEnum | undefined,
+) => {
+  role === RoleTypeEnum.ADMIN
+    ? `https://${process.env.PREFIX_URL}dashboard.${domain || 'youland'}.com/settings/organization/general`
+    : `https://${process.env.PREFIX_URL}dashboard.${domain || 'youland'}.com/settings/account_settings`;
+};
+
 export const URL_POS = (domain: string) =>
   `https://${process.env.PREFIX_URL}dashboard.${domain || 'youland'}.com/pos/customers`;
 export const URL_LOS = (domain: string) =>
@@ -85,5 +95,5 @@ export const URL_CUSTOMER = (domain: string) =>
 
 export const URL_LOGOUT_REDIRECTION = (domain: string) =>
   domain === 'alamedacapital'
-    ? `https://${process.env.PREFIX_ALAMEDA_URL}.alamedacapital.com/`
+    ? `https://${process.env.PREFIX_ALAMEDA_URL}.alamedacapital.com`
     : `https://${process.env.PREFIX_URL}software.${domain || 'youland'}.com/auth/login/?reload=true&origin=customer`;
