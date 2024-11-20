@@ -19,6 +19,7 @@ import {
   URL_POS,
   URL_PRICING,
   URL_SERVICING,
+  URL_SETTINGS,
 } from './index';
 import { useSwitch } from '@/hooks';
 
@@ -56,7 +57,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
   isHomepage = false,
   //actions,
 }) => {
-  const { setting, accessToken, licensedProduct, initialized, domain } =
+  const { setting, accessToken, licensedProduct, initialized, domain, role } =
     useUserStore((state) => state);
 
   const router = useRouter();
@@ -291,7 +292,7 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
                 height={24}
                 onClick={() =>
                   router.push(
-                    `${URL_HOME(domain)}/settings/organization/general/${
+                    `${URL_SETTINGS(domain, role)}/?token=${
                       accessToken ||
                       localStorage?.getItem('USER_LOGIN_INFORMATION')
                     }`,

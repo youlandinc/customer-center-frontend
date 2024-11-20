@@ -5,7 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 import { SystemLogout } from '@/utils';
 import { AUTO_HIDE_DURATION } from '@/constant';
 
-import { HttpError, SSEEvent } from '@/types';
+import { HttpError, RoleTypeEnum, SSEEvent } from '@/types';
 import {
   _fetchUserDetailByAccountId,
   _fetchUserInfoWithToken,
@@ -23,6 +23,7 @@ export type UserState = {
   licensedProduct: any[];
   sse: EventSource | undefined;
   notificationList: any[];
+  role: RoleTypeEnum | undefined;
 };
 
 export type UserStateActions = {
@@ -38,6 +39,7 @@ export type UserStateActions = {
 export type UserStore = UserState & UserStateActions;
 
 export const defaultInitState: UserState = {
+  role: undefined,
   isAuth: false,
   isHydration: false,
   accessToken: '',
@@ -68,6 +70,7 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
                 accountId: data?.userProfile?.accountId,
                 accessToken: data?.accessToken,
                 isAuth: true,
+                role: data?.userProfile?.role,
               }));
               localStorage.setItem('USER_LOGIN_INFORMATION', data?.accessToken);
               cb?.();
