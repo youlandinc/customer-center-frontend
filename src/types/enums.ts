@@ -47,3 +47,9 @@ export enum FilterOperationEnum {
   ends_with = 'ENDS_WITH',
   not_ends_with = 'NOT_ENDS_WITH',
 }
+
+export enum RoleTypeEnum {
+  ADMIN = 'ADMIN',
+  LOAN_OFFICER = 'LOAN_OFFICER',
+  EXECUTIVE = 'EXECUTIVE',
+}
