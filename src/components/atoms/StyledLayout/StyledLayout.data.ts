@@ -75,7 +75,7 @@ export const URL_SETTINGS = (
   domain: string,
   role: RoleTypeEnum | undefined,
 ) => {
-  role === RoleTypeEnum.ADMIN
+  return role === RoleTypeEnum.ADMIN
     ? `https://${process.env.PREFIX_URL}dashboard.${domain || 'youland'}.com/settings/organization/general`
     : `https://${process.env.PREFIX_URL}dashboard.${domain || 'youland'}.com/settings/account_settings`;
 };
