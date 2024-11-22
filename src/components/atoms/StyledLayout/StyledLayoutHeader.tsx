@@ -438,7 +438,8 @@ export const StyledLayoutHeader: FC<LayoutHeaderProps> = ({
               gap={1.5}
               key={`${item.label}_${index}`}
               onClick={async () => {
-                window.open(item.url, '_blank');
+                router.push(item.url);
+                router.refresh();
                 setAnchorElProduct(null);
               }}
               p={1.5}
