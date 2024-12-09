@@ -47,9 +47,11 @@ export type CampaignEditStoreActions = {
   redirectCampaignStepPhase: ({
     campaignId,
     nextSetupPhase,
+    isShowLoading,
   }: {
     campaignId: string | number;
     nextSetupPhase: SetupPhaseEnum;
+    isShowLoading?: boolean;
   }) => Promise<void>;
   updateCampaignStatus: (status: CampaignStatusEnum) => void;
 };
@@ -188,11 +190,17 @@ export const useCampaignEditStore = create<
       set({ isUpdating: false, isRedirecting: false, isFetching: false });
     }
   },
-  redirectCampaignStepPhase: async ({ campaignId, nextSetupPhase }) => {
+  redirectCampaignStepPhase: async ({
+    campaignId,
+    nextSetupPhase,
+    isShowLoading = true,
+  }) => {
     if (!campaignId) {
       return;
     }
-    set({ isRedirecting: true });
+    if (isShowLoading) {
+      set({ isRedirecting: true });
+    }
     try {
       await _redirectCampaignStepPhase({ campaignId, nextSetupPhase });
       get().updateSetupPhase(nextSetupPhase);
