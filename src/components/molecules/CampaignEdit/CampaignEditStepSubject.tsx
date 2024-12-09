@@ -48,14 +48,14 @@ export const CampaignEditStepSubject: FC<{
         <Typography variant={'body2'}>
           The subject line is the first thing your recipients see, so it should
           clearly convey the email&#39;s content. For best results, keep it
-          concise—under 50 characters.
+          concise—under 100 characters.
         </Typography>
         <StyledTextField
           onChange={(e) => updateFieldValue('subjectLine', e.target.value)}
           placeholder={'Subject line'}
           slotProps={{
             htmlInput: {
-              maxLength: 50,
+              maxLength: 100,
             },
           }}
           value={campaignData?.subjectLine || ''}
@@ -66,7 +66,7 @@ export const CampaignEditStepSubject: FC<{
         <Typography variant={'h7'}>Preview text</Typography>
         <Typography variant={'body2'}>
           Preview text gives recipients more insight into your email&#39;s
-          content. For the best effect, keep it under 100 characters.
+          content. For the best effect, keep it under 200 characters.
         </Typography>
         <StyledTextField
           multiline
@@ -75,7 +75,7 @@ export const CampaignEditStepSubject: FC<{
           rows={2}
           slotProps={{
             htmlInput: {
-              maxLength: 100,
+              maxLength: 200,
             },
           }}
           value={campaignData?.previewText || ''}
