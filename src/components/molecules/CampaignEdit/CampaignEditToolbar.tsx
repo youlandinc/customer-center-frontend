@@ -3,7 +3,7 @@ import {
   Icon,
   Stack,
   Step,
-  StepLabel,
+  StepButton,
   Stepper,
   Typography,
 } from '@mui/material';
@@ -27,12 +27,24 @@ const SETUP_PHASE_HASH = {
   [SetupPhaseEnum.schedule]: 4,
 };
 
+const STEP_PHASE_VALUE = [
+  SetupPhaseEnum.sender,
+  SetupPhaseEnum.recipient,
+  SetupPhaseEnum.subject,
+  SetupPhaseEnum.design,
+  SetupPhaseEnum.schedule,
+];
+
 export const CampaignEditToolbar = () => {
   const router = useRouter();
 
-  const { setupPhase, campaignName, campaignStatus } = useCampaignEditStore(
-    (state) => state,
-  );
+  const {
+    setupPhase,
+    campaignName,
+    campaignStatus,
+    _campaignId,
+    redirectCampaignStepPhase,
+  } = useCampaignEditStore((state) => state);
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -62,10 +74,24 @@ export const CampaignEditToolbar = () => {
         <CampaignStatus campaignStatus={campaignStatus} />
       </Stack>
       <Stack mb={3}>
-        <Stepper activeStep={activeStep}>
-          {steps.map((label) => (
+        <Stepper activeStep={activeStep} nonLinear>
+          {steps.map((label, index) => (
             <Step key={label}>
-              <StepLabel>{label}</StepLabel>
+              <StepButton
+                onClick={async () => {
+                  const postSetupPhase = STEP_PHASE_VALUE[index];
+                  if (postSetupPhase === setupPhase) {
+                    return;
+                  }
+                  await redirectCampaignStepPhase({
+                    campaignId: _campaignId!,
+                    nextSetupPhase: postSetupPhase,
+                    isShowLoading: false,
+                  });
+                }}
+              >
+                {label}
+              </StepButton>
             </Step>
           ))}
         </Stepper>
