@@ -42,6 +42,7 @@ export const CampaignEditToolbar = () => {
     setupPhase,
     campaignName,
     campaignStatus,
+    setupPhaseStatus,
     _campaignId,
     redirectCampaignStepPhase,
   } = useCampaignEditStore((state) => state);
@@ -76,8 +77,16 @@ export const CampaignEditToolbar = () => {
       <Stack mb={3}>
         <Stepper activeStep={activeStep} nonLinear>
           {steps.map((label, index) => (
-            <Step key={label}>
+            <Step
+              completed={
+                STEP_PHASE_VALUE[index] === setupPhase
+                  ? false
+                  : setupPhaseStatus[STEP_PHASE_VALUE[index]]
+              }
+              key={label}
+            >
               <StepButton
+                disabled={!setupPhaseStatus[STEP_PHASE_VALUE[index]]}
                 onClick={async () => {
                   const postSetupPhase = STEP_PHASE_VALUE[index];
                   if (postSetupPhase === setupPhase) {

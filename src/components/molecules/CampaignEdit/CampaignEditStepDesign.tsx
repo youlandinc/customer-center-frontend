@@ -5,6 +5,7 @@ import { useSnackbar } from 'notistack';
 import { useCampaignEditStore } from '@/stores/campaignEditStores/useCampaignEditStore';
 
 import { AUTO_HIDE_DURATION } from '@/constant';
+import { useSwitch } from '@/hooks';
 
 import {
   StyledButton,
@@ -23,7 +24,6 @@ import {
 import ICON_SEND from './assets/icon_send.svg';
 import ICON_HTML from './assets/icon_html.svg';
 import ICON_CLOSE from './assets/icon_close.svg';
-import { useSwitch } from '@/hooks';
 
 export const CampaignEditStepDesign: FC<{
   failedCb?: () => void;
