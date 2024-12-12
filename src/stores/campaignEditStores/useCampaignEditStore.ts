@@ -23,6 +23,9 @@ export type CampaignEditStoreStates = {
   isRedirecting: boolean;
   campaignName: string;
   setupPhase: SetupPhaseEnum;
+  setupPhaseStatus: {
+    [key in SetupPhaseEnum]: boolean;
+  };
   campaignData: CampaignData;
   campaignStatus: CampaignStatusEnum;
   segmentList: Option[];
@@ -47,9 +50,11 @@ export type CampaignEditStoreActions = {
   redirectCampaignStepPhase: ({
     campaignId,
     nextSetupPhase,
+    isShowLoading,
   }: {
     campaignId: string | number;
     nextSetupPhase: SetupPhaseEnum;
+    isShowLoading?: boolean;
   }) => Promise<void>;
   updateCampaignStatus: (status: CampaignStatusEnum) => void;
 };
@@ -85,6 +90,13 @@ export const useCampaignEditStore = create<
   isUpdating: false,
   segmentList: [],
   campaignStatus: CampaignStatusEnum.draft,
+  setupPhaseStatus: {
+    [SetupPhaseEnum.sender]: false,
+    [SetupPhaseEnum.recipient]: false,
+    [SetupPhaseEnum.subject]: false,
+    [SetupPhaseEnum.design]: false,
+    [SetupPhaseEnum.schedule]: false,
+  },
   fetchCampaignDetails: async (campaignId, cb, isShowLoading = true) => {
     set({ _campaignId: campaignId });
     if (isShowLoading) {
@@ -118,6 +130,7 @@ export const useCampaignEditStore = create<
           setupPhase,
           campaignName,
           campaignStatus,
+          setupPhaseStatus,
         },
       } = await _fetchCampaignDetails(campaignId);
       set({
@@ -143,6 +156,7 @@ export const useCampaignEditStore = create<
         setupPhase,
         campaignName,
         campaignStatus,
+        setupPhaseStatus,
       });
       await _fetchSegmentList();
     } catch (err) {
@@ -172,8 +186,9 @@ export const useCampaignEditStore = create<
   updateToServer: async (postData) => {
     set({ isUpdating: true, isRedirecting: false });
     try {
-      await _updateCampaign(postData);
+      const { data } = await _updateCampaign(postData);
       get().updateSetupPhase(postData.nextSetupPhase);
+      set({ setupPhaseStatus: data });
       return { success: true };
     } catch (err) {
       const { header, message, variant } = err as HttpError;
@@ -188,14 +203,24 @@ export const useCampaignEditStore = create<
       set({ isUpdating: false, isRedirecting: false, isFetching: false });
     }
   },
-  redirectCampaignStepPhase: async ({ campaignId, nextSetupPhase }) => {
+  redirectCampaignStepPhase: async ({
+    campaignId,
+    nextSetupPhase,
+    isShowLoading = true,
+  }) => {
     if (!campaignId) {
       return;
     }
-    set({ isRedirecting: true });
+    if (isShowLoading) {
+      set({ isRedirecting: true });
+    }
     try {
-      await _redirectCampaignStepPhase({ campaignId, nextSetupPhase });
+      const { data } = await _redirectCampaignStepPhase({
+        campaignId,
+        nextSetupPhase,
+      });
       get().updateSetupPhase(nextSetupPhase);
+      set({ setupPhaseStatus: data });
     } catch (err) {
       const { header, message, variant } = err as HttpError;
       enqueueSnackbar(message, {

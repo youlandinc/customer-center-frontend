@@ -3,7 +3,7 @@ import { Stack, Typography } from '@mui/material';
 
 import { useCampaignEditStore } from '@/stores/campaignEditStores/useCampaignEditStore';
 
-import { SetupPhaseEnum } from '@/types';
+import { CampaignStatusEnum, SetupPhaseEnum } from '@/types';
 
 import { StyledButton, StyledTextField } from '@/components/atoms';
 
@@ -14,6 +14,8 @@ export const CampaignEditStepSender: FC<{ failedCb?: () => void }> = () => {
     campaignData,
     _campaignId,
     isUpdating,
+    isRedirecting,
+    campaignStatus,
   } = useCampaignEditStore((state) => state);
 
   const onClickToSave = useCallback(async () => {
@@ -41,6 +43,11 @@ export const CampaignEditStepSender: FC<{ failedCb?: () => void }> = () => {
           Enter the email address you want your emails to send from.
         </Typography>
         <StyledTextField
+          disabled={
+            isUpdating ||
+            isRedirecting ||
+            campaignStatus === CampaignStatusEnum.sending
+          }
           onChange={(e) => updateFieldValue('email', e.target.value)}
           placeholder={'Email address'}
           value={campaignData?.email || ''}
@@ -54,6 +61,11 @@ export const CampaignEditStepSender: FC<{ failedCb?: () => void }> = () => {
           in their inbox.
         </Typography>
         <StyledTextField
+          disabled={
+            isUpdating ||
+            isRedirecting ||
+            campaignStatus === CampaignStatusEnum.sending
+          }
           onChange={(e) => updateFieldValue('name', e.target.value)}
           placeholder={'Name'}
           value={campaignData?.name || ''}
@@ -61,7 +73,13 @@ export const CampaignEditStepSender: FC<{ failedCb?: () => void }> = () => {
       </Stack>
 
       <StyledButton
-        disabled={!campaignData?.name || !campaignData?.email || isUpdating}
+        disabled={
+          !campaignData?.name ||
+          !campaignData?.email ||
+          isUpdating ||
+          isRedirecting ||
+          campaignStatus === CampaignStatusEnum.sending
+        }
         loading={isUpdating}
         onClick={onClickToSave}
         size={'small'}

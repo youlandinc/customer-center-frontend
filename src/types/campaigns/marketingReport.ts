@@ -56,16 +56,21 @@ export interface MarketingReportUnsubscribeStatistics {
   spamComplaintRate: number;
 }
 
+export interface MarketingReportPerformance {
+  campaignId: string | number;
+  subjectId: string;
+  subjectName: string;
+  deliveryStatistics: MarketingReportDeliveryStatistics;
+  openStatistics: MarketingReportOpenStatistics;
+  clickStatistics: MarketingReportClickStatistics;
+  unsubscribesStatistics: MarketingReportUnsubscribeStatistics;
+}
+
 export interface MarketingReportResponseData {
   campaignName: string;
   campaignId: string;
   campaignStatus: CampaignStatusEnum;
   info: MarketingReportBaseInfo;
   timeline: MarketingReportTimeline[];
-  performance: {
-    deliveryStatistics: MarketingReportDeliveryStatistics;
-    openStatistics: MarketingReportOpenStatistics;
-    clickStatistics: MarketingReportClickStatistics;
-    unsubscribesStatistics: MarketingReportUnsubscribeStatistics;
-  };
+  performances: MarketingReportPerformance[];
 }

@@ -1,35 +1,29 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { Box, Collapse, Icon, Stack, Tooltip, Typography } from '@mui/material';
 import { format, parseISO } from 'date-fns';
 
 import { POSTypeOf } from '@/utils/TypeOf';
 import { POSThousandSeparator } from '@/utils/Format';
 
-import {
-  MarketingReportClickStatistics,
-  MarketingReportDeliveryStatistics,
-  MarketingReportOpenStatistics,
-  MarketingReportUnsubscribeStatistics,
-} from '@/types';
+import { StyledSelect } from '@/components/atoms';
+
+import { MarketingReportPerformance } from '@/types';
 
 import ICON_PERFORMANCE from './assets/icon_performance.svg';
 import ICON_ARROW from './assets/icon_arrow.svg';
 import ICON_INFO from './assets/icon_info.svg';
 
 export interface CampaignMarketingPerformance {
-  deliveryStatistics: MarketingReportDeliveryStatistics;
-  openStatistics: MarketingReportOpenStatistics;
-  clickStatistics: MarketingReportClickStatistics;
-  unsubscribesStatistics: MarketingReportUnsubscribeStatistics;
+  performances?: MarketingReportPerformance[];
+  option?: Option[];
 }
 
 export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
-  deliveryStatistics,
-  openStatistics,
-  clickStatistics,
-  unsubscribesStatistics,
+  performances = [],
+  option = [],
 }) => {
   const [expandedTarget, setExpandedTarget] = useState('');
+  const [selectedValue, setSelectedValue] = useState('-1L');
 
   const onClickToExpand = useCallback(
     (target: string) => {
@@ -42,6 +36,13 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
     [expandedTarget],
   );
 
+  const performance = useMemo(() => {
+    const result = performances.find(
+      (item) => item.subjectId === selectedValue,
+    );
+    return result;
+  }, [performances, selectedValue]);
+
   return (
     <Stack
       bgcolor={'#FFFFFF'}
@@ -53,9 +54,18 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
       p={3}
       width={'100%'}
     >
-      <Stack alignItems={'center'} flexDirection={'row'} gap={1}>
-        <Icon component={ICON_PERFORMANCE} sx={{ width: 24, height: 24 }} />
-        <Typography variant={'subtitle1'}>Campaign performance</Typography>
+      <Stack alignItems={'center'} flexDirection={'row'} gap={3}>
+        <Stack flexDirection={'row'} gap={1}>
+          <Icon component={ICON_PERFORMANCE} sx={{ width: 24, height: 24 }} />
+          <Typography variant={'subtitle1'}>Campaign performance</Typography>
+        </Stack>
+        <StyledSelect
+          onChange={(e) => setSelectedValue(e.target.value as string)}
+          options={option}
+          size={'small'}
+          sx={{ maxWidth: 600, ml: 'auto' }}
+          value={selectedValue}
+        />
       </Stack>
 
       <Stack borderBottom={'1px solid #D2D6E1'} mt={2} pb={2}>
@@ -95,7 +105,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
             >
               Delivered to
               <Typography variant={'h6'}>
-                {POSThousandSeparator(deliveryStatistics.deliveredTo)}
+                {POSThousandSeparator(
+                  performance?.deliveryStatistics?.deliveredTo,
+                )}
               </Typography>
             </Stack>
             <Stack
@@ -108,7 +120,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
             >
               Delivery rate
               <Typography variant={'h6'}>
-                {deliveryStatistics.deliveryRate + '%'}
+                {performance?.deliveryStatistics?.deliveryRate + '%'}
               </Typography>
             </Stack>
           </Stack>
@@ -130,7 +142,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 Sent to
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(deliveryStatistics.sentTo)}
+                {POSThousandSeparator(performance?.deliveryStatistics?.sentTo)}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -138,7 +150,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 Delivered to
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(deliveryStatistics.deliveredTo)}
+                {POSThousandSeparator(
+                  performance?.deliveryStatistics?.deliveredTo,
+                )}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -146,7 +160,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 Delivery rate
               </Typography>
               <Typography variant={'subtitle1'}>
-                {deliveryStatistics.deliveryRate + '%'}
+                {performance?.deliveryStatistics?.deliveryRate + '%'}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -167,7 +181,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(deliveryStatistics.softBounces)}
+                {POSThousandSeparator(
+                  performance?.deliveryStatistics?.softBounces,
+                )}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -188,7 +204,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(deliveryStatistics.hardBounces)}
+                {POSThousandSeparator(
+                  performance?.deliveryStatistics?.hardBounces,
+                )}
               </Typography>
             </Stack>
           </Stack>
@@ -232,7 +250,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
             >
               Total opens
               <Typography variant={'h6'}>
-                {POSThousandSeparator(openStatistics.estimatedOpens)}
+                {POSThousandSeparator(
+                  performance?.openStatistics?.estimatedOpens,
+                )}
               </Typography>
             </Stack>
             <Stack
@@ -245,9 +265,13 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
             >
               Unique open rate
               <Typography variant={'h6'}>
-                {openStatistics.uniqueOpenRate + '%'}
+                {performance?.openStatistics?.uniqueOpenRate + '%'}
                 <Typography component={'span'} variant={'body2'}>
-                  ({POSThousandSeparator(openStatistics.uniqueOpens)})
+                  (
+                  {POSThousandSeparator(
+                    performance?.openStatistics?.uniqueOpens,
+                  )}
+                  )
                 </Typography>
               </Typography>
             </Stack>
@@ -284,7 +308,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {openStatistics.uniqueOpenRate + '%'}
+                {performance?.openStatistics?.uniqueOpenRate + '%'}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -305,7 +329,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(openStatistics.uniqueOpens)}
+                {POSThousandSeparator(performance?.openStatistics?.uniqueOpens)}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -326,7 +350,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(openStatistics.totalOpens)}
+                {POSThousandSeparator(performance?.openStatistics?.totalOpens)}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -334,7 +358,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 Average time to open
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(openStatistics.averageTimeToOpen) + 'min'}
+                {POSThousandSeparator(
+                  performance?.openStatistics?.averageTimeToOpen,
+                ) + 'min'}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -355,7 +381,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(openStatistics.unTrackableContacts)}
+                {POSThousandSeparator(
+                  performance?.openStatistics?.unTrackableContacts,
+                )}
               </Typography>
             </Stack>
           </Stack>
@@ -399,7 +427,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
             >
               Unique clicks
               <Typography variant={'h6'}>
-                {POSThousandSeparator(clickStatistics.uniqueClicks)}
+                {POSThousandSeparator(
+                  performance?.clickStatistics?.uniqueClicks,
+                )}
               </Typography>
             </Stack>
             <Stack
@@ -412,9 +442,13 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
             >
               Click-through rate
               <Typography variant={'h6'}>
-                {clickStatistics.clickThoughRate + '%'}
+                {performance?.clickStatistics?.clickThoughRate + '%'}
                 <Typography component={'span'} variant={'body2'}>
-                  ({POSThousandSeparator(clickStatistics.uniqueClicks)})
+                  (
+                  {POSThousandSeparator(
+                    performance?.clickStatistics?.uniqueClicks,
+                  )}
+                  )
                 </Typography>
               </Typography>
             </Stack>
@@ -437,7 +471,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 Click-through rate
               </Typography>
               <Typography variant={'subtitle1'}>
-                {clickStatistics.clickThoughRate + '%'}
+                {performance?.clickStatistics?.clickThoughRate + '%'}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -458,7 +492,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(clickStatistics.totalClicks)}
+                {POSThousandSeparator(
+                  performance?.clickStatistics?.totalClicks,
+                )}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -479,7 +515,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(clickStatistics.uniqueClicks)}
+                {POSThousandSeparator(
+                  performance?.clickStatistics?.uniqueClicks,
+                )}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -500,7 +538,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {clickStatistics.clickToOpenRate + '%'}
+                {performance?.clickStatistics?.clickToOpenRate + '%'}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -521,8 +559,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(clickStatistics.averageTimeToClick) +
-                  'min'}
+                {POSThousandSeparator(
+                  performance?.clickStatistics?.averageTimeToClick,
+                ) + 'min'}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -543,10 +582,12 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSTypeOf(clickStatistics.lastClick) === 'Null'
+                {POSTypeOf(performance?.clickStatistics?.lastClick) === 'Null'
                   ? '-'
                   : format(
-                      parseISO(clickStatistics.lastClick as string),
+                      parseISO(
+                        performance?.clickStatistics?.lastClick as string,
+                      ),
                       'MM/dd/yyyy',
                     )}
               </Typography>
@@ -592,7 +633,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
             >
               Unsubscribes
               <Typography variant={'h6'}>
-                {POSThousandSeparator(unsubscribesStatistics.unsubscribes)}
+                {POSThousandSeparator(
+                  performance?.unsubscribesStatistics?.unsubscribes,
+                )}
               </Typography>
             </Stack>
             <Stack
@@ -606,9 +649,13 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
             >
               Unsubscribe rate
               <Typography variant={'h6'}>
-                {unsubscribesStatistics.unsubscribeRate + '%'}
+                {performance?.unsubscribesStatistics?.unsubscribeRate + '%'}
                 <Typography component={'span'} variant={'body2'}>
-                  ({POSThousandSeparator(unsubscribesStatistics.unsubscribes)})
+                  (
+                  {POSThousandSeparator(
+                    performance?.unsubscribesStatistics?.unsubscribes,
+                  )}
+                  )
                 </Typography>
               </Typography>
             </Stack>
@@ -631,7 +678,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 Unsubscribes
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(unsubscribesStatistics.unsubscribes)}
+                {POSThousandSeparator(
+                  performance?.unsubscribesStatistics?.unsubscribes,
+                )}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -639,7 +688,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 Unsubscribe rate
               </Typography>
               <Typography variant={'subtitle1'}>
-                {unsubscribesStatistics.unsubscribeRate + '%'}
+                {performance?.unsubscribesStatistics?.unsubscribeRate + '%'}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -660,7 +709,9 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSThousandSeparator(unsubscribesStatistics.spamComplaints)}
+                {POSThousandSeparator(
+                  performance?.unsubscribesStatistics?.spamComplaints,
+                )}
               </Typography>
             </Stack>
             <Stack flex={1} gap={1} minWidth={200} p={1}>
@@ -668,7 +719,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 Spam complaint rate
               </Typography>
               <Typography variant={'subtitle1'}>
-                {unsubscribesStatistics.spamComplaintRate + '%'}
+                {performance?.unsubscribesStatistics?.spamComplaintRate + '%'}
               </Typography>
             </Stack>
           </Stack>

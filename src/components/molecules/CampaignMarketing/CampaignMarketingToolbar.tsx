@@ -101,14 +101,27 @@ export const CampaignMarketingToolbar: FC<CampaignMarketingToolbarProps> = ({
     switch (campaignStatus) {
       case CampaignStatusEnum.sending:
         return (
-          <StyledButton
-            color={'error'}
-            onClick={suspendOpen}
-            size={'small'}
-            sx={{ ml: 'auto', width: 90 }}
-          >
-            Suspend
-          </StyledButton>
+          <Stack flexDirection={'row'} flexShrink={0} gap={3} ml={'auto'}>
+            <StyledButton
+              color={'info'}
+              onClick={() => {
+                router.push(`../edit/${campaignId}`);
+              }}
+              size={'small'}
+              sx={{ width: 144 }}
+              variant={'outlined'}
+            >
+              Edit campaign
+            </StyledButton>
+            <StyledButton
+              color={'error'}
+              onClick={suspendOpen}
+              size={'small'}
+              sx={{ width: 90 }}
+            >
+              Suspend
+            </StyledButton>
+          </Stack>
         );
       case CampaignStatusEnum.suspended:
         return (
@@ -137,7 +150,15 @@ export const CampaignMarketingToolbar: FC<CampaignMarketingToolbarProps> = ({
       default:
         return null;
     }
-  }, [actionLoading, campaignStatus, cancelOpen, onClickToAction, suspendOpen]);
+  }, [
+    actionLoading,
+    campaignId,
+    campaignStatus,
+    cancelOpen,
+    onClickToAction,
+    router,
+    suspendOpen,
+  ]);
 
   return (
     <Stack

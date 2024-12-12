@@ -14,6 +14,9 @@ export interface CampaignDetailsResponse {
   setupPhase: SetupPhaseEnum;
   campaignStatus: CampaignStatusEnum;
   data: CampaignData;
+  setupPhaseStatus: {
+    [key in SetupPhaseEnum]: boolean;
+  };
 }
 
 export interface CampaignData {
