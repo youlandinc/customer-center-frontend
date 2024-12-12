@@ -53,3 +53,8 @@ export enum RoleTypeEnum {
   LOAN_OFFICER = 'LOAN_OFFICER',
   EXECUTIVE = 'EXECUTIVE',
 }
+
+export enum CampaignSentTypeEnum {
+  delivered = 'DELIVERED',
+  undelivered = 'UNDELIVERED',
+}
