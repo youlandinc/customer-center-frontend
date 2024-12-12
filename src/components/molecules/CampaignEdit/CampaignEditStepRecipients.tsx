@@ -5,7 +5,7 @@ import { useCampaignEditStore } from '@/stores/campaignEditStores/useCampaignEdi
 
 import { StyledButton, StyledCheckbox, StyledSelect } from '@/components/atoms';
 
-import { SetupPhaseEnum } from '@/types';
+import { CampaignStatusEnum, SetupPhaseEnum } from '@/types';
 
 export const CampaignEditStepRecipients: FC<{
   failedCb?: () => void;
@@ -20,6 +20,7 @@ export const CampaignEditStepRecipients: FC<{
     redirectCampaignStepPhase,
     updateFieldValue,
     fetchCampaignDetails,
+    campaignStatus,
   } = useCampaignEditStore((state) => state);
 
   const onClickToSave = useCallback(async () => {
@@ -53,6 +54,11 @@ export const CampaignEditStepRecipients: FC<{
         <Typography variant={'h7'}>Send to</Typography>
         <StyledSelect
           defaultValue={''}
+          disabled={
+            isUpdating ||
+            isRedirecting ||
+            campaignStatus === CampaignStatusEnum.sending
+          }
           label={'Segments'}
           noResultContent={'No segments found'}
           onChange={(e) => {
@@ -63,6 +69,11 @@ export const CampaignEditStepRecipients: FC<{
         />
         <StyledCheckbox
           checked={campaignData?.markSpam}
+          disabled={
+            isUpdating ||
+            isRedirecting ||
+            campaignStatus === CampaignStatusEnum.sending
+          }
           label={'Send to accounts marked as spam'}
           onChange={(e) => {
             updateFieldValue('markSpam', e.target.checked);

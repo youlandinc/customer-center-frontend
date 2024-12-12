@@ -148,18 +148,38 @@ export const CampaignEditStepSchedule: FC<{
     };
   }, [campaignData.sendNow, isScheduled]);
 
+  const disabledStatus = useMemo(() => {
+    return (
+      isUpdating ||
+      isRedirecting ||
+      campaignStatus === CampaignStatusEnum.sending
+    );
+  }, [campaignStatus, isRedirecting, isUpdating]);
+
   return (
     <Stack gap={3} maxWidth={600} width={'100%'}>
       <Stack gap={1.5}>
         <Stack flexDirection={'row'} gap={3}>
           <Typography
-            bgcolor={renderColor.now.bgcolor}
+            bgcolor={
+              disabledStatus && campaignData.sendNow
+                ? '#EDEDED'
+                : renderColor.now.bgcolor
+            }
             border={'2px solid'}
-            borderColor={renderColor.now.borderColor}
+            borderColor={
+              disabledStatus && campaignData.sendNow
+                ? '#BABCBE'
+                : renderColor.now.borderColor
+            }
             borderRadius={2}
-            color={renderColor.now.color}
+            color={
+              disabledStatus && campaignData.sendNow
+                ? '#BABCBE'
+                : renderColor.now.color
+            }
             onClick={() => {
-              if (isScheduled) {
+              if (isScheduled || disabledStatus) {
                 return;
               }
               updateFieldValue('sendNow', true);
@@ -167,7 +187,7 @@ export const CampaignEditStepSchedule: FC<{
             px={4}
             py={1.5}
             sx={{
-              cursor: isScheduled ? 'default' : 'pointer',
+              cursor: isScheduled || disabledStatus ? 'default' : 'pointer',
               transition: 'all .3s',
             }}
             variant={'subtitle2'}
@@ -175,13 +195,25 @@ export const CampaignEditStepSchedule: FC<{
             Send now
           </Typography>
           <Typography
-            bgcolor={renderColor.schedule.bgcolor}
+            bgcolor={
+              disabledStatus && !campaignData.sendNow
+                ? '#EDEDED'
+                : renderColor.schedule.bgcolor
+            }
             border={'2px solid'}
-            borderColor={renderColor.schedule.borderColor}
+            borderColor={
+              disabledStatus && !campaignData.sendNow
+                ? '#BABCBE'
+                : renderColor.schedule.borderColor
+            }
             borderRadius={2}
-            color={renderColor.schedule.color}
+            color={
+              disabledStatus && !campaignData.sendNow
+                ? '#BABCBE'
+                : renderColor.schedule.color
+            }
             onClick={() => {
-              if (isScheduled) {
+              if (isScheduled || disabledStatus) {
                 return;
               }
               updateFieldValue('sendNow', false);
@@ -192,7 +224,7 @@ export const CampaignEditStepSchedule: FC<{
             px={4}
             py={1.5}
             sx={{
-              cursor: isScheduled ? 'default' : 'pointer',
+              cursor: isScheduled || disabledStatus ? 'default' : 'pointer',
               transition: 'all .3s',
             }}
             variant={'subtitle2'}
@@ -211,7 +243,7 @@ export const CampaignEditStepSchedule: FC<{
       {!campaignData?.sendNow && (
         <DateTimePicker
           defaultValue={TomorrowTenAM}
-          disabled={isScheduled}
+          disabled={isScheduled || disabledStatus}
           disablePast
           label={'Date / Time'}
           onChange={(date) => {
@@ -243,7 +275,7 @@ export const CampaignEditStepSchedule: FC<{
           mt={2}
         >
           <StyledTextFieldNumber
-            disabled={isScheduled}
+            disabled={isScheduled || disabledStatus}
             label={'Send quantity'}
             onValueChange={({ floatValue }) =>
               updateFieldValue('quantity', floatValue as number)
@@ -297,15 +329,27 @@ export const CampaignEditStepSchedule: FC<{
           >
             Back
           </StyledButton>
-          <StyledButton
-            disabled={isUpdating || isRedirecting || !isFormValid}
-            loading={isUpdating}
-            onClick={onClickToSave}
-            size={'small'}
-            sx={{ width: 120 }}
-          >
-            {campaignData?.sendNow ? 'Send now' : 'Schedule'}
-          </StyledButton>
+          {campaignStatus === CampaignStatusEnum.sending ? (
+            <StyledButton
+              disabled={isUpdating || isRedirecting || !isFormValid}
+              loading={isUpdating}
+              onClick={() => router.push('/campaigns/email')}
+              size={'small'}
+              sx={{ width: 144 }}
+            >
+              Edit completed
+            </StyledButton>
+          ) : (
+            <StyledButton
+              disabled={isUpdating || isRedirecting || !isFormValid}
+              loading={isUpdating}
+              onClick={onClickToSave}
+              size={'small'}
+              sx={{ width: 120 }}
+            >
+              {campaignData?.sendNow ? 'Send now' : 'Schedule'}
+            </StyledButton>
+          )}
         </Stack>
       )}
     </Stack>

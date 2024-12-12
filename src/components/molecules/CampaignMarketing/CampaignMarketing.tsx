@@ -17,11 +17,8 @@ import {
   CampaignStatusEnum,
   HttpError,
   MarketingReportBaseInfo,
-  MarketingReportClickStatistics,
-  MarketingReportDeliveryStatistics,
-  MarketingReportOpenStatistics,
+  MarketingReportPerformance,
   MarketingReportTimeline,
-  MarketingReportUnsubscribeStatistics,
 } from '@/types';
 
 interface CampaignMarketingProps {
@@ -47,40 +44,10 @@ export const CampaignMarketing: FC<CampaignMarketingProps> = ({
 
   const [timeline, setTimeline] = useState<MarketingReportTimeline[]>([]);
 
-  const [deliveryStatistics, setDeliveryStatistics] =
-    useState<MarketingReportDeliveryStatistics>({
-      sentTo: 0,
-      deliveredTo: 0,
-      deliveryRate: 0,
-      softBounces: 0,
-      hardBounces: 0,
-    });
-  const [openStatistics, setOpenStatistics] =
-    useState<MarketingReportOpenStatistics>({
-      estimatedOpens: 0,
-      trackableOpens: 0,
-      uniqueOpens: 0,
-      uniqueOpenRate: 0,
-      totalOpens: 0,
-      averageTimeToOpen: 0,
-      unTrackableContacts: 0,
-    });
-  const [clickStatistics, setClickStatistics] =
-    useState<MarketingReportClickStatistics>({
-      lastClick: '2024-01-01T00:00:00Z',
-      totalClicks: 0,
-      uniqueClicks: 0,
-      clickThoughRate: 0,
-      clickToOpenRate: 0,
-      averageTimeToClick: 0,
-    });
-  const [unsubscribesStatistics, setUnsubscribesStatistics] =
-    useState<MarketingReportUnsubscribeStatistics>({
-      unsubscribes: 0,
-      unsubscribeRate: 0,
-      spamComplaints: 0,
-      spamComplaintRate: 0,
-    });
+  const [subjectOpt, setSubjectOpt] = useState<Option[]>();
+
+  const [performances, setPerformances] =
+    useState<MarketingReportPerformance[]>();
 
   const [firstLoad, setFirstLoad] = useState(true);
 
@@ -89,18 +56,7 @@ export const CampaignMarketing: FC<CampaignMarketingProps> = ({
     async ({ campaignId }) => {
       try {
         const {
-          data: {
-            campaignName,
-            campaignStatus,
-            info,
-            timeline,
-            performance: {
-              deliveryStatistics,
-              openStatistics,
-              clickStatistics,
-              unsubscribesStatistics,
-            },
-          },
+          data: { campaignName, campaignStatus, info, timeline, performances },
         } = await _fetchMarketingReportData(campaignId);
         setCampaignData({
           campaignId,
@@ -112,10 +68,21 @@ export const CampaignMarketing: FC<CampaignMarketingProps> = ({
 
         setTimeline(timeline);
 
-        setDeliveryStatistics(deliveryStatistics);
-        setOpenStatistics(openStatistics);
-        setClickStatistics(clickStatistics);
-        setUnsubscribesStatistics(unsubscribesStatistics);
+        const opt = performances.map((performance) => ({
+          label: performance.subjectName,
+          value: performance.subjectId,
+          key: performance.subjectId,
+        }));
+
+        setSubjectOpt(opt);
+
+        setPerformances(performances);
+
+        //
+        //setDeliveryStatistics(deliveryStatistics);
+        //setOpenStatistics(openStatistics);
+        //setClickStatistics(clickStatistics);
+        //setUnsubscribesStatistics(unsubscribesStatistics);
       } catch (err) {
         const { header, message, variant } = err as HttpError;
         enqueueSnackbar(message, {
@@ -166,10 +133,8 @@ export const CampaignMarketing: FC<CampaignMarketingProps> = ({
         </Stack>
 
         <CampaignMarketingPerformance
-          clickStatistics={clickStatistics}
-          deliveryStatistics={deliveryStatistics}
-          openStatistics={openStatistics}
-          unsubscribesStatistics={unsubscribesStatistics}
+          option={subjectOpt}
+          performances={performances}
         />
       </Stack>
     </Stack>
