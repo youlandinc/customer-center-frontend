@@ -1,3 +1,4 @@
+import { DirectoryEmailCampaigns } from '@/components/organisms';
 import { FC, useEffect, useRef, useState } from 'react';
 import { Fade, Stack, Typography } from '@mui/material';
 import { useRouter } from 'nextjs-toploader/app';
@@ -111,7 +112,7 @@ export const DirectoryOverview: FC<DirectoryOverviewProps> = ({
         </StyledButton>
       </Stack>
       <Fade in={visible}>
-        <Stack flexDirection={'row'}>
+        <Stack flexDirection={'row'} gap={3}>
           {state?.value?.data?.metadataColumns?.length && (
             <Stack
               autoComplete={'off'}
@@ -119,11 +120,12 @@ export const DirectoryOverview: FC<DirectoryOverviewProps> = ({
               borderColor={'border.normal'}
               borderRadius={2}
               component={'form'}
-              flex={1}
               gap={2}
+              minWidth={400}
               overflow={'auto'}
               p={3}
               ref={formRef}
+              width={400}
             >
               {state?.value?.data?.metadataColumns.map((item) => {
                 const key = `${item.columnName}|${item.columnId}`;
@@ -179,6 +181,15 @@ export const DirectoryOverview: FC<DirectoryOverviewProps> = ({
               })}
             </Stack>
           )}
+          <Stack
+            border={'1px solid #D2D6E1'}
+            borderRadius={2}
+            flex={1}
+            height={'fit-content'}
+            p={3}
+          >
+            <DirectoryEmailCampaigns contactId={id} />
+          </Stack>
         </Stack>
       </Fade>
     </Stack>
