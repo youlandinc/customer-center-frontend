@@ -25,6 +25,7 @@ type StyledGridProps = MRT_TableOptions<any> & {
   }) => void;
   muiTableBodyRowSx?: SxProps;
   muiTableHeadSx?: SxProps;
+  muiTableBodyPropsSx?: SxProps;
 };
 
 export const StyledGrid: FC<StyledGridProps> = ({
@@ -39,6 +40,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
   onRowClick,
   muiTableBodyRowSx,
   muiTableHeadSx,
+  muiTableBodyPropsSx,
   ...rest
 }) => {
   // const router = useRouter();
@@ -149,6 +151,9 @@ export const StyledGrid: FC<StyledGridProps> = ({
             justifyContent: 'center',
             px: rest?.enableSelectAll ? 0 : 1.5,
           },
+          '& .MuiTableCell-root:last-of-type': {
+            px: 0,
+          },
           '&:last-of-type .MuiTableCell-root': {
             borderBottom: 'none',
           },
@@ -168,6 +173,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
           '& .Mui-selected:hover td::after': {
             bgcolor: '#EDEFF2',
           },
+          ...muiTableBodyPropsSx,
         },
       };
     },
@@ -266,6 +272,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
             height: 16,
             borderColor: '#D2D6E1',
           },
+          minWidth: 0,
           ...muiTableHeadSx,
         },
       };
