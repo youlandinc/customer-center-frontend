@@ -1,6 +1,7 @@
 import { del, get, post, put } from '@/request/axios';
 import {
   AddContactRequestParam,
+  CampaignSentTypeEnum,
   ColumnTypeEnum,
   DirectoryGridQueryCondition,
   DirectoryGridResponse,
@@ -120,4 +121,30 @@ export const _fetchImportHistoryInvalidExcel = (id: string | number) => {
 
 export const _setPageSize = (params: { pageSize: number }) => {
   return post('/customer/user/config', params);
+};
+
+export const _getCampaignInfo = (param: {
+  contactId: string;
+  page: number;
+  size: number;
+}) => {
+  return post<{
+    sent: number;
+    clicks: number;
+    opens: number;
+    undelivered: number;
+    acquisitionCost: number;
+    campaignInfo: {
+      records: {
+        campaignName: string;
+        sent: CampaignSentTypeEnum;
+        hasClick: boolean;
+        hasOpen: boolean;
+      }[];
+      total: number;
+      size: number;
+      current: number;
+      pages: number;
+    };
+  }>('/customer/marketing/contact/campaignInfo', param);
 };
