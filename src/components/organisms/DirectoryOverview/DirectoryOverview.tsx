@@ -181,7 +181,13 @@ export const DirectoryOverview: FC<DirectoryOverviewProps> = ({
               })}
             </Stack>
           )}
-          <Stack flex={1}>
+          <Stack
+            border={'1px solid #D2D6E1'}
+            borderRadius={2}
+            flex={1}
+            height={'fit-content'}
+            p={3}
+          >
             <DirectoryEmailCampaigns contactId={id} />
           </Stack>
         </Stack>

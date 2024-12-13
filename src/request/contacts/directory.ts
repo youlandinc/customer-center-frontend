@@ -123,7 +123,11 @@ export const _setPageSize = (params: { pageSize: number }) => {
   return post('/customer/user/config', params);
 };
 
-export const _getCampaignInfo = (contactId: string) => {
+export const _getCampaignInfo = (param: {
+  contactId: string;
+  page: number;
+  size: number;
+}) => {
   return post<{
     sent: number;
     clicks: number;
@@ -142,5 +146,5 @@ export const _getCampaignInfo = (contactId: string) => {
       current: number;
       pages: number;
     };
-  }>('/customer/marketing/contact/campaignInfo', { contactId });
+  }>('/customer/marketing/contact/campaignInfo', param);
 };
