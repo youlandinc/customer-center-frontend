@@ -18,7 +18,7 @@ export interface StyledGoogleAutoCompleteProps {
   onBlur?: InputBaseProps['onBlur'];
 }
 
-export interface _StyledGoogleAutoCompleteProps {
+export interface StyledGoogleAutoCompleteRefProps {
   inputValue: string;
   onInputChange: (e: any, val: string) => void;
   fullAddress: boolean;
