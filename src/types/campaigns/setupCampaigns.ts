@@ -23,6 +23,7 @@ export interface CampaignData {
   // sender
   name: string;
   email: string;
+  recipientEmail: string;
   // recipient
   segmentId: number | string;
   markSpam: boolean;
