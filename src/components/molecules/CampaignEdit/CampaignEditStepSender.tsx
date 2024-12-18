@@ -26,10 +26,17 @@ export const CampaignEditStepSender: FC<{ failedCb?: () => void }> = () => {
       data: {
         name: campaignData.name,
         email: campaignData.email,
+        recipientEmail: campaignData.recipientEmail,
       },
     };
     await updateToServer(postData);
-  }, [_campaignId, campaignData.email, campaignData.name, updateToServer]);
+  }, [
+    _campaignId,
+    campaignData.email,
+    campaignData.name,
+    campaignData.recipientEmail,
+    updateToServer,
+  ]);
 
   return (
     <Stack gap={3} maxWidth={600} width={'100%'}>
@@ -55,6 +62,23 @@ export const CampaignEditStepSender: FC<{ failedCb?: () => void }> = () => {
       </Stack>
 
       <Stack gap={1.5}>
+        <Typography variant={'h7'}>Recipient email address</Typography>
+        <Typography variant={'body2'}>
+          The email address that receives replies from customers.
+        </Typography>
+        <StyledTextField
+          disabled={
+            isUpdating ||
+            isRedirecting ||
+            campaignStatus === CampaignStatusEnum.sending
+          }
+          onChange={(e) => updateFieldValue('recipientEmail', e.target.value)}
+          placeholder={'Recipient email address'}
+          value={campaignData?.recipientEmail || ''}
+        />
+      </Stack>
+
+      <Stack gap={1.5}>
         <Typography variant={'h7'}>Name</Typography>
         <Typography variant={'body2'}>
           Enter a name (e.g. your company name) to help recipients recognize you
@@ -76,6 +100,7 @@ export const CampaignEditStepSender: FC<{ failedCb?: () => void }> = () => {
         disabled={
           !campaignData?.name ||
           !campaignData?.email ||
+          !campaignData?.recipientEmail ||
           isUpdating ||
           isRedirecting ||
           campaignStatus === CampaignStatusEnum.sending
