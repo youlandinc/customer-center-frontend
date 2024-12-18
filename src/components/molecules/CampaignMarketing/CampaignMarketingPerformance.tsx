@@ -1,8 +1,7 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { Box, Collapse, Icon, Stack, Tooltip, Typography } from '@mui/material';
-import { format, parseISO } from 'date-fns';
+import { format, isValid } from 'date-fns';
 
-import { POSTypeOf } from '@/utils/TypeOf';
 import { POSThousandSeparator } from '@/utils/Format';
 
 import { StyledSelect } from '@/components/atoms';
@@ -582,14 +581,14 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
                 </Tooltip>
               </Typography>
               <Typography variant={'subtitle1'}>
-                {POSTypeOf(performance?.clickStatistics?.lastClick) === 'Null'
-                  ? '-'
-                  : format(
-                      parseISO(
+                {isValid(performance?.clickStatistics?.lastClick)
+                  ? format(
+                      new Date(
                         performance?.clickStatistics?.lastClick as string,
                       ),
                       'MM/dd/yyyy',
-                    )}
+                    )
+                  : '-'}
               </Typography>
             </Stack>
           </Stack>
