@@ -55,8 +55,15 @@ export const EmailPage: FC = () => {
   );
 
   return (
-    <Stack gap={3} height={'100%'} overflow={'auto'} px={8} py={6}>
-      <Stack gap={3}>
+    <Stack
+      gap={3}
+      height={'100%'}
+      maxHeight={'calc(100vh - 60px)'}
+      overflow={'auto'}
+      px={8}
+      py={6}
+    >
+      <Stack gap={3} height={'100%'}>
         <Stack alignItems={'center'} flexDirection={'row'} gap={3} ml={'auto'}>
           <StyledTextFieldSearch
             handleClear={() => {
