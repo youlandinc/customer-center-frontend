@@ -20,9 +20,9 @@ import {
 } from '@/components/atoms';
 
 import {
-  _StyledGoogleAutoCompleteProps,
   PlaceType,
   StyledGoogleAutoCompleteProps,
+  StyledGoogleAutoCompleteRefProps,
   StyledGoogleAutoCompleteStyles,
 } from './index';
 
@@ -85,7 +85,7 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
       {fullAddress ? (
         <Stack width={'100%'}>
           <Stack width={'100%'}>
-            <_StyledGoogleAutoComplete
+            <StyledGoogleAutoCompleteRef
               disabled={disabled}
               fullAddress={fullAddress}
               handledPlaceSelect={handledPlaceSelect}
@@ -151,7 +151,7 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
         </Stack>
       ) : (
         <Stack>
-          <_StyledGoogleAutoComplete
+          <StyledGoogleAutoCompleteRef
             disabled={disabled}
             fullAddress={fullAddress}
             handledPlaceSelect={handledPlaceSelect}
@@ -171,7 +171,7 @@ export const StyledGoogleAutoComplete: FC<StyledGoogleAutoCompleteProps> = ({
   );
 };
 
-const _StyledGoogleAutoComplete: FC<_StyledGoogleAutoCompleteProps> = ({
+const StyledGoogleAutoCompleteRef: FC<StyledGoogleAutoCompleteRefProps> = ({
   inputValue,
   onInputChange,
   fullAddress,
