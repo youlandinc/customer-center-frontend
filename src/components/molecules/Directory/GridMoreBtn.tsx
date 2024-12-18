@@ -85,9 +85,9 @@ export const GridMoreBtn: FC = () => {
     {
       label: 'View import history',
       icon: ICON_VIEW_HISTORY,
-      handleClick: () => {
+      handleClick: async () => {
         setAnchorEl(null);
-        onClickToOpenDrawer();
+        await onClickToOpenDrawer();
       },
     },
   ];
@@ -260,7 +260,7 @@ export const GridMoreBtn: FC = () => {
           <Typography variant={'subtitle1'}>History</Typography>
           <Icon
             component={ICON_CLOSE}
-            onClick={close}
+            onClick={historyClose}
             sx={{ width: 24, height: 24, ml: 'auto', cursor: 'pointer' }}
           />
         </Stack>
