@@ -62,6 +62,7 @@ export type CampaignEditStoreActions = {
 const INITIAL_CAMPAIGN_DATA: CampaignData = {
   name: '',
   email: '',
+  recipientEmail: '',
   // recipient
   segmentId: '',
   markSpam: false,
@@ -112,6 +113,7 @@ export const useCampaignEditStore = create<
             // sender
             name = '',
             email = '',
+            recipientEmail = '',
             // recipient
             segmentId = '',
             markSpam = false,
@@ -138,6 +140,7 @@ export const useCampaignEditStore = create<
           // sender
           name,
           email,
+          recipientEmail,
           // recipient
           segmentId,
           markSpam,
