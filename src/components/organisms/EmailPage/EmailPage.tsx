@@ -99,7 +99,6 @@ export const EmailPage: FC = () => {
           bgcolor={'#fff'}
           border={'1px solid #ccc'}
           borderRadius={2}
-          gap={3}
           overflow={'hidden'}
         >
           <StyledGrid

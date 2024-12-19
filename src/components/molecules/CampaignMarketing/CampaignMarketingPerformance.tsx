@@ -59,6 +59,7 @@ export const CampaignMarketingPerformance: FC<CampaignMarketingPerformance> = ({
           <Typography variant={'subtitle1'}>Campaign performance</Typography>
         </Stack>
         <StyledSelect
+          label={'Subject line'}
           onChange={(e) => setSelectedValue(e.target.value as string)}
           options={option}
           size={'small'}
