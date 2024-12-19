@@ -272,7 +272,7 @@ export const StyledGrid: FC<StyledGridProps> = ({
             height: 16,
             borderColor: '#D2D6E1',
           },
-          minWidth: 0,
+          // minWidth: 0,
           ...muiTableHeadSx,
         },
       };
