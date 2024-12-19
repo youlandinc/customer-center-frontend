@@ -57,7 +57,7 @@ export const GridSegments = () => {
   );
 
   return (
-    <Stack bgcolor={'#fff'} border={'1px solid #ccc'} borderRadius={2} gap={3}>
+    <Stack bgcolor={'#fff'} border={'1px solid #ccc'} borderRadius={2}>
       <StyledGrid
         columns={genColumns(mutate, resetToolbarData)}
         data={data?.data?.records || []}

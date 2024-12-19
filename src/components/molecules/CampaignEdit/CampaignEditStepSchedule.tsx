@@ -337,7 +337,7 @@ export const CampaignEditStepSchedule: FC<{
               size={'small'}
               sx={{ width: 144 }}
             >
-              Edit completed
+              Save changes
             </StyledButton>
           ) : (
             <StyledButton
