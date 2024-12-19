@@ -249,12 +249,7 @@ export const GridDirectory: FC = () => {
     <Box height={'100%'} position={'relative'}>
       <Stack gap={1.5}>
         <GridToolBar totalContacts={totalContacts} />
-        <Stack
-          bgcolor={'#fff'}
-          border={'1px solid #ccc'}
-          borderRadius={2}
-          gap={3}
-        >
+        <Stack bgcolor={'#fff'} border={'1px solid #ccc'} borderRadius={2}>
           <StyledGrid
             columns={columns}
             data={data || []}
@@ -272,7 +267,7 @@ export const GridDirectory: FC = () => {
             rowCount={0}
             rowSelection={rowSelection}
             style={{
-              maxHeight: 'calc(100vh - 430px)',
+              maxHeight: 'calc(100vh - 390px)',
               borderBottom: '1px solid #ccc',
               borderTopLeftRadius: '8px',
               borderTopRightRadius: '8px',
