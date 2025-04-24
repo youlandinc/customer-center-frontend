@@ -209,7 +209,7 @@ const defaultOptions: ThemeOptions = {
     },
   },
   typography: {
-    fontFamily: 'var(--font-poppins)',
+    fontFamily: 'var(--font-inter)',
     h1: {
       fontSize: 56,
       fontWeight: 600,
