@@ -1,4 +1,3 @@
-
 html,
 body {
   box-sizing: border-box;
@@ -44,7 +43,7 @@ strong {
     right: 48px !important;
     max-width: calc(100% - 72px);
   }
-  
+
   .notistack-CollapseWrapper {
     padding: 0 0 8px 0;
   }
@@ -55,7 +54,7 @@ strong {
     top: 36px !important;
     max-width: calc(100% - 72px) !important;
   }
-  
+
   .notistack-CollapseWrapper {
     padding: 0 0 8px 0;
   }
