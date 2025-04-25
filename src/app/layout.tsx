@@ -7,7 +7,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 
-import localFont from 'next/font/local';
+import { Inter } from 'next/font/google';
 import Script from 'next/script';
 
 import { ThemeProvider } from '@mui/material/styles';
@@ -22,26 +22,9 @@ import { UserStoreProvider } from '@/providers';
 import { useBreakpoints } from '@/hooks';
 import { StyledNotification } from '@/components/atoms';
 
-const YOULAND_FONTS = localFont({
-  src: [
-    {
-      path: '../../public/fonts/Poppins-Regular.woff2',
-      weight: '400',
-    },
-    {
-      path: '../../public/fonts/Poppins-Medium.woff2',
-      weight: '500',
-    },
-    {
-      path: '../../public/fonts/Poppins-SemiBold.woff2',
-      weight: '600',
-    },
-    {
-      path: '../../public/fonts/Poppins-Bold.woff2',
-      weight: '700',
-    },
-  ],
-  variable: '--font-poppins',
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
   display: 'swap',
 });
 
@@ -55,7 +38,7 @@ const RootLayout = ({
   return (
     <html lang="en">
       <title>Customer Center</title>
-      <body className={YOULAND_FONTS.variable}>
+      <body className={inter.variable}>
         <NextTopLoader
           color="#D2D6E1"
           crawl={true}
