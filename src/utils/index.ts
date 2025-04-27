@@ -20,7 +20,7 @@ export const NotUndefined = (value: unknown): boolean => {
 export const SystemLogout = () => {
   localStorage.clear();
   window.location.href = URL_LOGOUT_REDIRECTION(
-    location.href.includes('alamedacapital') ? 'alamedacapital' : 'youland',
+    location.href.includes('alamedacapital') ? 'alamedacapital' : 'corepass',
   );
 };
 
